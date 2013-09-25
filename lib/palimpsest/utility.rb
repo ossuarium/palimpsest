@@ -2,7 +2,7 @@ require 'archive/tar/minitar'
 
 module Palimpsest
 
-  # Utility functions for this kit.
+  # Utility functions for Palimpsest.
   class Utility
 
     # Make a random directory.
