@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'palimpsest/environment'
 
 describe Palimpsest::Environment do
 

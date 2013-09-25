@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'palimpsest/assets'
 
 describe Palimpsest::Assets do
 

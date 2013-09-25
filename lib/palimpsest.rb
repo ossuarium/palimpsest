@@ -1,5 +1,6 @@
 require 'palimpsest/version'
 require 'palimpsest/assets'
+require 'palimpsest/environment'
 require 'palimpsest/utility'
 
 # No web framework, no problem:
