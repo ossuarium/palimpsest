@@ -9,6 +9,8 @@ Palimpsest runs on top of any project and acts as a post processor for your code
 Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
 and easy integration with [Kit](https://github.com/razor-x/kit).
 
+[![Dependency Status](https://gemnasium.com/razor-x/palimpsest.png)](https://gemnasium.com/razor-x/palimpsest)
+
 ## Installation
 
 Add this line to your application's Gemfile:
