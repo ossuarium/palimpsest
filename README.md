@@ -10,6 +10,7 @@ Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
 and easy integration with [Kit](https://github.com/razor-x/kit).
 
 [![Dependency Status](https://gemnasium.com/razor-x/palimpsest.png)](https://gemnasium.com/razor-x/palimpsest)
+[![Build Status](https://travis-ci.org/razor-x/palimpsest.png?branch=master)](https://travis-ci.org/razor-x/palimpsest)
 [![Code Climate](https://codeclimate.com/github/razor-x/palimpsest.png)](https://codeclimate.com/github/razor-x/palimpsest)
 
 ## Installation
