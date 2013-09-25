@@ -1,5 +1,6 @@
 require 'palimpsest'
 
+require 'coveralls'
 require 'simplecov'
 
 SimpleCov.start
