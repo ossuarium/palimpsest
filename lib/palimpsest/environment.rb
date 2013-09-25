@@ -219,13 +219,13 @@ module Palimpsest
 
       def safe_path?(path) Palimpsest::Utility.safe_path?(path) end
 
+      # Checks the option in the asset key.
       def validate_asset_options opts
         opts.each do |k,v|
           raise RuntimeError, 'bad option in config' if k == :sprockets_options
           raise RuntimeError, message if k == :output && ! safe_path?(v)
         end
       end
-
 
       @config[:assets].each do |k, v|
 
