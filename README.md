@@ -2,11 +2,12 @@
 
 by Evan Boyd Sosenko.
 
-_No web framework, no problem: palimpsest gives any custom or legacy project a modern workflow and toolset._
+_No web framework, no problem: Palimpsest gives any custom or legacy project a modern workflow and toolset._
 
 Built flexible, simple, and customizable.
-Palimpsest run on top of any project and acts as a post processor for your code.
-Features a sprockets asset pipeline and easy integration with kit.
+Palimpsest runs on top of any project and acts as a post processor for your code.
+Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
+and easy integration with [Kit](https://github.com/razor-x/kit).
 
 ## Installation
 

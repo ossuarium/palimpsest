@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Palimpsest::VERSION
   spec.authors       = ['Evan Boyd Sosenko']
   spec.email         = ['razorx@evansosenko.com']
-  spec.description   = %q{No web framework, no problem: palimpsest gives any custom or legacy project a modern workflow and toolset.}
-  spec.summary       = %q{Built flexible, simple, and customizable. Palimpsest run on top of any project and acts as a post processor for your code. Features a sprockets asset pipeline and easy integration with kit.}
+  spec.description   = %q{No web framework, no problem: Palimpsest gives any custom or legacy project a modern workflow and toolset.}
+  spec.summary       = %q{Built flexible, simple, and customizable. Palimpsest runs on top of any project and acts as a post processor for your code. Features a Sprockets asset pipeline and easy integration with Kit.}
   spec.homepage      = 'https://github.com/razor-x/palimpsest'
   spec.license       = 'MIT'
 
