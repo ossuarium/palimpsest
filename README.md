@@ -33,9 +33,10 @@ $ gem install palimpsest
 
 ### Documentation
 
-The primary documentation for palimpsest is this README
-and the extensive source code YARD documentation hosted
-on the [Palimpsest gem page](https://rubygems.org/gems/palimpsest).
+The primary documentation for Palimpsest is this README and the YARD source documentation.
+
+YARD documentation for all gem versions is hosted on the [Palimpsest gem page](https://rubygems.org/gems/palimpsest).
+Documentation for the latest commits is hosted on [the RubyDoc.info project page](http://rubydoc.info/github/razor-x/palimpsest/frames).
 
 ## Development
 
