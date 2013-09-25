@@ -34,7 +34,13 @@ $ gem install palimpsest
 
 ## Usage
 
+**Palimpsest should not be considered stable until version 0.1.0 is released.**
+
 ### Documentation
+
+_Comprehensive documentation and examples will be added to this REAME soon._
+
+_For now, reference the YARD documentation below._
 
 The primary documentation for Palimpsest is this README and the YARD source documentation.
 
