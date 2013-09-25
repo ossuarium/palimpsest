@@ -33,6 +33,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'rspec', '~> 2.14.1'
   spec.add_development_dependency 'fuubar', '~> 1.2.1'
-  spec.add_development_dependency 'guard-rspec', '~> 3.0.3'
+  spec.add_development_dependency 'guard-rspec', '~> 3.1.0'
   spec.add_development_dependency 'guard-yard', '~> 2.1.0'
 end
