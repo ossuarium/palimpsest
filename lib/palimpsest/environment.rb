@@ -110,18 +110,18 @@ module Palimpsest
     end
 
     def site= site
-      raise RuntimeError, "Cannot redefine 'site' once populated" if populated
+      fail RuntimeError, "Cannot redefine 'site' once populated" if populated
       @site = site
     end
 
     def treeish= treeish
-      raise RuntimeError, "Cannot redefine 'treeish' once populated" if populated
-      raise TypeError unless treeish.is_a? String
+      fail RuntimeError, "Cannot redefine 'treeish' once populated" if populated
+      fail TypeError unless treeish.is_a? String
       @treeish = treeish
     end
 
     def directory
-      raise RuntimeError if site.nil?
+      fail RuntimeError if site.nil?
       if @directory.nil?
         @directory = Utility.make_random_directory options[:tmp_dir], "#{options[:dir_prefix]}#{site.name}_"
       else
@@ -140,11 +140,11 @@ module Palimpsest
     # Extracts the site's files from repository to the working directory.
     def populate from: :repo
       cleanup if populated
-      raise RuntimeError, "Cannot populate without 'site'" if site.nil?
+      fail RuntimeError, "Cannot populate without 'site'" if site.nil?
 
       case from
       when :repo
-        raise RuntimeError, "Cannot populate without 'treeish'" if treeish.empty?
+        fail RuntimeError, "Cannot populate without 'treeish'" if treeish.empty?
         Utility.extract_repo site.repo, treeish, directory
       when :source
         FileUtils.cp_r Dir["#{site.source}/*"], directory
@@ -220,8 +220,8 @@ module Palimpsest
       # Checks the option in the asset key.
       def validate_asset_options opts
         opts.each do |k,v|
-          raise RuntimeError, 'bad option in config' if k == :sprockets_options
-          raise RuntimeError, message if k == :output && ! Utility.safe_path?(v)
+          fail RuntimeError, 'bad option in config' if k == :sprockets_options
+          fail RuntimeError, message if k == :output && ! Utility.safe_path?(v)
         end
       end
 
@@ -236,7 +236,7 @@ module Palimpsest
         # process @config[:assets][:sources] then go to the next option
         if k == :sources
           v.each_with_index do |source, i|
-            raise RuntimeError, message unless Utility.safe_path? source
+            fail RuntimeError, message unless Utility.safe_path? source
           end
           next
         end
@@ -251,7 +251,7 @@ module Palimpsest
 
           # process each asset path
           asset_value.each_with_index do |path, i|
-            raise RuntimeError, message unless Utility.safe_path? path
+            fail RuntimeError, message unless Utility.safe_path? path
           end
         end
       end unless @config[:assets].nil?

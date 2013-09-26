@@ -165,7 +165,7 @@ module Palimpsest
     # @param options [Hash] merged with {DEFAULT_OPTIONS}
     # (see #find_tags)
     def self.find_tags path, type=nil, options={}
-      raise ArgumentError, 'path cannot be empty' if path.empty?
+      fail ArgumentError, 'path cannot be empty' if path.empty?
 
       options = DEFAULT_OPTIONS.merge options
       pre = Regexp.escape options[:src_pre]

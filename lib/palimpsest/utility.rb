@@ -38,8 +38,8 @@ module Palimpsest
     # @return [String] input path if valid
     def self.validate_path path, root=''
       case
-      when path[/(\.\.\/|~\/)/] then raise RuntimeError
-      when File.expand_path(path, root)[/^#{root}/].nil? then raise RuntimeError
+      when path[/(\.\.\/|~\/)/] then fail RuntimeError
+      when File.expand_path(path, root)[/^#{root}/].nil? then fail RuntimeError
       else path
       end
     end
