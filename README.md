@@ -14,6 +14,7 @@ and easy integration with [Kit](https://github.com/razor-x/kit).
 [![Build Status](https://travis-ci.org/razor-x/palimpsest.png?branch=master)](https://travis-ci.org/razor-x/palimpsest)
 [![Coverage Status](https://coveralls.io/repos/razor-x/palimpsest/badge.png)](https://coveralls.io/r/razor-x/palimpsest)
 [![Code Climate](https://codeclimate.com/github/razor-x/palimpsest.png)](https://codeclimate.com/github/razor-x/palimpsest)
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/428992451dfb452dbd522644cbb17f71 "githalytics.com")](http://githalytics.com/razor-x/palimpsest)
 
 ## Installation
 
