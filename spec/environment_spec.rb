@@ -120,40 +120,40 @@ describe Palimpsest::Environment do
       subject(:environment) { Palimpsest::Environment.new site: site_1, treeish: 'master' }
 
       before :each do
-        allow(site_1).to receive(:repo).and_return(double Grit::Repo)
+        site_1.repo = double Grit::Repo
         allow(Palimpsest::Utility).to receive :extract_repo
       end
 
       it "extracts the repo to the directory and sets populated true" do
         expect(Palimpsest::Utility).to receive(:extract_repo).with(site_1.repo, 'master', environment.directory)
-        environment.populate
+        environment.populate from: :repo
         expect(environment.populated).to eq true
       end
 
       it "fails when missing treeish" do
         environment.site = site_1
         environment.treeish = ''
-        expect { environment.populate }.to raise_error RuntimeError, /populate without/
+        expect { environment.populate from: :repo }.to raise_error RuntimeError, /populate without/
       end
 
       it "returns itself" do
-        expect(environment.populate).to be environment
+        expect(environment.populate from: :repo).to be environment
       end
 
       it "will cleanup if populated" do
         environment.populate
         expect(environment).to receive :cleanup
-        environment.populate
+        environment.populate from: :repo
       end
     end
 
-    context "populate from directory" do
+    context "populate from source" do
 
-      it "copies the source files to the directory" do
+      it "copies the source files to the directory preserving mtime" do
         environment.site = site_1
-        allow(site_1).to receive(:source).and_return('/path/to/source')
+        site_1.source = '/path/to/source'
         allow(Dir).to receive(:[]).with('/path/to/source/*').and_return( %w(dir_1 dir_2) )
-        expect(FileUtils).to receive(:cp_r).with( %w(dir_1 dir_2), environment.directory )
+        expect(FileUtils).to receive(:cp_r).with( %w(dir_1 dir_2), environment.directory, preserve: true )
         environment.populate from: :source
       end
     end

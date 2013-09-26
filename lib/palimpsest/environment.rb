@@ -144,19 +144,26 @@ module Palimpsest
     end
 
     # Extracts the site's files from repository to the working directory.
-    def populate from: :repo
+    def populate from: :auto
       cleanup if populated
       fail RuntimeError, "Cannot populate without 'site'" if site.nil?
 
       case from
+      when :auto
+        if site.respond_to?(:repo) ? site.repo : nil
+          populate from: :repo
+        else
+          populate from: :source
+        end
       when :repo
         fail RuntimeError, "Cannot populate without 'treeish'" if treeish.empty?
         Utility.extract_repo site.repo, treeish, directory
+        @populated = true
       when :source
         FileUtils.cp_r Dir["#{site.source}/*"], directory, preserve: true
+        @populated = true
       end
 
-      @populated = true
       self
     end
 
