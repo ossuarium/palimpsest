@@ -4,6 +4,7 @@ module Palimpsest
 
   # An environment is populated with the contents of
   # a site's repository at a specified commit.
+  # Alternatively, a single directory can be used to populate the environment.
   # The environment's files are rooted in a temporary {#directory}.
   # An environment is the primary way to interact with a site's files.
   #
@@ -13,11 +14,12 @@ module Palimpsest
   # Paths are all relative to the working {#directory}.
   #
   # ````yml
-  # palimpsest_config.yml
+  # # example of palimpsest_config.yml
   #
   # # asset settings
   # :assets:
-  #   # all options are passed to `Palimpsest::Assets#options` and will use those defaults if unset
+  #   # all options are passed to Palimpsest::Assets#options
+  #   # options will use defaults set in Palimpsest::Asset::DEFAULT_OPTIONS if unset here
   #   # unless otherwise mentioned, options can be set or overridden per asset type
   #   :options:
   #     # opening and closing brackets for asset source tags
