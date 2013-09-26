@@ -83,7 +83,6 @@ module Palimpsest
       end
 
       if options[:image_compression]
-        require 'sprockets-image_compressor'
         Sprockets::ImageCompressor::Integration.setup sprockets
       end
 

@@ -62,16 +62,30 @@ require 'palimpsest'
 Some optional Palimpsest features depend on gems not required by Palimpsest itself.
 Include these in your project's Gemfile if you plan to use them.
 
-For example, to use the `image_compression` option, add
+For example, to use the `image_compression` option, add to your Gemfile
 
 ````ruby
 gem 'sprockets-image_compressor'
 ````
-or if you set `js_compressor: uglifier` you must added
+
+and to your project
+
+````ruby
+require 'sprockets-image_compressor'
+````
+
+or if you set `js_compressor: uglifier` you must add to your Gemfile
 
 ````ruby
 gem 'uglifier'
 ````
+
+and to your project
+
+````ruby
+require 'uglifier'
+````
+
 Similarly you must include gems for any sprockets engines you want to use.
 
 ### Creating and populating an environment
@@ -130,7 +144,7 @@ and replace the tags with references to the processed assets,
 ````ruby
 environment.compile_assets
 ````
-Check the [**`Palimpsest::Environment` documentation**](http://rubydoc.info/github/razor-x/palimpsest/Palimpsest/Environment)
+Check the [`Palimpsest::Environment` documentation](http://rubydoc.info/github/razor-x/palimpsest/Palimpsest/Environment)
 for all available magic, and freely extend the class to add new magic applicable to your project.
 
 ### Finishing with the environment
