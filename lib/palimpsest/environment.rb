@@ -153,7 +153,7 @@ module Palimpsest
         fail RuntimeError, "Cannot populate without 'treeish'" if treeish.empty?
         Utility.extract_repo site.repo, treeish, directory
       when :source
-        FileUtils.cp_r Dir["#{site.source}/*"], directory
+        FileUtils.cp_r Dir["#{site.source}/*"], directory, preserve: true
       end
 
       @populated = true
@@ -210,7 +210,7 @@ module Palimpsest
       sources_with_assets.each do |file|
         source = File.read file
         assets.each { |a| a.update_source! source }
-        Utility.write source, file
+        Utility.write source, file, preserve: true
       end
       self
     end

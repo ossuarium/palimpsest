@@ -56,8 +56,10 @@ module Palimpsest
     # Write contents to file.
     # @param contents [String]
     # @param file [String]
-    def self.write contents, file
+    def self.write contents, file, preserve: false
+      original_time = File.mtime file if preserve
       File.open(file, 'w') { |f| f.write contents }
+      File.utime original_time, original_time, file if preserve
     end
   end
 end

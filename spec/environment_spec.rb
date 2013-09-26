@@ -292,12 +292,12 @@ describe Palimpsest::Environment do
         expect(environment.compile_assets).to be environment
       end
 
-      it "compiles the assets and writes the sources" do
+      it "compiles the assets and writes the sources while preserving mtime" do
         allow(environment).to receive(:sources_with_assets).and_return sources
         allow(File).to receive(:read).with(sources[0]).and_return('data_1')
         allow(File).to receive(:read).with(sources[1]).and_return('data_2')
-        expect(Palimpsest::Utility).to receive(:write).with 'data_1', sources[0]
-        expect(Palimpsest::Utility).to receive(:write).with 'data_2', sources[1]
+        expect(Palimpsest::Utility).to receive(:write).with 'data_1', sources[0], preserve: true
+        expect(Palimpsest::Utility).to receive(:write).with 'data_2', sources[1], preserve: true
         environment.compile_assets
       end
     end

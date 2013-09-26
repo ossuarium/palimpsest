@@ -46,11 +46,22 @@ describe Palimpsest::Utility do
   describe "write" do
 
     let(:file) { double File }
+    let(:mtime) { Time.now }
+
+    before :each do
+      allow(File).to receive(:open).with('path/to/file', 'w').and_yield(file)
+    end
 
     it "writes to file" do
-      allow(File).to receive(:open).with('path/to/file', 'w').and_yield(file)
       expect(file).to receive(:write).with('data')
       Palimpsest::Utility.write 'data', 'path/to/file'
+    end
+
+    it "can preserve atime and mtime" do
+      allow(file).to receive(:write)
+      allow(File).to receive(:mtime).with('path/to/file').and_return(mtime)
+      expect(File).to receive(:utime).with(mtime, mtime, 'path/to/file')
+      Palimpsest::Utility.write 'data', 'path/to/file', preserve: true
     end
   end
 end
