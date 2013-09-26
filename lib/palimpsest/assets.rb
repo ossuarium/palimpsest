@@ -78,7 +78,7 @@ module Palimpsest
       options[:sprockets_options].each do |opt|
         sprockets.send "#{opt}=".to_sym, options[opt] if options[opt]
       end
-      return self
+      self
     end
 
     # Load paths into the sprockets environment.
@@ -87,7 +87,7 @@ module Palimpsest
       paths.each do |path|
         sprockets.append_path "#{directory + '/' unless directory.empty?}#{path}"
       end
-      return self
+      self
     end
 
     # @return [Sprockets::Environment] sprockets environment with {#options} and {#paths} loaded

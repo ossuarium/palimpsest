@@ -123,7 +123,7 @@ module Palimpsest
     def directory
       raise RuntimeError if site.nil?
       if @directory.nil?
-        @directory = Palimpsest::Utility.make_random_directory options[:tmp_dir], "#{options[:dir_prefix]}#{site.name}_"
+        @directory = Utility.make_random_directory options[:tmp_dir], "#{options[:dir_prefix]}#{site.name}_"
       else
         @directory
       end
@@ -145,7 +145,7 @@ module Palimpsest
       case from
       when :repo
         raise RuntimeError, "Cannot populate without 'treeish'" if treeish.empty?
-        Palimpsest::Utility.extract_repo site.repo, treeish, directory
+        Utility.extract_repo site.repo, treeish, directory
       when :source
         FileUtils.cp_r Dir["#{site.source}/*"], directory
       end
@@ -169,7 +169,7 @@ module Palimpsest
         next if [:sources].include? type
         next if opt[:paths].nil?
 
-        assets = Palimpsest::Assets.new directory: directory, paths: opt[:paths]
+        assets = Assets.new directory: directory, paths: opt[:paths]
         assets.options config[:assets][:options] unless config[:assets][:options].nil?
         assets.options opt[:options] unless opt[:options].nil?
         assets.type = type
@@ -192,7 +192,7 @@ module Palimpsest
       end unless config[:assets][:options].nil?
 
       config[:assets][:sources].each do |path|
-        @sources_with_assets << Palimpsest::Assets.find_tags("#{directory}/#{path}", nil, opts)
+        @sources_with_assets << Assets.find_tags("#{directory}/#{path}", nil, opts)
       end
 
       @sources_with_assets.flatten
@@ -204,7 +204,7 @@ module Palimpsest
       sources_with_assets.each do |file|
         source = File.read file
         assets.each { |a| a.update_source! source }
-        Palimpsest::Utility.write source, file
+        Utility.write source, file
       end
       self
     end
@@ -217,13 +217,11 @@ module Palimpsest
     def validate_config
       message = 'bad path in config'
 
-      def safe_path?(path) Palimpsest::Utility.safe_path?(path) end
-
       # Checks the option in the asset key.
       def validate_asset_options opts
         opts.each do |k,v|
           raise RuntimeError, 'bad option in config' if k == :sprockets_options
-          raise RuntimeError, message if k == :output && ! safe_path?(v)
+          raise RuntimeError, message if k == :output && ! Utility.safe_path?(v)
         end
       end
 
@@ -238,7 +236,7 @@ module Palimpsest
         # process @config[:assets][:sources] then go to the next option
         if k == :sources
           v.each_with_index do |source, i|
-            raise RuntimeError, message unless safe_path? source
+            raise RuntimeError, message unless Utility.safe_path? source
           end
           next
         end
@@ -253,7 +251,7 @@ module Palimpsest
 
           # process each asset path
           asset_value.each_with_index do |path, i|
-            raise RuntimeError, message unless safe_path? path
+            raise RuntimeError, message unless Utility.safe_path? path
           end
         end
       end unless @config[:assets].nil?
