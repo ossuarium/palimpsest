@@ -48,15 +48,9 @@ module Palimpsest
     # @param [Grit::Repo] repo
     # @param [String] treeish
     # @param [String] directory
-    def self.extract_repo repo, treeish, directory, files: nil
+    def self.extract_repo repo, treeish, directory
       input = Archive::Tar::Minitar::Input.new StringIO.new(repo.archive_tar treeish)
-      input.each do |entry|
-        if files.nil?
-          input.extract_entry directory, entry
-        else
-          input.extract_entry directory, entry if files.include? entry.name
-        end
-      end
+      input.each { |e| input.extract_entry directory, e }
     end
 
     # Write contents to file.
