@@ -11,12 +11,13 @@ module Palimpsest
     #
     # @!attribute source
     #   @return [String] path to source code for this site
-    attr_accessor :name, :repo, :source
+    attr_accessor :name, :repo, :source, :path
 
     def initialize name: '', repo: nil, source: ''
       self.name = name
       self.repo = repo
       self.source = source
+      self.path = path
     end
   end
 end
