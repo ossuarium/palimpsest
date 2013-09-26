@@ -113,11 +113,13 @@ module Palimpsest
       @options = @options.merge options
     end
 
+    # @see Environment#site
     def site= site
       fail RuntimeError, "Cannot redefine 'site' once populated" if populated
       @site = site
     end
 
+    # @see Environment#treeish
     def treeish= treeish
       fail RuntimeError, "Cannot redefine 'treeish' once populated" if populated
       fail TypeError unless treeish.is_a? String
