@@ -29,6 +29,9 @@ module Palimpsest
       # keyword to use in asset tag for inline assets
       inline: 'inline',
 
+      # if true, use sprockets-image_compressor with pngcrush and jpegoptim
+      image_compression: false,
+
       # if true, also generate a gzipped asset
       gzip: false,
 
@@ -78,6 +81,12 @@ module Palimpsest
       options[:sprockets_options].each do |opt|
         sprockets.send "#{opt}=".to_sym, options[opt] if options[opt]
       end
+
+      if options[:image_compression]
+        require 'sprockets-image_compressor'
+        Sprockets::ImageCompressor::Integration.setup sprockets
+      end
+
       self
     end
 

@@ -63,8 +63,10 @@ module Palimpsest
   #       - assets/stylesheets
   #   # images can be part of the asset pipeline
   #   :images:
-  #     # options can be overridden per type
   #     :options:
+  #       # requires the sprockets-image_compressor gem
+  #       :image_compression: true
+  #        # options can be overridden per type
   #       :output: images
   #     :paths:
   #       - assets/images
