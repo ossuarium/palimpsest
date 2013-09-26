@@ -9,6 +9,7 @@ Palimpsest runs on top of any project and acts as a post processor for your code
 Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
 and easy integration with [Kit](https://github.com/razor-x/kit).
 
+[![Gem Version](https://badge.fury.io/rb/palimpsest.png)](http://badge.fury.io/rb/palimpsest)
 [![Dependency Status](https://gemnasium.com/razor-x/palimpsest.png)](https://gemnasium.com/razor-x/palimpsest)
 [![Build Status](https://travis-ci.org/razor-x/palimpsest.png?branch=master)](https://travis-ci.org/razor-x/palimpsest)
 [![Coverage Status](https://coveralls.io/repos/razor-x/palimpsest/badge.png)](https://coveralls.io/r/razor-x/palimpsest)
