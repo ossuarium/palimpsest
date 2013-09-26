@@ -134,7 +134,7 @@ module Palimpsest
       FileUtils.remove_entry_secure directory if @directory
       @directory = nil
       @populated = false
-      return self
+      self
     end
 
     # Extracts the site's files from repository to the working directory.
@@ -151,7 +151,7 @@ module Palimpsest
       end
 
       @populated = true
-      return self
+      self
     end
 
     # @return [Hash] configuration loaded from {#options}`[:config_file]` under {#directory}
@@ -166,7 +166,7 @@ module Palimpsest
       @assets = []
 
       config[:assets].each do |type, opt|
-        next if [ :sources ].include? type
+        next if [:sources].include? type
         next if opt[:paths].nil?
 
         assets = Palimpsest::Assets.new directory: directory, paths: opt[:paths]
@@ -187,7 +187,7 @@ module Palimpsest
       @sources_with_assets = []
 
       opts = {}
-      [ :src_pre, :src_post ].each do |opt|
+      [:src_pre, :src_post].each do |opt|
         opts[opt] = config[:assets][:options][opt] unless config[:assets][:options][opt].nil?
       end unless config[:assets][:options].nil?
 
@@ -206,7 +206,7 @@ module Palimpsest
         assets.each { |a| a.update_source! source }
         Palimpsest::Utility.write source, file
       end
-      return self
+      self
     end
 
     private

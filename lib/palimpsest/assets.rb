@@ -40,7 +40,7 @@ module Palimpsest
       src_post: '%]',
 
       # allowed options for `Sprockets::Environment`
-      sprockets_options: [ :js_compressor, :css_compressor ]
+      sprockets_options: [:js_compressor, :css_compressor]
     }
 
     # @!attribute directory
@@ -171,9 +171,9 @@ module Palimpsest
       pre = Regexp.escape options[:src_pre]
       post= Regexp.escape options[:src_post]
 
-      cmd = [ 'grep' ]
-      cmd.concat [ '-l', '-I', '-r', '-E' ]
-      cmd << \
+      cmd = ['grep']
+      cmd.concat %w(-l -I -r -E)
+      cmd <<
         if type.nil?
           pre + '(.*?)' + post
         else
