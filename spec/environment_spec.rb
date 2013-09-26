@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Palimpsest::Environment do
 
-  let(:site_1) { double name: 'site_1' }
-  let(:site_2) { double name: 'site_2' }
+  let(:site_1) { Palimpsest::Site.new name: 'site_1' }
+  let(:site_2) { Palimpsest::Site.new name: 'site_2' }
 
   subject(:environment) { Palimpsest::Environment.new }
 
