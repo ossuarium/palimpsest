@@ -125,9 +125,9 @@ module Palimpsest
 
     # @return [String] the environment's working directory
     def directory
-      fail RuntimeError if site.nil?
       if @directory.nil?
-        @directory = Utility.make_random_directory options[:tmp_dir], "#{options[:dir_prefix]}#{site.name}_"
+        name = site.nil? ? '' : site.name
+        @directory = Utility.make_random_directory options[:tmp_dir], "#{options[:dir_prefix]}#{name}_"
       else
         @directory
       end

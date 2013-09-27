@@ -63,30 +63,26 @@ describe Palimpsest::Environment do
 
   describe "#directory" do
 
-    context "when required values set" do
+    before :each do
+      allow(Palimpsest::Utility).to receive(:make_random_directory).and_return('/tmp/rand_dir')
+    end
 
-      subject(:environment) { Palimpsest::Environment.new site: site_1 }
+    context "when directory is unset" do
 
-      before :each do
-        allow(Palimpsest::Utility).to receive(:make_random_directory).and_return('/tmp/rand_dir')
-      end
-
-      context "when directory is unset" do
-
-        it "makes and returns a random directory" do
-          expect(environment.directory).to eq '/tmp/rand_dir'
-        end
-      end
-
-      context "when directory is set" do
-
-        it "returns the current directory" do
-          expect(Palimpsest::Utility).to receive(:make_random_directory).once
-          environment.directory
-          expect(environment.directory).to eq '/tmp/rand_dir'
-        end
+      it "makes and returns a random directory" do
+        expect(environment.directory).to eq '/tmp/rand_dir'
       end
     end
+
+    context "when directory is set" do
+
+      it "returns the current directory" do
+        expect(Palimpsest::Utility).to receive(:make_random_directory).once
+        environment.directory
+        expect(environment.directory).to eq '/tmp/rand_dir'
+      end
+    end
+  end
 
     context "when required values are not set" do
 
