@@ -106,6 +106,10 @@ describe Palimpsest::Environment do
       environment.cleanup
       expect(environment.instance_variable_get :@directory).to eq nil
     end
+
+    it "returns itself" do
+      expect(environment.cleanup).to be environment
+    end
   end
 
   describe "#populate" do

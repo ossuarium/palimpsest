@@ -138,6 +138,8 @@ module Palimpsest
     def cleanup
       FileUtils.remove_entry_secure directory if @directory
       @directory = nil
+      @assets = []
+      @components = []
       @populated = false
       self
     end
