@@ -91,12 +91,9 @@ module Palimpsest
     # @!attribute treeish
     #   @return [String] the reference used to pick the commit to build the environment with
     #
-    # @!attribute [r] directory
-    #   @return [String] the environment's working directory
-    #
     # @!attribute [r] populated
     #   @return [Boolean] true if the site's repo has been extracted
-    attr_reader :site, :treeish, :directory, :populated
+    attr_reader :site, :treeish, :populated
 
     def initialize site: nil, treeish: 'master', options: {}
       @populated = false
@@ -126,6 +123,7 @@ module Palimpsest
       @treeish = treeish
     end
 
+    # @return [String] the environment's working directory
     def directory
       fail RuntimeError if site.nil?
       if @directory.nil?
@@ -136,6 +134,7 @@ module Palimpsest
     end
 
     # Removes the environment's working directory.
+    # @return [Palimpsest::Environment] the current environment instance
     def cleanup
       FileUtils.remove_entry_secure directory if @directory
       @directory = nil
@@ -144,6 +143,7 @@ module Palimpsest
     end
 
     # Extracts the site's files from repository to the working directory.
+    # @return [Palimpsest::Environment] the current environment instance
     def populate from: :auto
       cleanup if populated
       fail RuntimeError, "Cannot populate without 'site'" if site.nil?
@@ -213,6 +213,7 @@ module Palimpsest
 
     # Finds all assets in {#sources_with_assets} and
     # generates the assets and updates the sources.
+    # @return [Palimpsest::Environment] the current environment instance
     def compile_assets
       sources_with_assets.each do |file|
         source = File.read file
@@ -225,7 +226,7 @@ module Palimpsest
     private
 
     # Checks the config file for invalid settings.
-    #
+    # @todo refactor this
     # - Checks that paths are not absolute or use `../` or `~/`.
     def validate_config
       message = 'bad path in config'
@@ -268,6 +269,7 @@ module Palimpsest
           end
         end
       end unless @config[:assets].nil?
+
       @config
     end
   end
