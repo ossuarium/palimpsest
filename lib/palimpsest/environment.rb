@@ -133,6 +133,14 @@ module Palimpsest
       end
     end
 
+    # Copy the contents of the working directory.
+    # @param dest [String] path to copy environment's files to
+    # @return [Palimpsest::Environment] the current environment instance
+    def copy dest: site.path
+      FileUtils.cp_r Dir["#{directory}/*"], dest, preserve: true
+      self
+    end
+
     # Removes the environment's working directory.
     # @return [Palimpsest::Environment] the current environment instance
     def cleanup

@@ -84,11 +84,12 @@ describe Palimpsest::Environment do
     end
   end
 
-    context "when required values are not set" do
-
-      it "fails if site is not set" do
-        expect { environment.directory }.to raise_error RuntimeError
-      end
+  describe "#copy" do
+    it "moves the component to the install path" do
+      dir = environment.directory
+      allow(Dir).to receive(:[]).with("#{dir}/*").and_return( %W(#{dir}/path/1 #{dir}/path/2) )
+      expect(FileUtils).to receive(:cp_r).with( %W(#{dir}/path/1 #{dir}/path/2), '/dest/path', preserve: true)
+      environment.copy dest: '/dest/path'
     end
   end
 
