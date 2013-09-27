@@ -223,6 +223,29 @@ module Palimpsest
       self
     end
 
+    # @return [Array<Palimpsest::Component>] components with paths loaded from config
+    def components
+      return @components if @components
+      return [] if config[:components].nil?
+
+      @components = []
+
+      base = config[:components][:base].nil? ? '' : config[:components][:base] + '/'
+
+      config[:components][:paths].each do |paths|
+       @components << Component.new(source_path: base + paths[0], install_path: paths[1])
+      end unless config[:components].nil?
+
+      @components
+    end
+
+    # Install all components.
+    # @return [Palimpsest::Environment] the current environment instance
+    def install_components
+      components.each { |c| c.install }
+      self
+    end
+
     private
 
     # Checks the config file for invalid settings.
@@ -239,8 +262,23 @@ module Palimpsest
         end
       end
 
-      @config[:assets].each do |k, v|
+      @config[:components].each do |k,v|
+        # process @config[:components][:base] then go to the next option
+        if k == :base
+          fail RuntimeError, message unless Utility.safe_path? v
+          next
+        end unless v.nil?
 
+        # process @config[:components][:paths]
+        if k == :paths
+          v.each do |path|
+            fail RuntimeError, message unless Utility.safe_path? path[0]
+            fail RuntimeError, message unless Utility.safe_path? path[1]
+          end
+        end
+      end unless @config[:components].nil?
+
+      @config[:assets].each do |k, v|
         # process @config[:assets][:options] then go to the next option
         if k == :options
           validate_asset_options v

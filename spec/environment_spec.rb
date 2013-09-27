@@ -189,6 +189,11 @@ describe Palimpsest::Environment do
 
     let(:config) do
       YAML.load <<-EOF
+        :components:
+          :base: _components
+          :paths:
+            - [ my_app/templates, apps/my_app/templates ]
+            - [ my_app/extra, apps/my_app ]
         :assets:
           :options:
             :output: compiled
@@ -217,6 +222,36 @@ describe Palimpsest::Environment do
       environment.directory
       allow(environment).to receive(:populated).and_return(true)
       allow(environment).to receive(:config).and_return(config)
+    end
+
+    describe "#components" do
+
+      it "returns an array" do
+        expect(environment.components).to be_a Array
+      end
+
+     it "contains components" do
+        expect(environment.components[0]).to be_a Palimpsest::Component
+        expect(environment.components[1]).to be_a Palimpsest::Component
+      end
+
+      it "sets the components source and install paths" do
+        expect(environment.components[0].source_path).to eq '_components/my_app/templates'
+        expect(environment.components[0].install_path).to eq 'apps/my_app/templates'
+      end
+    end
+
+    describe "#install_components" do
+
+      it "installs the components" do
+        expect(environment.components[0]).to receive(:install)
+        expect(environment.components[1]).to receive(:install)
+        environment.install_components
+      end
+
+      it "returns itself" do
+        expect(environment.install_components).to be environment
+      end
     end
 
     describe "#assets" do
