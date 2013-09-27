@@ -176,6 +176,8 @@ module Palimpsest
 
     # @return [Array<Palimpsest::Assets>] assets with settings and paths loaded from config
     def assets
+      return @assets if @assets
+
       @assets = []
 
       config[:assets].each do |type, opt|
