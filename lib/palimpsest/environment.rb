@@ -207,6 +207,29 @@ module Palimpsest
       self
     end
 
+    # @return [Array<External>] externals loaded from config
+    def externals
+      return @externals if @externals
+      return [] if config[:externals].nil?
+      return [] if config[:externals][:repos].nil?
+
+      @externals = []
+
+      config[:externals][:repos].each do |repo|
+        source = repo[3].nil? ? config[:externals][:server] : repo[3]
+        @externals << External.new(name: repo[0], source: source, branch: repo[2], install_path: "#{directory}/#{repo[1]}" )
+      end
+
+      @externals
+    end
+
+    # Install all externals.
+    # @return [Environment] the current environment instance
+    def install_externals
+      externals.each { |e| e.install }
+      self
+    end
+
     # @return [Array<Assets>] assets with settings and paths loaded from config
     def assets
       return @assets if @assets
@@ -273,6 +296,14 @@ module Palimpsest
           fail RuntimeError, message if k == :output && ! Utility.safe_path?(v)
         end
       end
+
+      @config[:external].each do |k, v|
+        next if k == :server
+
+        v.each do |repo|
+          fail RuntimeError, message unless Utility.safe_path? repo[1]
+        end unless v.nil?
+      end unless @config[:external].nil?
 
       @config[:components].each do |k,v|
         # process @config[:components][:base] then go to the next option

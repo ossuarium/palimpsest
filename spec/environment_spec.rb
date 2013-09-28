@@ -189,6 +189,11 @@ describe Palimpsest::Environment do
           :paths:
             - [ my_app/templates, apps/my_app/templates ]
             - [ my_app/extra, apps/my_app ]
+        :externals:
+          :server: "https://github.com/razor-x"
+          :repos:
+            - [ my_app, apps/my_app, master ]
+            - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
         :assets:
           :options:
             :output: compiled
@@ -246,6 +251,55 @@ describe Palimpsest::Environment do
 
       it "returns itself" do
         expect(environment.install_components).to be environment
+      end
+    end
+
+    describe "#externals" do
+
+      it "returns an array" do
+        expect(environment.externals).to be_a Array
+      end
+
+      it "contains externals" do
+        expect(environment.externals[0]).to be_a Palimpsest::External
+        expect(environment.externals[1]).to be_a Palimpsest::External
+      end
+
+      it "sets the externals repo path" do
+        expect(environment.externals[0].repo_path).to eq 'https://github.com/razor-x/my_app'
+        expect(environment.externals[1].repo_path).to eq 'https://bitbucket.org/razorx/sub_app'
+      end
+
+      it "sets the externals branch" do
+        expect(environment.externals[0].branch).to eq 'master'
+        expect(environment.externals[1].branch).to eq 'my_feature'
+      end
+
+      it "sets the install path" do
+        expect(environment.externals[0].install_path).to eq "#{environment.directory}/apps/my_app"
+        expect(environment.externals[1].install_path).to eq "#{environment.directory}/apps/my_app/sub_app"
+      end
+    end
+
+    describe "#install_externals" do
+
+      let(:external_1) { double Palimpsest::External }
+      let(:external_2) { double Palimpsest::External }
+
+      before :each do
+        allow(environment).to receive(:externals).and_return( [ external_1, external_2 ] )
+        allow(external_1).to receive(:install)
+        allow(external_2).to receive(:install)
+      end
+
+      it "installs the externals" do
+        expect(external_1).to receive(:install)
+        expect(external_2).to receive(:install)
+        environment.install_externals
+      end
+
+      it "returns itself" do
+        expect(environment.install_externals).to be environment
       end
     end
 
