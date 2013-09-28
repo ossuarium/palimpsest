@@ -44,6 +44,9 @@ module Palimpsest
 
       fail RuntimeError if source.empty?
 
+      Grit::Git.git_max_size = 200 * 1048576
+      Grit::Git.git_timeout = 200
+
       @tmp_environment = Environment.new
       gritty = Grit::Git.new tmp_environment.directory
       gritty.clone( { branch: branch }, source, tmp_environment.directory )
