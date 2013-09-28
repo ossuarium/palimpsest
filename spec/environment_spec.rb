@@ -83,7 +83,7 @@ describe Palimpsest::Environment do
     it "copies the environment to the destination" do
       dir = environment.directory
       allow(Dir).to receive(:[]).with("#{dir}/*").and_return( %W(#{dir}/path/1 #{dir}/path/2) )
-      expect(FileUtils).to receive(:mkdir_p).with( %W(#{dir}/path/1 #{dir}/path/2) )
+      expect(FileUtils).to receive(:mkdir_p).with('/dest/path')
       expect(FileUtils).to receive(:cp_r).with( %W(#{dir}/path/1 #{dir}/path/2), '/dest/path', preserve: true)
       environment.copy dest: '/dest/path'
     end
@@ -294,15 +294,11 @@ describe Palimpsest::Environment do
         allow(external_2).to receive(:install)
       end
 
-      it "installs the externals" do
+      it "installs the externals and returns itself" do
         expect(external_1).to receive(:install).and_return(external_1)
         expect(external_1).to receive(:cleanup)
         expect(external_2).to receive(:install).and_return(external_2)
         expect(external_2).to receive(:cleanup)
-        environment.install_externals
-      end
-
-      it "returns itself" do
         expect(environment.install_externals).to be environment
       end
     end
