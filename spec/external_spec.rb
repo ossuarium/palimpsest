@@ -11,6 +11,7 @@ describe Palimpsest::External do
     allow(Grit::Git).to receive(:new).and_return(gritty)
     allow(Grit::Repo).to receive(:new).and_return(repo)
     allow(gritty).to receive(:clone)
+    allow(repo).to receive(:archive_tar)
   end
 
   describe "#repo_path" do
@@ -77,17 +78,10 @@ describe Palimpsest::External do
 
   describe "#install" do
 
-    before :each do
+    it "populates and installs the external to the install path and returns itself" do
       external.install_path = 'path/to/install'
-      allow(external.environment).to receive(:copy)
-    end
-
-    it "installs the external to the install path" do
+      expect(external.environment).to receive(:populate).and_return(external.environment)
       expect(external.environment).to receive(:copy).with(dest: 'path/to/install')
-      external.install
-    end
-
-    it "returns itself" do
       expect(external.install).to be external
     end
   end
