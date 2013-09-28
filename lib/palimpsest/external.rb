@@ -16,12 +16,16 @@ module Palimpsest
     #
     # @!attribute branch
     #   @return [String] branch to use for treeish
-    attr_accessor :name, :source, :branch
+    #
+    # @!attribute install_path
+    #   @return [String] where the files will be installed to
+    attr_accessor :name, :source, :branch, :install_path
 
-    def initialize name: '', source: '', branch: 'master'
+    def initialize name: '', source: '', branch: 'master', install_path: ''
       self.name = name
       self.source = source
       self.branch = branch
+      self.install_path = install_path
     end
 
     def repo_path
@@ -34,6 +38,12 @@ module Palimpsest
 
       site = Site.new repo: Grit::Repo.new(tmp_environment.directory)
       @environment = Environment.new site: site, treeish: branch
+    end
+
+    # Copy the files to the {#install_path}.
+    # @return (see Environment#copy)
+    def install
+      environment.copy dest: install_path
     end
 
     # @return [External] the current external instance
