@@ -7,12 +7,6 @@ describe Palimpsest::Environment do
 
   subject(:environment) { Palimpsest::Environment.new }
 
-  after :all do
-    Dir.glob("#{Palimpsest::Environment.new.options[:tmp_dir]}/#{Palimpsest::Environment.new.options[:dir_prefix]}*").each do |dir|
-      FileUtils.remove_entry_secure dir
-    end
-  end
-
   describe ".new" do
 
     it "sets default options" do
