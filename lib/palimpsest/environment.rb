@@ -186,6 +186,7 @@ module Palimpsest
     def components
       return @components if @components
       return [] if config[:components].nil?
+      return [] if config[:components][:paths].nil?
 
       @components = []
 
@@ -194,7 +195,7 @@ module Palimpsest
 
       config[:components][:paths].each do |paths|
        @components << Component.new(source_path: "#{base}/#{paths[0]}", install_path: "#{directory}/#{paths[1]}")
-      end unless config[:components].nil?
+      end
 
       @components
     end
