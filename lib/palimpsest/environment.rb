@@ -156,6 +156,7 @@ module Palimpsest
     # @param dest [String] path to copy environment's files to
     # @return [Environment] the current environment instance
     def copy dest: site.path
+      FileUtils.mkdir_p dest
       FileUtils.cp_r Dir["#{directory}/*"], dest, preserve: true
       self
     end

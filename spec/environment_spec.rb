@@ -79,9 +79,11 @@ describe Palimpsest::Environment do
   end
 
   describe "#copy" do
-    it "moves the component to the install path" do
+
+    it "copies the environment to the destination" do
       dir = environment.directory
       allow(Dir).to receive(:[]).with("#{dir}/*").and_return( %W(#{dir}/path/1 #{dir}/path/2) )
+      expect(FileUtils).to receive(:mkdir_p).with( %W(#{dir}/path/1 #{dir}/path/2) )
       expect(FileUtils).to receive(:cp_r).with( %W(#{dir}/path/1 #{dir}/path/2), '/dest/path', preserve: true)
       environment.copy dest: '/dest/path'
     end
