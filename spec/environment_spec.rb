@@ -231,8 +231,8 @@ describe Palimpsest::Environment do
       end
 
       it "sets the components source and install paths" do
-        expect(environment.components[0].source_path).to eq '_components/my_app/templates'
-        expect(environment.components[0].install_path).to eq 'apps/my_app/templates'
+        expect(environment.components[0].source_path).to eq "#{environment.directory}/_components/my_app/templates"
+        expect(environment.components[0].install_path).to eq "#{environment.directory}/apps/my_app/templates"
       end
     end
 

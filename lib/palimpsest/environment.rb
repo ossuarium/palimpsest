@@ -240,10 +240,11 @@ module Palimpsest
 
       @components = []
 
-      base = config[:components][:base].nil? ? '' : config[:components][:base] + '/'
+      base = directory
+      base += config[:components][:base].nil? ? '' : '/' + config[:components][:base]
 
       config[:components][:paths].each do |paths|
-       @components << Component.new(source_path: base + paths[0], install_path: paths[1])
+       @components << Component.new(source_path: "#{base}/#{paths[0]}", install_path: "#{directory}/#{paths[1]}")
       end unless config[:components].nil?
 
       @components
