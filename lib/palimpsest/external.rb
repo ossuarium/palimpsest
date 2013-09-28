@@ -36,7 +36,7 @@ module Palimpsest
     def environment
       return @environment if @environment
 
-      site = Site.new repo: Grit::Repo.new(tmp_environment.directory)
+      site = Site.new name: "external_#{name.gsub '/', '_'}", repo: Grit::Repo.new(tmp_environment.directory)
       @environment = Environment.new site: site, treeish: branch
     end
 
@@ -66,7 +66,7 @@ module Palimpsest
       Grit::Git.git_max_size = 200 * 1048576
       Grit::Git.git_timeout = 200
 
-      @tmp_environment = Environment.new
+      @tmp_environment = Environment.new site: Site.new(name: "external_clone_#{name.gsub '/', '_'}")
       gritty = Grit::Git.new tmp_environment.directory
       gritty.clone( { branch: branch }, repo_path, tmp_environment.directory )
       @tmp_environment
