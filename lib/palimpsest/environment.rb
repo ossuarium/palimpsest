@@ -182,6 +182,30 @@ module Palimpsest
       validate_config if @config
     end
 
+    # @return [Array<Component>] components with paths loaded from config
+    def components
+      return @components if @components
+      return [] if config[:components].nil?
+
+      @components = []
+
+      base = directory
+      base += config[:components][:base].nil? ? '' : '/' + config[:components][:base]
+
+      config[:components][:paths].each do |paths|
+       @components << Component.new(source_path: "#{base}/#{paths[0]}", install_path: "#{directory}/#{paths[1]}")
+      end unless config[:components].nil?
+
+      @components
+    end
+
+    # Install all components.
+    # @return [Environment] the current environment instance
+    def install_components
+      components.each { |c| c.install }
+      self
+    end
+
     # @return [Array<Assets>] assets with settings and paths loaded from config
     def assets
       return @assets if @assets
@@ -230,30 +254,6 @@ module Palimpsest
         assets.each { |a| a.update_source! source }
         Utility.write source, file, preserve: true
       end
-      self
-    end
-
-    # @return [Array<Component>] components with paths loaded from config
-    def components
-      return @components if @components
-      return [] if config[:components].nil?
-
-      @components = []
-
-      base = directory
-      base += config[:components][:base].nil? ? '' : '/' + config[:components][:base]
-
-      config[:components][:paths].each do |paths|
-       @components << Component.new(source_path: "#{base}/#{paths[0]}", install_path: "#{directory}/#{paths[1]}")
-      end unless config[:components].nil?
-
-      @components
-    end
-
-    # Install all components.
-    # @return [Environment] the current environment instance
-    def install_components
-      components.each { |c| c.install }
       self
     end
 
