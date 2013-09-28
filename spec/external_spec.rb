@@ -77,10 +77,18 @@ describe Palimpsest::External do
 
   describe "#install" do
 
-    it "installs the external to the install path" do
+    before :each do
       external.install_path = 'path/to/install'
+      allow(external.environment).to receive(:copy)
+    end
+
+    it "installs the external to the install path" do
       expect(external.environment).to receive(:copy).with(dest: 'path/to/install')
       external.install
+    end
+
+    it "returns itself" do
+      expect(external.install).to be external
     end
   end
 end

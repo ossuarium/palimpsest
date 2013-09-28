@@ -44,6 +44,7 @@ module Palimpsest
     # @return (see Environment#copy)
     def install
       environment.copy dest: install_path
+      self
     end
 
     # @return [External] the current external instance

@@ -248,7 +248,7 @@ module Palimpsest
     # Install all externals.
     # @return [Environment] the current environment instance
     def install_externals
-      externals.each { |e| e.install }
+      externals.each { |e| e.install.cleanup }
       self
     end
 
