@@ -16,7 +16,7 @@ module Palimpsest
   #
   # # asset settings
   # :assets:
-  #   # all options are passed to Palimpsest::Assets#options
+  #   # all options are passed to Assets#options
   #   # options will use defaults set in Palimpsest::Asset::DEFAULT_OPTIONS if unset here
   #   # unless otherwise mentioned, options can be set or overridden per asset type
   #   :options:
@@ -133,14 +133,14 @@ module Palimpsest
 
     # Copy the contents of the working directory.
     # @param dest [String] path to copy environment's files to
-    # @return [Palimpsest::Environment] the current environment instance
+    # @return [Environment] the current environment instance
     def copy dest: site.path
       FileUtils.cp_r Dir["#{directory}/*"], dest, preserve: true
       self
     end
 
     # Removes the environment's working directory.
-    # @return [Palimpsest::Environment] the current environment instance
+    # @return [Environment] the current environment instance
     def cleanup
       FileUtils.remove_entry_secure directory if @directory
       @directory = nil
@@ -151,7 +151,7 @@ module Palimpsest
     end
 
     # Extracts the site's files from repository to the working directory.
-    # @return [Palimpsest::Environment] the current environment instance
+    # @return [Environment] the current environment instance
     def populate from: :auto
       cleanup if populated
       fail RuntimeError, "Cannot populate without 'site'" if site.nil?
@@ -182,7 +182,7 @@ module Palimpsest
       validate_config if @config
     end
 
-    # @return [Array<Palimpsest::Assets>] assets with settings and paths loaded from config
+    # @return [Array<Assets>] assets with settings and paths loaded from config
     def assets
       return @assets if @assets
 
@@ -223,7 +223,7 @@ module Palimpsest
 
     # Finds all assets in {#sources_with_assets} and
     # generates the assets and updates the sources.
-    # @return [Palimpsest::Environment] the current environment instance
+    # @return [Environment] the current environment instance
     def compile_assets
       sources_with_assets.each do |file|
         source = File.read file
@@ -233,7 +233,7 @@ module Palimpsest
       self
     end
 
-    # @return [Array<Palimpsest::Component>] components with paths loaded from config
+    # @return [Array<Component>] components with paths loaded from config
     def components
       return @components if @components
       return [] if config[:components].nil?
@@ -250,7 +250,7 @@ module Palimpsest
     end
 
     # Install all components.
-    # @return [Palimpsest::Environment] the current environment instance
+    # @return [Environment] the current environment instance
     def install_components
       components.each { |c| c.install }
       self
