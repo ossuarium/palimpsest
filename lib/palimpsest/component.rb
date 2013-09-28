@@ -26,6 +26,7 @@ module Palimpsest
     def install
       fail RuntimeError if source_path.empty?
       fail RuntimeError if install_path.empty?
+      FileUtils.mkdir_p install_path
       FileUtils.mv Dir["#{source_path}/*"], install_path
     end
   end
