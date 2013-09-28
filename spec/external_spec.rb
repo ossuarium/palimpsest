@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Palimpsest::External do
 
-  subject(:external) { Palimpsest::External.new source: 'path/to/source', branch: 'my_feature' }
+  subject(:external) { Palimpsest::External.new name: 'my_app', source: 'path/to/source', branch: 'my_feature' }
 
   let(:gritty) { double Grit::Git }
   let(:repo) { double Grit::Repo }
@@ -11,6 +11,13 @@ describe Palimpsest::External do
     allow(Grit::Git).to receive(:new).and_return(gritty)
     allow(Grit::Repo).to receive(:new).and_return(repo)
     allow(gritty).to receive(:clone)
+  end
+
+  describe "#repo_path" do
+
+    it "gives the full path to the source repo" do
+      expect(external.repo_path).to eq 'path/to/source/my_app'
+    end
   end
 
   describe "#environment" do
@@ -30,7 +37,8 @@ describe Palimpsest::External do
 
   describe "#tmp_environment" do
 
-    it "fails if no source" do
+    it "fails if no repo path" do
+      external.name = ''
       external.source = ''
       expect { external.tmp_environment }.to raise_error RuntimeError
     end
@@ -40,7 +48,7 @@ describe Palimpsest::External do
     end
 
     it "sets the treeish for the environment" do
-      expect(gritty).to receive(:clone).with( { branch: 'my_feature' }, external.source, anything )
+      expect(gritty).to receive(:clone).with( { branch: 'my_feature' }, external.repo_path, anything )
       external.tmp_environment
     end
   end
