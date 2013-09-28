@@ -5,6 +5,7 @@ require 'palimpsest/utility'
 require 'palimpsest/site'
 require 'palimpsest/assets'
 require 'palimpsest/component'
+require 'palimpsest/external'
 require 'palimpsest/environment'
 
 # No web framework, no problem:
