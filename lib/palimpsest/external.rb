@@ -28,6 +28,7 @@ module Palimpsest
       self.install_path = install_path
     end
 
+    # @return [String] full path to repo as {#source}`/`{#name}
     def repo_path
       ( source.empty? || name.empty? ) ? '' : "#{source}/#{name}"
     end
