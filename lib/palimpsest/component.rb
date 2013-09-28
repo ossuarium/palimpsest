@@ -11,7 +11,7 @@ module Palimpsest
   class Component
 
     # @!attribute source_path
-    #   @return source path for component
+    #   @return [String] source path for component
     #
     # @!attribute install_path
     #   @return [String] install path for component
