@@ -14,6 +14,27 @@ module Palimpsest
   # ````yml
   # # example of palimpsest_config.yml
   #
+  # # component settings
+  # :components:
+  #   # all component paths are relative to the base
+  #   :base: _components
+  #
+  #   # list of components
+  #   :paths:
+  #    #- [ components_path, install_path ]
+  #     - [ my_app/templates, apps/my_app/templates ]
+  #     - [ my_app/extra, apps/my_app ]
+  #
+  # # externals settings
+  # :externals:
+  #   # server or local path that repos are under
+  #   :server: "https://github.com/razor-x"
+  #
+  #   # list of external repos
+  #   :repos:
+  #   #- [ name, install_path, branch, server (optional) ]
+  #    - [ my_app, apps/my_app, master ]
+  #    - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
   # # asset settings
   # :assets:
   #   # all options are passed to Assets#options
