@@ -45,7 +45,7 @@ Documentation for the latest commits is hosted on [the RubyDoc.info project page
 
 ## Usage
 
-**Palimpsest should not be considered stable until version 0.1.0 is released.**
+**Palimpsest should not be considered stable until version 1.0.0 is released.**
 
 This README will focus on examples of how to get your project working with Palimpsest through `Palimpsest::Environment`.
 

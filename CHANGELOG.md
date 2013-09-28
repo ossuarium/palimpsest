@@ -1,5 +1,11 @@
 # Palimpsest ChangeLog
 
+## 0.1.0
+
+- Lots of documentation and improvements.
+- New classes: Site, Component, External.
+- Environment support for new classes.
+
 ## 0.0.1
 
 Initial release.
