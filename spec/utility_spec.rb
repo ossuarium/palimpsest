@@ -13,32 +13,27 @@ describe Palimpsest::Utility do
     end
   end
 
-  describe ".validate_path" do
+  describe ".safe_path?" do
 
     context "valid path" do
 
-      it "returns the input path" do
-        expect(Palimpsest::Utility.validate_path '/path').to eq '/path'
+      it "returns true" do
+        expect(Palimpsest::Utility.safe_path? 'path').to be_true
       end
-
-      it "returns the input path when the root path matches" do
-        expect(Palimpsest::Utility.validate_path '/path/to/dir', '/path/to').to eq '/path/to/dir'
-      end
-
     end
 
-    context "bad path" do
+    context "invalid path" do
 
-      it "rasises an error if path contains '../'" do
-        expect { Palimpsest::Utility.validate_path 'path/with/../in/it' }.to raise_error RuntimeError
+      it "returns false if path contains '../'" do
+        expect(Palimpsest::Utility.safe_path? 'path/with/../in/it').to be_false
       end
 
-      it "rasises an error if using '~/'" do
-        expect { Palimpsest::Utility.validate_path '~/path' }.to raise_error RuntimeError
+      it "returns false if using '~/'" do
+        expect( Palimpsest::Utility.safe_path? '~/path').to be_false
       end
 
-      it "rasises an error if given root does not match path root" do
-        expect { Palimpsest::Utility.validate_path '/other_root/path', '/root/path' }.to raise_error RuntimeError
+      it "returns false if path starts with '/'" do
+        expect(Palimpsest::Utility.safe_path? '/path').to be_false
       end
     end
   end

@@ -31,19 +31,6 @@ module Palimpsest
       end
     end
 
-    # Checks that a path is really rooted under a given root directory.
-    # Forbids use of `../` and `~/` in path.
-    # @param [String] path
-    # @param [String] root directory where path should be rooted under
-    # @return [String] input path if valid
-    def self.validate_path path, root=''
-      case
-      when path[/(\.\.\/|~\/)/] then fail RuntimeError
-      when File.expand_path(path, root)[/^#{root}/].nil? then fail RuntimeError
-      else path
-      end
-    end
-
     # Extracts a git repo to a directory.
     # @param [Grit::Repo] repo
     # @param [String] treeish
