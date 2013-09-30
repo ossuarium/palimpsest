@@ -32,9 +32,16 @@ module Palimpsest
   #
   #   # list of external repos
   #   :repos:
-  #   #- [ name, install_path, branch, server (optional) ]
-  #    - [ my_app, apps/my_app, master ]
-  #    - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
+  #    #- [ name, install_path, branch, server (optional) ]
+  #     - [ my_app, apps/my_app, master ]
+  #     - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
+  #
+  # # list of excludes
+  # # matching paths are removed with {#remove_excludes}.
+  # :excludes:
+  #   - _assets
+  #   - apps/*/.gitignore
+  #
   # # asset settings
   # :assets:
   #   # all options are passed to Assets#options
@@ -85,7 +92,7 @@ module Palimpsest
   #     :options:
   #       # requires the sprockets-image_compressor gem
   #       :image_compression: true
-  #        # options can be overridden per type
+  #       # options can be overridden per type
   #       :output: images
   #     :paths:
   #       - assets/images
@@ -254,6 +261,14 @@ module Palimpsest
       self
     end
 
+    # Remove all excludes defined by `config[:excludes]`.
+    # @return [Environment] the current environment instance
+    def remove_excludes
+      return self if config[:excludes].nil?
+      config[:excludes].map{ |e| Dir["#{directory}/#{e}"] }.flatten.each { |e| FileUtils.remove_entry_secure e }
+      self
+    end
+
     # @return [Array<Assets>] assets with settings and paths loaded from config
     def assets
       return @assets if @assets
@@ -320,6 +335,10 @@ module Palimpsest
           fail RuntimeError, message if k == :output && ! Utility.safe_path?(v)
         end
       end
+
+      @config[:excludes].each do |v|
+        fail RuntimeError, message unless Utility.safe_path? v
+      end unless @config[:excludes].nil?
 
       @config[:external].each do |k, v|
         next if k == :server

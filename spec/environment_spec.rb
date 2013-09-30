@@ -195,6 +195,9 @@ describe Palimpsest::Environment do
           :repos:
             - [ my_app, apps/my_app, master ]
             - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
+        :excludes:
+          - .gitignore
+          - apps/*/assets
         :assets:
           :options:
             :output: compiled
@@ -299,6 +302,22 @@ describe Palimpsest::Environment do
         expect(external_2).to receive(:install).and_return(external_2)
         expect(external_2).to receive(:cleanup)
         expect(environment.install_externals).to be environment
+      end
+    end
+
+    describe "#remove_excludes" do
+
+      it "removes excluded files" do
+        allow(Dir).to receive(:[]).with("#{environment.directory}/.gitignore")
+        .and_return(["#{environment.directory}/.gitignore"])
+
+        allow(Dir).to receive(:[]).with("#{environment.directory}/apps/*/assets")
+        .and_return( %W(#{environment.directory}/apps/app_1/assets #{environment.directory}/apps/app_2/assets) )
+
+        expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/.gitignore")
+        expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/apps/app_1/assets")
+        expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/apps/app_2/assets")
+        expect(environment.remove_excludes).to be environment
       end
     end
 
