@@ -165,6 +165,7 @@ module Palimpsest
     # @return [Environment] the current environment instance
     def cleanup
       FileUtils.remove_entry_secure directory if @directory
+      @config = nil
       @directory = nil
       @assets = []
       @components = []
@@ -199,6 +200,7 @@ module Palimpsest
 
     # @return [Hash] configuration loaded from {#options}`[:config_file]` under {#directory}
     def config
+      return @config if @config
       populate unless populated
       @config = YAML.load_file "#{directory}/#{options[:config_file]}"
       validate_config if @config
