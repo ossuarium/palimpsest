@@ -149,8 +149,7 @@ describe Palimpsest::Environment do
       it "copies the source files to the directory preserving mtime" do
         environment.site = site_1
         site_1.source = '/path/to/source'
-        allow(Dir).to receive(:[]).with('/path/to/source/*').and_return( %w(dir_1 dir_2) )
-        expect(FileUtils).to receive(:cp_r).with( %w(dir_1 dir_2), environment.directory, preserve: true )
+        expect(Kernel).to receive(:system).with('rsync', '-rt', %q{--exclude='.git/'}, '/path/to/source/', environment.directory)
         environment.populate from: :source
       end
     end
