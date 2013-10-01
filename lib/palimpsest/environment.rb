@@ -390,7 +390,7 @@ module Palimpsest
           # process each asset path
           asset_value.each_with_index do |path, i|
             fail RuntimeError, message unless Utility.safe_path? path
-          end
+          end if asset_key == :paths
         end
       end unless @config[:assets].nil?
 
