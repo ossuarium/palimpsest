@@ -1,5 +1,11 @@
 # Palimpsest ChangeLog
 
+## 0.2.0
+
+- Added Environment#remove_excludes.
+- Environment#config can be overridden.
+- Environment#copy now uses rsync to exclude .git.
+
 ## 0.1.0
 
 - Lots of documentation and improvements.
