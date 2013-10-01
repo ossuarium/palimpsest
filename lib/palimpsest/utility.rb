@@ -38,6 +38,7 @@ module Palimpsest
     def self.extract_repo repo, treeish, directory
       input = Archive::Tar::Minitar::Input.new StringIO.new(repo.archive_tar treeish)
       input.each { |e| input.extract_entry directory, e }
+      FileUtils.remove_entry_secure "#{directory}/pax_global_header"
     end
 
     # Write contents to file.
