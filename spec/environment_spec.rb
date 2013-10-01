@@ -7,6 +7,10 @@ describe Palimpsest::Environment do
 
   subject(:environment) { Palimpsest::Environment.new }
 
+  before :each do
+    allow(Kernel).to receive(:system)
+  end
+
   describe ".new" do
 
     it "sets default options" do
