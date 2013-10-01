@@ -205,12 +205,16 @@ module Palimpsest
       self
     end
 
+    # @param settings [Hash] merged with current config
     # @return [Hash] configuration loaded from {#options}`[:config_file]` under {#directory}
-    def config
-      return @config if @config
-      populate unless populated
-      @config = YAML.load_file "#{directory}/#{options[:config_file]}"
-      validate_config if @config
+    def config settings = {}
+      if @config.nil?
+        populate unless populated
+        @config = YAML.load_file "#{directory}/#{options[:config_file]}"
+        validate_config if @config
+      end
+
+      @config.merge! settings
     end
 
     # @return [Array<Component>] components with paths loaded from config

@@ -159,12 +159,12 @@ describe Palimpsest::Environment do
     end
   end
 
-  describe "config" do
+  describe "#config" do
 
     subject(:environment) { Palimpsest::Environment.new site: site_1, treeish: 'master' }
 
     before :each do
-      allow(YAML).to receive(:load_file)
+      allow(YAML).to receive(:load_file).and_return({})
     end
 
     it "populate if not populated" do
@@ -182,6 +182,32 @@ describe Palimpsest::Environment do
       allow(environment).to receive(:populated).and_return(true)
       expect(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest_config.yml")
       environment.config
+    end
+
+    context "settings given" do
+
+      before :each do
+        allow(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest_config.yml")
+        .and_return( { conf_1: :val_1, conf_2: :val_2 } )
+      end
+
+      it "merges new settings on first call" do
+        expect( environment.config({ conf_3: :val_3 }) ).to eq({ conf_1: :val_1, conf_2: :val_2, conf_3: :val_3 })
+      end
+
+      it "merges new settings on subsequent call" do
+        environment.config
+        expect( environment.config({ conf_3: :val_3 }) ).to eq({ conf_1: :val_1, conf_2: :val_2, conf_3: :val_3 })
+      end
+
+      it "remembers new settings" do
+        environment.config({ conf_3: :val_3 })
+        expect(environment.config).to eq({ conf_1: :val_1, conf_2: :val_2, conf_3: :val_3 })
+      end
+
+      it "overwrites current settings" do
+        expect( environment.config({ conf_2: :new_val_2 }) ).to eq({ conf_1: :val_1, conf_2: :new_val_2 })
+      end
     end
   end
 
