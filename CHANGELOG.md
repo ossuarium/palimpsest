@@ -4,7 +4,6 @@
 
 - Added Environment#remove_excludes.
 - Environment#config can be overridden.
-- Environment#copy now uses rsync to exclude .git.
 
 ## 0.1.0
 
