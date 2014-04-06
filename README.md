@@ -10,6 +10,7 @@ Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
 and easy integration with [Kit](https://github.com/razor-x/kit).
 
 [![Gem Version](https://badge.fury.io/rb/palimpsest.png)](http://badge.fury.io/rb/palimpsest)
+[![MIT License](http://img.shields.io/badge/license-MIT-red.svg)](./LICENSE.txt)
 [![Dependency Status](https://gemnasium.com/razor-x/palimpsest.png)](https://gemnasium.com/razor-x/palimpsest)
 [![Build Status](https://travis-ci.org/razor-x/palimpsest.png?branch=master)](https://travis-ci.org/razor-x/palimpsest)
 [![Coverage Status](https://coveralls.io/repos/razor-x/palimpsest/badge.png)](https://coveralls.io/r/razor-x/palimpsest)
