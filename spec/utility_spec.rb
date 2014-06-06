@@ -38,7 +38,7 @@ describe Palimpsest::Utility do
     end
   end
 
-  describe "write" do
+  describe ".write" do
 
     let(:file) { double File }
     let(:mtime) { Time.now }
