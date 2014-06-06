@@ -210,7 +210,7 @@ module Palimpsest
     def config settings = {}
       if @config.nil?
         populate unless populated
-        @config = YAML.load_file "#{directory}/#{options[:config_file]}"
+        @config = YAML.load_file File.join(directory, options[:config_file])
         validate_config if @config
       end
 
@@ -226,10 +226,13 @@ module Palimpsest
       @components = []
 
       base = directory
-      base += config[:components][:base].nil? ? '' : '/' + config[:components][:base]
+      base = File.join directory, config[:components][:base] unless config[:components][:base].nil?
 
       config[:components][:paths].each do |paths|
-       @components << Component.new(source_path: "#{base}/#{paths[0]}", install_path: "#{directory}/#{paths[1]}")
+        @components << Component.new(
+          source_path: File.join(base, paths[0]),
+          install_path: File.join(directory, paths[1])
+        )
       end
 
       @components
@@ -252,7 +255,10 @@ module Palimpsest
 
       config[:externals][:repos].each do |repo|
         source = repo[3].nil? ? config[:externals][:server] : repo[3]
-        @externals << External.new(name: repo[0], source: source, branch: repo[2], install_path: "#{directory}/#{repo[1]}" )
+        @externals << External.new(
+          name: repo[0], source: source, branch: repo[2],
+          install_path: File.join(directory,repo[1])
+        )
       end
 
       @externals
@@ -306,7 +312,7 @@ module Palimpsest
       end unless config[:assets][:options].nil?
 
       config[:assets][:sources].each do |path|
-        @sources_with_assets << Assets.find_tags("#{directory}/#{path}", nil, opts)
+        @sources_with_assets << Assets.find_tags(File.join(directory, path), nil, opts)
       end
 
       @sources_with_assets.flatten

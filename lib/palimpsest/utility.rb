@@ -11,7 +11,7 @@ module Palimpsest
     # @param [String, nil] dir the random directory name (used recursively)
     # @return [String] path to created random directory
     def self.make_random_directory root, prefix, dir = nil
-      path = "#{root}/#{prefix}#{dir}" unless dir.nil?
+      path = File.join(root, "#{prefix}#{dir}") unless dir.nil?
       if path.nil? or File.exists? path
         make_random_directory root, prefix, Random.rand(10000000)
       else
@@ -38,7 +38,7 @@ module Palimpsest
     def self.extract_repo repo, treeish, directory
       input = Archive::Tar::Minitar::Input.new StringIO.new(repo.archive_tar treeish)
       input.each { |e| input.extract_entry directory, e }
-      FileUtils.remove_entry_secure "#{directory}/pax_global_header"
+      FileUtils.remove_entry_secure File.join(directory, 'pax_global_header')
     end
 
     # Write contents to file.

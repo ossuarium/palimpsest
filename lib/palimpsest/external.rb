@@ -21,7 +21,7 @@ module Palimpsest
     #   @return [String] where the files will be installed to
     attr_accessor :name, :source, :branch, :install_path
 
-    def initialize name: '', source: '', branch: 'master', install_path: ''
+    def initialize name: '', source: nil, branch: 'master', install_path: nil
       self.name = name
       self.source = source
       self.branch = branch
@@ -30,7 +30,7 @@ module Palimpsest
 
     # @return [String] full path to repo as {#source}`/`{#name}
     def repo_path
-      ( source.empty? || name.empty? ) ? '' : "#{source}/#{name}"
+      ( source.nil? || name.empty? ) ? nil : "#{source}/#{name}"
     end
 
     # @return [Environment] environment with contents of the repository at the HEAD of the branch
@@ -62,7 +62,7 @@ module Palimpsest
     def tmp_environment
       return @tmp_environment if @tmp_environment
 
-      fail RuntimeError if repo_path.empty?
+      fail RuntimeError if repo_path.nil?
 
       Grit::Git.git_max_size = 200 * 1048576
       Grit::Git.git_timeout = 200

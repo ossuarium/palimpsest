@@ -20,7 +20,7 @@ module Palimpsest
     # Default {#options}.
     DEFAULT_OPTIONS = {
       # default path to output all saved assets (relative to directory)
-      output: '',
+      output: nil,
 
       # assume assets will be served under this url
       # e.g. `https://cdn.example.com/`
@@ -56,7 +56,7 @@ module Palimpsest
     #   @return [Symbol] type of asset
     attr_accessor :directory, :paths, :type
 
-    def initialize directory: '', options: {}, paths: {}
+    def initialize directory: nil, options: {}, paths: {}
       self.options options
       self.directory = directory
       self.paths = paths
@@ -93,7 +93,9 @@ module Palimpsest
     # Values are loaded from {#paths}.
     def load_paths
       paths.each do |path|
-        sprockets.append_path "#{directory + '/' unless directory.empty?}#{path}"
+        full_path = path
+        full_path = File.join(directory, path) unless directory.nil?
+        sprockets.append_path full_path
       end
       self
     end
@@ -119,10 +121,10 @@ module Palimpsest
       return if asset.nil?
 
       name = hash ? asset.digest_path : asset.logical_path.to_s
-      name = "#{options[:output]}/#{name}" unless options[:output].empty?
+      name = File.join(options[:output], name) unless options[:output].nil?
 
-      path = directory.empty? ? '' : "#{directory}/"
-      path << name
+      path = name
+      path = File.join(directory, path) unless directory.nil?
 
       asset.write_to "#{path}.gz", compress: true if gzip
       asset.write_to path

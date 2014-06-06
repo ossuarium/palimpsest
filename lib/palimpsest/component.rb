@@ -17,15 +17,15 @@ module Palimpsest
     #   @return [String] install path for component
     attr_accessor :source_path, :install_path
 
-    def initialize source_path: '', install_path: ''
+    def initialize source_path: nil, install_path: nil
       self.source_path = source_path
       self.install_path = install_path
     end
 
     # Installs files in {#source_path} to {#install_path}
     def install
-      fail RuntimeError if source_path.empty?
-      fail RuntimeError if install_path.empty?
+      fail RuntimeError if source_path.nil?
+      fail RuntimeError if install_path.nil?
       FileUtils.mkdir_p install_path
       FileUtils.mv Dir["#{source_path}/*"], install_path
     end
