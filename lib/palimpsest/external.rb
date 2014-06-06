@@ -44,7 +44,7 @@ module Palimpsest
     # Copy the files to the {#install_path}.
     # @return (see Environment#copy)
     def install
-      environment.populate.copy dest: install_path
+      environment.populate.copy destination: install_path
       self
     end
 

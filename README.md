@@ -155,7 +155,7 @@ You can copy the current state of the environment to another directory with `Pal
 By default, this will use `site.path` for the destination, or you can specify with
 
 ````ruby
-environment.copy dest: '/path/to/out/dir'
+environment.copy destination: '/path/to/out/dir'
 ````
 
 To delete the working directory, use
