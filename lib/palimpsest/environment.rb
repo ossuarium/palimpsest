@@ -33,7 +33,7 @@ module Palimpsest
   #   # list of external repos
   #   :repos:
   #    #- [ name, install_path, ref (optional), server (optional) ]
-  #     - [ my_app, apps/my_app, master ]
+  #     - [ my_app, apps/my_app ]
   #     - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
   #
   # # list of excludes
