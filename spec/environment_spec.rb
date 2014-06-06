@@ -264,7 +264,7 @@ describe Palimpsest::Environment do
         expect(environment.components).to be_a Array
       end
 
-     it "contains components" do
+      it "contains components" do
         expect(environment.components[0]).to be_a Palimpsest::Component
         expect(environment.components[1]).to be_a Palimpsest::Component
       end
@@ -272,6 +272,14 @@ describe Palimpsest::Environment do
       it "sets the components source and install paths" do
         expect(environment.components[0].source_path).to eq "#{environment.directory}/_components/my_app/templates"
         expect(environment.components[0].install_path).to eq "#{environment.directory}/apps/my_app/templates"
+      end
+
+      context "when no components given" do
+
+        it "contains no components" do
+          allow(environment).to receive(:config).and_return({})
+          expect(environment.components).to eq []
+        end
       end
     end
 
@@ -285,6 +293,14 @@ describe Palimpsest::Environment do
 
       it "returns itself" do
         expect(environment.install_components).to be environment
+      end
+
+      context "when no components given" do
+
+        it "does nothing and returns itself" do
+          allow(environment).to receive(:config).and_return({})
+          expect(environment.install_components).to be environment
+        end
       end
     end
 
@@ -313,31 +329,50 @@ describe Palimpsest::Environment do
         expect(environment.externals[0].install_path).to eq "#{environment.directory}/apps/my_app"
         expect(environment.externals[1].install_path).to eq "#{environment.directory}/apps/my_app/sub_app"
       end
+
+      context "when no externals given" do
+
+        it "contains no externals" do
+          allow(environment).to receive(:config).and_return({})
+          expect(environment.externals).to eq []
+        end
+      end
     end
 
     describe "#install_externals" do
 
-      let(:external_1) { double Palimpsest::External }
-      let(:external_2) { double Palimpsest::External }
+      context "when externals given" do
 
-      before :each do
-        allow(environment).to receive(:externals).and_return( [ external_1, external_2 ] )
-        allow(external_1).to receive(:install)
-        allow(external_2).to receive(:install)
+        let(:external_1) { double Palimpsest::External }
+        let(:external_2) { double Palimpsest::External }
+
+        before :each do
+          allow(environment).to receive(:externals).and_return( [ external_1, external_2 ] )
+          allow(external_1).to receive(:install)
+          allow(external_2).to receive(:install)
+        end
+
+        it "installs the externals and returns itself" do
+          expect(external_1).to receive(:install).and_return(external_1)
+          expect(external_1).to receive(:cleanup)
+          expect(external_2).to receive(:install).and_return(external_2)
+          expect(external_2).to receive(:cleanup)
+          expect(environment.install_externals).to be environment
+        end
       end
 
-      it "installs the externals and returns itself" do
-        expect(external_1).to receive(:install).and_return(external_1)
-        expect(external_1).to receive(:cleanup)
-        expect(external_2).to receive(:install).and_return(external_2)
-        expect(external_2).to receive(:cleanup)
-        expect(environment.install_externals).to be environment
+      context "when no externals given" do
+
+        it "does nothing and returns itself" do
+          allow(environment).to receive(:config).and_return({})
+          expect(environment.install_externals).to be environment
+        end
       end
     end
 
     describe "#remove_excludes" do
 
-      it "removes excluded files" do
+      it "removes excluded files and returns itself" do
         allow(Dir).to receive(:[]).with("#{environment.directory}/.gitignore")
         .and_return(["#{environment.directory}/.gitignore"])
 
@@ -348,6 +383,14 @@ describe Palimpsest::Environment do
         expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/apps/app_1/assets")
         expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/apps/app_2/assets")
         expect(environment.remove_excludes).to be environment
+      end
+
+      context "when no excludes given" do
+
+        it "does nothing and returns itself" do
+          allow(environment).to receive(:config).and_return({})
+          expect(environment.remove_excludes).to be environment
+        end
       end
     end
 
@@ -388,9 +431,12 @@ describe Palimpsest::Environment do
         expect(assets[1].paths).to_not include 'assets/javascripts'
       end
 
-      it "does not fail if assets are not configured" do
-        allow(environment).to receive(:config).and_return({})
-        expect { assets }.not_to raise_error
+      context "when no assets given" do
+
+        it "contains no assets" do
+          allow(environment).to receive(:config).and_return({})
+          expect(assets).to eq []
+        end
       end
     end
 
@@ -413,6 +459,14 @@ describe Palimpsest::Environment do
         allow(Palimpsest::Assets).to receive(:find_tags).with(dir + '/app/src', anything, anything).and_return(dir + '/app/src/head.tpl')
         expect(environment.sources_with_assets).to eq [ "#{dir}/public/header.html", "#{dir}/app/src/head.tpl" ]
       end
+
+      context "when no assets given" do
+
+        it "contains no sources with assets" do
+          allow(environment).to receive(:config).and_return({})
+          expect(environment.sources_with_assets).to eq []
+        end
+      end
     end
 
     describe "#compile_assets" do
@@ -431,6 +485,14 @@ describe Palimpsest::Environment do
         expect(Palimpsest::Utility).to receive(:write).with 'data_1', sources[0], preserve: true
         expect(Palimpsest::Utility).to receive(:write).with 'data_2', sources[1], preserve: true
         environment.compile_assets
+      end
+
+      context "when no assets given" do
+
+        it "does nothing and returns itself" do
+          allow(environment).to receive(:config).and_return({})
+          expect(environment.compile_assets).to be environment
+        end
       end
     end
   end
