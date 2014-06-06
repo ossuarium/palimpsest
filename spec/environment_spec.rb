@@ -167,6 +167,15 @@ describe Palimpsest::Environment do
         expect(Kernel).to receive(:system).with('rsync', '-rt', %q{--exclude='.git/'}, '/path/to/source/', environment.directory)
         environment.populate from: :source
       end
+
+      context "site source not given" do
+
+        it "copies from the working directory" do
+          environment.site = site_1
+          expect(Kernel).to receive(:system).with('rsync', '-rt', %q{--exclude='.git/'}, './', environment.directory)
+          environment.populate from: :source
+        end
+      end
     end
   end
 

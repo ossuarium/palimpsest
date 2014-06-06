@@ -199,7 +199,8 @@ module Palimpsest
         Utility.extract_repo site.repo, treeish, directory
         @populated = true
       when :source
-        Kernel.system 'rsync', '-rt', %q{--exclude='.git/'}, "#{site.source}/", directory
+        source = site.source.nil? ? '.' : site.source
+        Kernel.system 'rsync', '-rt', %q{--exclude='.git/'}, "#{source}/", directory
         @populated = true
       end
 
