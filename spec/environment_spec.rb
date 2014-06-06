@@ -95,6 +95,13 @@ describe Palimpsest::Environment do
       expect(FileUtils).to receive(:cp_r).with( %W(#{dir}/path/1 #{dir}/path/2), '/dest/path', preserve: true)
       environment.copy destination: '/dest/path'
     end
+
+    context "when destination is nil" do
+
+      it "fails" do
+        expect { environment.copy destination: nil }.to raise_error RuntimeError, /destination/
+      end
+    end
   end
 
   describe "#cleanup" do
