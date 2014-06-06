@@ -212,11 +212,12 @@ module Palimpsest
     def config settings = {}
       if @config.nil?
         populate unless populated
-        @config = YAML.load_file File.join(directory, options[:config_file])
+        file = File.join(directory, options[:config_file])
+        @config = YAML.load_file(file) if File.exists? file
         validate_config if @config
       end
 
-      @config.merge! settings
+      @config.nil? ? settings : @config.merge!(settings)
     end
 
     # @return [Array<Component>] components with paths loaded from config
