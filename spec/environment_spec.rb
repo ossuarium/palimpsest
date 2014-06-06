@@ -184,6 +184,7 @@ describe Palimpsest::Environment do
     subject(:environment) { Palimpsest::Environment.new site: site_1, treeish: 'master' }
 
     before :each do
+      allow(File).to receive(:exists?).and_return(true)
       allow(YAML).to receive(:load_file).and_return({})
     end
 
