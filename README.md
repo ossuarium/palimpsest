@@ -121,10 +121,10 @@ or to populate from a directory,
 site.source = '/path/to/project/source'
 environment.populate from :source
 ````
-Either way you will get a copy of your site in a new random working directory,
+Either way you will get a copy of your site in a new temporary working directory,
 
 ````ruby
-environment.directory #=> '/tmp/palimpsest_my_app_6025680'
+environment.directory #=> '/tmp/palimpsest_my_app_120140605-26021-d7vlnv'
 ````
 
 ### Working with the environment

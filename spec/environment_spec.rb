@@ -62,12 +62,16 @@ describe Palimpsest::Environment do
   describe "#directory" do
 
     before :each do
-      allow(Palimpsest::Utility).to receive(:make_random_directory).and_return('/tmp/rand_dir')
+      allow(Dir).to receive(:mktmpdir).and_return('/tmp/rand_dir')
     end
 
     context "when directory is unset" do
 
-      it "makes and returns a random directory" do
+      it "makes and returns a temporary directory" do
+        environment.site = site_1
+        rest = environment.options[:tmp_dir]
+        prefix = "#{environment.options[:dir_prefix]}site_1_"
+        expect(Dir).to receive(:mktmpdir).with(prefix, rest).and_return('/tmp/rand_dir')
         expect(environment.directory).to eq '/tmp/rand_dir'
       end
     end
@@ -75,7 +79,7 @@ describe Palimpsest::Environment do
     context "when directory is set" do
 
       it "returns the current directory" do
-        expect(Palimpsest::Utility).to receive(:make_random_directory).once
+        expect(Dir).to receive(:mktmpdir).once
         environment.directory
         expect(environment.directory).to eq '/tmp/rand_dir'
       end

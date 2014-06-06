@@ -2,17 +2,6 @@ require 'spec_helper'
 
 describe Palimpsest::Utility do
 
-  describe ".make_random_directory" do
-
-    root, prefix = '/tmp', 'rspec'
-
-    it "makes a directory where expected" do
-      dir = Palimpsest::Utility.make_random_directory root, prefix
-      expect(Dir.exists? dir).to be true
-      FileUtils.remove_entry_secure dir if dir =~ %r{^/tmp}
-    end
-  end
-
   describe ".safe_path?" do
 
     context "valid path" do

@@ -102,7 +102,7 @@ module Palimpsest
     # Default {#options}.
     DEFAULT_OPTIONS = {
       # all environment's temporary directories will be rooted under here
-      tmp_dir: '/tmp',
+      tmp_dir: Dir.tmpdir,
 
       # prepended to the name of the environment's working directory
       dir_prefix: 'palimpsest_',
@@ -153,7 +153,7 @@ module Palimpsest
     def directory
       if @directory.nil?
         name = site.nil? ? '' : site.name
-        @directory = Utility.make_random_directory options[:tmp_dir], "#{options[:dir_prefix]}#{name}_"
+        @directory = Dir.mktmpdir "#{options[:dir_prefix]}#{name}_", options[:tmp_dir]
       else
         @directory
       end

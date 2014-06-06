@@ -5,20 +5,6 @@ module Palimpsest
   # Utility functions for Palimpsest.
   class Utility
 
-    # Make a random directory.
-    # @param [String] root directory to place random directory
-    # @param [String] prefix prepended to random directory name
-    # @param [String, nil] dir the random directory name (used recursively)
-    # @return [String] path to created random directory
-    def self.make_random_directory root, prefix, dir = nil
-      path = File.join(root, "#{prefix}#{dir}") unless dir.nil?
-      if path.nil? or File.exists? path
-        make_random_directory root, prefix, Random.rand(10000000)
-      else
-        FileUtils.mkdir(path).first
-      end
-    end
-
     # Forbids use of `../` and `~/` in path.
     # Forbids absolute paths.
     # @param [String] path
