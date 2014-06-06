@@ -7,12 +7,12 @@ module Palimpsest
   # An environment is the primary way to interact with a site's files.
   #
   # An environment loads a {#config} file from the working {#directory};
-  # by default, `palimpsest_config.yml`.
+  # by default, `palimpsest.yml`.
   #
   # Paths are all relative to the working {#directory}.
   #
   # ````yml
-  # # example of palimpsest_config.yml
+  # # example of palimpsest.yml
   #
   # # component settings
   # :components:
@@ -108,7 +108,7 @@ module Palimpsest
       dir_prefix: 'palimpsest_',
 
       # name of config file to load, relative to environment's working directory
-      config_file: 'palimpsest_config.yml'
+      config_file: 'palimpsest.yml'
     }
 
     # @!attribute site

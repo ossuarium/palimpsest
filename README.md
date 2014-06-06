@@ -129,10 +129,10 @@ environment.directory #=> '/tmp/palimpsest_my_app_6025680'
 
 ### Working with the environment
 
-If you project contains a file `palimpsest_config.yml`,
+If you project contains a file `palimpsest.yml`,
 then its configuration is available with `environment.config`.
 
-[**An example `palimpsest_config.yml`.**](http://rubydoc.info/github/razor-x/palimpsest/Palimpsest/Environment)
+[**An example `palimpsest.yml`.**](http://rubydoc.info/github/razor-x/palimpsest/Palimpsest/Environment)
 
 The configuration file tells Palimpsest how to behave when you ask it to manipulate the environment
 and acts as a shortcut to working with the other Palimpsest classes directly.

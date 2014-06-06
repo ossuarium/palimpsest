@@ -180,14 +180,14 @@ describe Palimpsest::Environment do
 
     it "loads the config if populated" do
       allow(environment).to receive(:populated).and_return(true)
-      expect(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest_config.yml")
+      expect(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest.yml")
       environment.config
     end
 
     context "settings given" do
 
       before :each do
-        allow(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest_config.yml")
+        allow(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest.yml")
         .and_return( { conf_1: :val_1, conf_2: :val_2 } )
       end
 
