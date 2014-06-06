@@ -8,7 +8,7 @@ describe Palimpsest::Utility do
 
     it "makes a directory where expected" do
       dir = Palimpsest::Utility.make_random_directory root, prefix
-      expect(Dir.exists? dir).to be_true
+      expect(Dir.exists? dir).to be true
       FileUtils.remove_entry_secure dir if dir =~ %r{^/tmp}
     end
   end
@@ -18,22 +18,22 @@ describe Palimpsest::Utility do
     context "valid path" do
 
       it "returns true" do
-        expect(Palimpsest::Utility.safe_path? 'path').to be_true
+        expect(Palimpsest::Utility.safe_path? 'path').to be true
       end
     end
 
     context "invalid path" do
 
       it "returns false if path contains '../'" do
-        expect(Palimpsest::Utility.safe_path? 'path/with/../in/it').to be_false
+        expect(Palimpsest::Utility.safe_path? 'path/with/../in/it').to be false
       end
 
       it "returns false if using '~/'" do
-        expect( Palimpsest::Utility.safe_path? '~/path').to be_false
+        expect( Palimpsest::Utility.safe_path? '~/path').to be false
       end
 
       it "returns false if path starts with '/'" do
-        expect(Palimpsest::Utility.safe_path? '/path').to be_false
+        expect(Palimpsest::Utility.safe_path? '/path').to be false
       end
     end
   end

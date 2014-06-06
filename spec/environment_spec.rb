@@ -98,8 +98,8 @@ describe Palimpsest::Environment do
     subject(:environment) { Palimpsest::Environment.new site: site_1 }
 
     it "removes the directory and resets @directory" do
+      expect(FileUtils).to receive(:remove_entry_secure).with(environment.directory)
       environment.directory
-      FileUtils.should_receive(:remove_entry_secure).with(environment.directory)
       environment.cleanup
       expect(environment.instance_variable_get :@directory).to eq nil
     end
