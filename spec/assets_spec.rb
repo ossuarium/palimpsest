@@ -108,7 +108,7 @@ describe Palimpsest::Assets do
 
     context "when no paths set" do
 
-      it "should not fail" do
+      it "does not fail" do
         assets.paths = {}
         expect { assets.load_paths }.to_not raise_error
       end
@@ -119,24 +119,24 @@ describe Palimpsest::Assets do
 
     subject(:assets) { Palimpsest::Assets.new paths: config[:paths] }
 
-    it "should load options" do
+    it "loads options" do
       expect(assets).to receive :load_options
       assets.assets
     end
 
-    it "should load paths" do
+    it "loads paths" do
       expect(assets).to receive :load_paths
       assets.assets
     end
 
-    it "should not load options and paths twice" do
+    it "does not load options and paths twice" do
       expect(assets).to receive(:load_options).once
       expect(assets).to receive(:load_paths).once
       assets.assets
       assets.assets
     end
 
-    it "should return compiled assets" do
+    it "returns compiled assets" do
       expect(assets.assets).to equal assets.sprockets
     end
   end
