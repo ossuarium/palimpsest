@@ -40,7 +40,7 @@ describe Palimpsest::External do
 
     it "fails if no repo path" do
       external.name = ''
-      external.source = ''
+      external.source = nil
       expect { external.tmp_environment }.to raise_error RuntimeError
     end
 

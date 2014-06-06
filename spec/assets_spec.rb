@@ -228,7 +228,7 @@ describe Palimpsest::Assets do
 
       let(:regex) { '\[%(.*?)%\]' }
 
-      it "fails if path is empty" do
+      it "fails if no path given" do
         expect { assets.find_tags '' }.to raise_error ArgumentError
       end
 
