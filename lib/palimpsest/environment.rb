@@ -32,7 +32,7 @@ module Palimpsest
   #
   #   # list of external repos
   #   :repos:
-  #    #- [ name, install_path, branch, server (optional) ]
+  #    #- [ name, install_path, ref (optional), server (optional) ]
   #     - [ my_app, apps/my_app, master ]
   #     - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
   #
@@ -256,10 +256,14 @@ module Palimpsest
 
       config[:externals][:repos].each do |repo|
         source = repo[3].nil? ? config[:externals][:server] : repo[3]
-        @externals << External.new(
-          name: repo[0], source: source, branch: repo[2],
+
+        params = {
+          name: repo[0],
+          source: source,
           install_path: File.join(directory,repo[1])
-        )
+        }
+        params[:ref] = repo[2] if repo[2]
+        @externals << External.new(params)
       end
 
       @externals

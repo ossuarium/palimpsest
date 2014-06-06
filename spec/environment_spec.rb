@@ -244,7 +244,7 @@ describe Palimpsest::Environment do
         :externals:
           :server: "https://github.com/razor-x"
           :repos:
-            - [ my_app, apps/my_app, master ]
+            - [ my_app, apps/my_app ]
             - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
         :excludes:
           - .gitignore
@@ -341,9 +341,9 @@ describe Palimpsest::Environment do
         expect(environment.externals[1].repo_path).to eq 'https://bitbucket.org/razorx/sub_app'
       end
 
-      it "sets the externals branch" do
-        expect(environment.externals[0].branch).to eq 'master'
-        expect(environment.externals[1].branch).to eq 'my_feature'
+      it "sets the externals ref" do
+        expect(environment.externals[0].ref).to eq 'master'
+        expect(environment.externals[1].ref).to eq 'my_feature'
       end
 
       it "sets the install path" do

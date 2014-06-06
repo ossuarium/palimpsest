@@ -2,7 +2,7 @@ module Palimpsest
 
   # Use this class to manage external repositories you want to include in your project.
   #
-  # Given a name, source and branch, the contents of the repository at the HEAD of the branch
+  # Given a name, source, and ref, the contents of the repository at the HEAD of the ref
   # will be available as an {Environment} object through {#environment}.
   #
   # Use {#cleanup} to remove all files created by the {#External} object.
@@ -14,17 +14,17 @@ module Palimpsest
     # @!attribute source
     #   @return [String] base source url or path to external git repo (without name)
     #
-    # @!attribute branch
-    #   @return [String] branch to use for treeish
+    # @!attribute ref
+    #   @return [String] ref to use for
     #
     # @!attribute install_path
     #   @return [String] where the files will be installed to
-    attr_accessor :name, :source, :branch, :install_path
+    attr_accessor :name, :source, :ref, :install_path
 
-    def initialize name: '', source: nil, branch: 'master', install_path: nil
+    def initialize name: '', source: nil, ref: 'master', install_path: nil
       self.name = name
       self.source = source
-      self.branch = branch
+      self.ref = ref
       self.install_path = install_path
     end
 
@@ -33,12 +33,12 @@ module Palimpsest
       ( source.nil? || name.empty? ) ? nil : "#{source}/#{name}"
     end
 
-    # @return [Environment] environment with contents of the repository at the HEAD of the branch
+    # @return [Environment] environment with contents of the repository at the HEAD of the ref
     def environment
       return @environment if @environment
 
       site = Site.new name: "external_#{name.gsub '/', '_'}", repo: Grit::Repo.new(tmp_environment.directory)
-      @environment = Environment.new site: site, treeish: branch
+      @environment = Environment.new site: site, treeish: ref
     end
 
     # Copy the files to the {#install_path}.
@@ -69,7 +69,7 @@ module Palimpsest
 
       @tmp_environment = Environment.new site: Site.new(name: "external_clone_#{name.gsub '/', '_'}")
       gritty = Grit::Git.new tmp_environment.directory
-      gritty.clone( { branch: branch }, repo_path, tmp_environment.directory )
+      gritty.clone( { ref: ref }, repo_path, tmp_environment.directory )
       @tmp_environment
     end
   end
