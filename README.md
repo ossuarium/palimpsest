@@ -9,13 +9,12 @@ Palimpsest runs on top of any project and acts as a post processor for your code
 Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
 and easy integration with [Kit](https://github.com/razor-x/kit).
 
-[![Gem Version](https://badge.fury.io/rb/palimpsest.png)](http://badge.fury.io/rb/palimpsest)
+[![Gem Version](http://img.shields.io/gem/v/palimpsest.svg)](https://rubygems.org/gems/palimpsest)
 [![MIT License](http://img.shields.io/badge/license-MIT-red.svg)](./LICENSE.txt)
-[![Dependency Status](https://gemnasium.com/razor-x/palimpsest.png)](https://gemnasium.com/razor-x/palimpsest)
-[![Build Status](https://travis-ci.org/razor-x/palimpsest.png?branch=master)](https://travis-ci.org/razor-x/palimpsest)
-[![Coverage Status](https://coveralls.io/repos/razor-x/palimpsest/badge.png)](https://coveralls.io/r/razor-x/palimpsest)
-[![Code Climate](https://codeclimate.com/github/razor-x/palimpsest.png)](https://codeclimate.com/github/razor-x/palimpsest)
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/428992451dfb452dbd522644cbb17f71 "githalytics.com")](http://githalytics.com/razor-x/palimpsest)
+[![Dependency Status](http://img.shields.io/gemnasium/razor-x/palimpsest.svg)](https://gemnasium.com/razor-x/palimpsest)
+[![Build Status](http://img.shields.io/travis/razor-x/palimpsest.svg)](https://travis-ci.org/razor-x/palimpsest)
+[![Coverage Status](http://img.shields.io/coveralls/razor-x/palimpsest.svg)](https://coveralls.io/r/razor-x/palimpsest)
+[![Code Climate](http://img.shields.io/codeclimate/github/razor-x/palimpsest.svg)](https://codeclimate.com/github/razor-x/palimpsest)
 
 ## Installation
 
@@ -41,8 +40,10 @@ $ gem install palimpsest
 
 The primary documentation for Palimpsest is this README and the YARD source documentation.
 
-YARD documentation for all gem versions is hosted on the [Palimpsest gem page](https://rubygems.org/gems/palimpsest).
-Documentation for the latest commits is hosted on [the RubyDoc.info project page](http://rubydoc.info/github/razor-x/palimpsest/frames).
+YARD documentation for all gem versions is hosted on the
+[Palimpsest gem page](https://rubygems.org/gems/palimpsest).
+Documentation for the latest commits is hosted on
+[the RubyDoc.info project page](http://rubydoc.info/github/razor-x/palimpsest/frames).
 
 ## Usage
 
@@ -163,16 +164,27 @@ To delete the working directory, use
 environment.cleanup
 ````
 
-## Development
+## Source Repository
 
-### Source Repository
-
-The [Palimpsest source](https://github.com/razor-x/palimpsest) is hosted at github.
+The [Palimpsest source](https://github.com/razor-x/palimpsest)
+is hosted on GitHub.
 To clone the project run
 
 ````bash
-$ git clone git@github.com:razor-x/palimpsest.git
+$ git clone https://github.com/razor-x/palimpsest.git
 ````
+
+## Contributing
+
+Please submit and comment on bug reports and feature requests.
+
+To submit a patch:
+
+1. Fork it (https://github.com/razor-x/palimpsest/fork).
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin my-new-feature`).
+5. Create a new Pull Request.
 
 ## License
 
