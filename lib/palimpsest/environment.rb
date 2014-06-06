@@ -151,12 +151,10 @@ module Palimpsest
 
     # @return [String] the environment's working directory
     def directory
-      if @directory.nil?
-        name = site.nil? ? '' : site.name
-        @directory = Dir.mktmpdir "#{options[:dir_prefix]}#{name}_", options[:tmp_dir]
-      else
-        @directory
-      end
+      @directory ||= Dir.mktmpdir(
+        "#{options[:dir_prefix]}#{site.nil? ? '' : site.name}_",
+        options[:tmp_dir]
+      )
     end
 
     # Copy the contents of the working directory.
