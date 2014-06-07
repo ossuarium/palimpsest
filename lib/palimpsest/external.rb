@@ -69,7 +69,7 @@ module Palimpsest
 
       @tmp_environment = Environment.new site: Site.new(name: "external_clone_#{name.gsub '/', '_'}")
       gritty = Grit::Git.new tmp_environment.directory
-      gritty.clone( {}, repo_path, tmp_environment.directory )
+      gritty.clone( {ref: ref}, repo_path, tmp_environment.directory )
       @tmp_environment
     end
   end
