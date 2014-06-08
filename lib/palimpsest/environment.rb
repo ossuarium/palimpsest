@@ -101,14 +101,14 @@ module Palimpsest
 
     # Default {#options}.
     DEFAULT_OPTIONS = {
-      # all environment's temporary directories will be rooted under here
+      # All environment's temporary directories will be rooted under here.
       tmp_dir: Dir.tmpdir,
 
-      # prepended to the name of the environment's working directory
+      # Prepended to the name of the environment's working directory.
       dir_prefix: 'palimpsest_',
 
-      # name of config file to load, relative to environment's working directory
-      config_file: 'palimpsest.yml'
+      # Name of config file to load, relative to environment's working directory.
+      config_file: 'palimpsest.yml',
     }
 
     # @!attribute site

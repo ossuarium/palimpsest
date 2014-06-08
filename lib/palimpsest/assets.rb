@@ -19,30 +19,30 @@ module Palimpsest
 
     # Default {#options}.
     DEFAULT_OPTIONS = {
-      # default path to output all saved assets (relative to directory)
+      # Default path to output all saved assets (relative to directory).
       output: nil,
 
-      # assume assets will be served under this url
-      # e.g. `https://cdn.example.com/`
+      # Assume assets will be served under this url,
+      # e.g., `https://cdn.example.com/`.
       cdn: '',
 
-      # keyword to use in asset tag for inline assets
+      # Keyword to use in asset tag for inline assets.
       inline: 'inline',
 
-      # if true, use sprockets-image_compressor with pngcrush and jpegoptim
+      # If true, use sprockets-image_compressor with pngcrush and jpegoptim.
       image_compression: false,
 
-      # if true, also generate a gzipped asset
+      # If true, also generate a gzipped asset.
       gzip: false,
 
-      # include hash in asset name
+      # Include hash in asset name.
       hash: true,
 
-      # opening and closing brackets for asset source tags
+      # Opening and closing brackets for asset source tags.
       src_pre: '[%',
       src_post: '%]',
 
-      # allowed options for `Sprockets::Environment`
+      # Allowed options for `Sprockets::Environment`.
       sprockets_options: [:js_compressor, :css_compressor]
     }
 
