@@ -2,6 +2,7 @@ require 'grit'
 
 require 'palimpsest/version'
 require 'palimpsest/utility'
+require 'palimpsest/utils'
 require 'palimpsest/site'
 require 'palimpsest/assets'
 require 'palimpsest/component'
