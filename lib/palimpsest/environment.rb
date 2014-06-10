@@ -173,10 +173,11 @@ module Palimpsest
 
     # Copy the contents of the working directory.
     # @param destination [String] path to copy environment's files to
+    # @param mirror [Boolean] remove any non-excluded paths from destination
     # @return [Environment] the current environment instance
-    def copy destination: site.path
+    def copy destination: site.path, mirror: false
       fail RuntimeError, "Must specify a destination" if destination.nil?
-      copy_directory directory, destination, exclude: options[:copy_exclude]
+      copy_directory directory, destination, exclude: options[:copy_exclude], mirror: mirror
       self
     end
 

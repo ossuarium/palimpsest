@@ -27,12 +27,13 @@ module Palimpsest
     # @param source [String] directory to copy
     # @param destination [String] where to copy contents of the directory
     # @param exclude [Symbol] files and directories to exclude from copy
+    # @param mirror [Boolean] remove any non-excluded paths from destination
     # @param backend [Symbol] copy backed to use
-    def copy_directory source, destination, exclude: [], backend: :auto
+    def copy_directory source, destination, exclude: [], mirror: false, backend: :auto
       available_backends = backends(COPY_BACKENDS)
       backend = available_backends.first if backend == :auto
       fail RuntimeError, 'Requested copy backend not available.' unless available_backends.include? backend
-      send "copy_directory_with_#{backend}".to_sym, source, destination, exclude: exclude
+      send "copy_directory_with_#{backend}".to_sym, source, destination, exclude: exclude, mirror: mirror
     end
 
     # Search all non-binary files against regular expression.
@@ -88,12 +89,13 @@ module Palimpsest
     #
 
     # @todo Add support for stdlib backend.
-    def copy_directory_with_stdlib source, destination, exclude: []
+    def copy_directory_with_stdlib source, destination, exclude: [], mirror: false
       fail RuntimeError, "Directory copy via stdlib not yet implemented."
     end
 
-    def copy_directory_with_rsync source, destination, exclude: []
+    def copy_directory_with_rsync source, destination, exclude: [], mirror: false
       cmd = %w(rsync -rt)
+      cmd << '--del' if mirror
       exclude.each { |e| cmd << "--exclude='#{e}'" }
       cmd << "#{source}/"
       cmd << destination

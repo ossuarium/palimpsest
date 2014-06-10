@@ -91,9 +91,9 @@ describe Palimpsest::Environment do
     it "copies the environment to the destination" do
       dir = environment.directory
       expect(environment).to receive(:copy_directory).with(
-        dir, '/dest/path', exclude: environment.options[:copy_exclude]
+        dir, '/dest/path', exclude: environment.options[:copy_exclude], mirror: false
       )
-      environment.copy destination: '/dest/path'
+      environment.copy destination: '/dest/path', mirror: false
     end
 
     context "when destination is nil" do

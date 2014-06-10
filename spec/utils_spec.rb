@@ -60,8 +60,8 @@ describe Palimpsest::Utils do
     end
 
     it "runs the correct directory copy method" do
-      expect(object).to receive(:copy_directory_with_stdlib).with('src', 'dest', exclude: ['.git'])
-      object.copy_directory 'src', 'dest', backend: :stdlib, exclude: ['.git']
+      expect(object).to receive(:copy_directory_with_stdlib).with('src', 'dest', exclude: ['.git'], mirror: true)
+      object.copy_directory 'src', 'dest', backend: :stdlib, exclude: ['.git'], mirror: true
     end
 
     it "automatically selects first available backend" do
