@@ -219,64 +219,29 @@ describe Palimpsest::Assets do
     end
   end
 
-  describe ".find_tags and #find_tags" do
+  describe "#find_tags" do
 
-    let(:grep) { [ 'grep', '-l', '-I', '-r', '-E' ] }
-    let(:matches) { [ "first/match_1\nsecond/match_2" ] }
-
-    describe ".find_tags" do
-
-      let(:regex) { '\[%(.*?)%\]' }
-
-      it "fails if no path given" do
-        expect { assets.find_tags '' }.to raise_error ArgumentError
-      end
-
-      it "greps in the path" do
-        expect(Open3).to receive(:capture2).with(*grep, regex, '/the/path').and_return(matches)
-        Palimpsest::Assets.find_tags '/the/path'
-      end
-
-      it "greps for only the asset tag for the given type" do
-        expect(Open3).to receive(:capture2).with(*grep, '\[%\s+javascript\s+(.*?)%\]', '/the/path').and_return(matches)
-        Palimpsest::Assets.find_tags '/the/path', :javascript
-      end
-
-      it "merges options" do
-        expect(Open3).to receive(:capture2).with(*grep, '\(%\s+javascript\s+(.*?)%\]', '/the/path').and_return(matches)
-        Palimpsest::Assets.find_tags '/the/path', :javascript, src_pre: '(%'
-      end
-
-      it "returns an array of results" do
-        allow(Open3).to receive(:capture2).with(*grep, regex, '/the/path').and_return(matches)
-        expect(Palimpsest::Assets.find_tags '/the/path').to eq [ 'first/match_1', 'second/match_2' ]
-      end
+    it "uses the type as the type" do
+      assets.type = :javascript
+      expect(Palimpsest::Assets).to receive(:find_tags).with(anything, :javascript, anything)
+      assets.find_tags path: '/the/path'
     end
 
-    describe "#find_tags" do
+    it "uses the options as the options" do
+      expect(Palimpsest::Assets).to receive(:find_tags).with(anything, anything, assets.options)
+      assets.find_tags path: '/the/path'
+    end
 
-      it "uses the type as the type" do
-        assets.type = :javascript
-        expect(Palimpsest::Assets).to receive(:find_tags).with(anything, :javascript, anything)
-        assets.find_tags path: '/the/path'
-      end
+    it "uses the directory as the path" do
+      assets.directory = '/the/directory'
+      expect(Palimpsest::Assets).to receive(:find_tags).with('/the/directory', anything, anything)
+      assets.find_tags
+    end
 
-      it "uses the options as the options" do
-        expect(Palimpsest::Assets).to receive(:find_tags).with(anything, anything, assets.options)
-        assets.find_tags path: '/the/path'
-      end
-
-      it "uses the directory as the path" do
-        assets.directory = '/the/directory'
-        expect(Palimpsest::Assets).to receive(:find_tags).with('/the/directory', anything, anything)
-        assets.find_tags
-      end
-
-      it "can use an alternative path" do
-        assets.directory = '/the/directory'
-        expect(Palimpsest::Assets).to receive(:find_tags).with('/the/path', anything, anything)
-        assets.find_tags path: '/the/path'
-      end
+    it "can use an alternative path" do
+      assets.directory = '/the/directory'
+      expect(Palimpsest::Assets).to receive(:find_tags).with('/the/path', anything, anything)
+      assets.find_tags path: '/the/path'
     end
   end
 
@@ -354,6 +319,29 @@ describe Palimpsest::Assets do
       it "does not change input string" do
         assets.update_source source
         expect(source).to eq source
+      end
+    end
+  end
+
+  describe ".find_tags" do
+
+    context "when grep is the backend" do
+
+      let(:regex) { '\[%(.*?)%\]' }
+
+      it "greps in the path" do
+        expect(Palimpsest::Assets).to receive(:search_files).with(regex, '/the/path', backend: :grep)
+        Palimpsest::Assets.find_tags '/the/path', nil, search_backend: :grep
+      end
+
+      it "greps for only the asset tag for the given type" do
+        expect(Palimpsest::Assets).to receive(:search_files).with('\[%\s+javascript\s+(.*?)%\]', '/the/path', backend: :grep)
+        Palimpsest::Assets.find_tags '/the/path', :javascript, search_backend: :grep
+      end
+
+      it "merges options" do
+        expect(Palimpsest::Assets).to receive(:search_files).with('\(%\s+javascript\s+(.*?)%\]', '/the/path', backend: :grep)
+        Palimpsest::Assets.find_tags '/the/path', :javascript, src_pre: '(%', search_backend: :grep
       end
     end
   end

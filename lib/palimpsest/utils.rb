@@ -87,13 +87,35 @@ module Palimpsest
     # Backend specific methods below.
     #
 
-    def copy_directory_with_rsync source, destination, exclude: []
+    # @todo Add support for stdlib backend.
+    def copy_directory_with_stdlib source, destination, exclude: []
+      fail RuntimeError, "Directory copy via stdlib not yet implemented."
     end
 
-    def copy_directory_with_stdlib source, destination, exclude: []
+    def copy_directory_with_rsync source, destination, exclude: []
+      cmd = %w(rsync -rt)
+      exclude.each { |e| cmd << "--exclude='#{e}'" }
+      cmd << "#{source}/"
+      cmd << directory
+      system *cmd
+    end
+
+    # @todo Add support for stdlib backend.
+    def search_files_with_stdlib source, destination, exclude: []
+      fail RuntimeError, "File search via stdlib not yet implemented."
     end
 
     def search_files_with_grep regex, path
+      fail RuntimeError, "Must specify regex as string." unless regex.is_a? String
+
+      cmd = [command]
+      cmd.concat %w(-l -I -r -E)
+      cmd << regex
+      cmd << path
+
+      files = []
+      Open3.capture2(*cmd).first.each_line { |l| files << l.chomp unless l.empty? }
+      files
     end
   end
 

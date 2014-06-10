@@ -99,8 +99,22 @@ module Palimpsest
   # ````
   class Environment
 
+    include Utils
+
     # Default {#options}.
     DEFAULT_OPTIONS = {
+      # Backend to use for file search operations.
+      # :grep to use grep.
+      search_backend: :grep,
+
+      # Backend to use for multi-file copy operations.
+      # :rsync to use rsync.
+      copy_backend: :rsync,
+
+      # Files and directories that should never
+      # be copied to the working environment.
+      copy_exclude: %w(.git .svn),
+
       # All environment's temporary directories will be rooted under here.
       tmp_dir: Dir.tmpdir,
 
@@ -198,7 +212,7 @@ module Palimpsest
         @populated = true
       when :source
         source = site.source.nil? ? '.' : site.source
-        Kernel.system 'rsync', '-rt', %q{--exclude='.git/'}, "#{source}/", directory
+        copy_directory source, directory, exclude: options[:copy_exclude]
         @populated = true
       end
 
@@ -307,7 +321,7 @@ module Palimpsest
 
       @sources_with_assets = []
 
-      opts = {}
+      opts = {search_backend: options[:search_backend]}
       [:src_pre, :src_post].each do |opt|
         opts[opt] = config[:assets][:options][opt] unless config[:assets][:options][opt].nil?
       end unless config[:assets][:options].nil?
@@ -326,7 +340,7 @@ module Palimpsest
       sources_with_assets.each do |file|
         source = File.read file
         assets.each { |a| a.update_source! source }
-        Utility.write source, file, preserve: true
+        write_to_file source, file, preserve: true
       end
       self
     end
@@ -343,34 +357,34 @@ module Palimpsest
       def validate_asset_options opts
         opts.each do |k,v|
           fail RuntimeError, 'bad option in config' if k == :sprockets_options
-          fail RuntimeError, message if k == :output && ! Utility.safe_path?(v)
+          fail RuntimeError, message if k == :output && ! safe_path?(v)
         end
       end
 
       @config[:excludes].each do |v|
-        fail RuntimeError, message unless Utility.safe_path? v
+        fail RuntimeError, message unless safe_path? v
       end unless @config[:excludes].nil?
 
       @config[:external].each do |k, v|
         next if k == :server
 
         v.each do |repo|
-          fail RuntimeError, message unless Utility.safe_path? repo[1]
+          fail RuntimeError, message unless safe_path? repo[1]
         end unless v.nil?
       end unless @config[:external].nil?
 
       @config[:components].each do |k,v|
         # process @config[:components][:base] then go to the next option
         if k == :base
-          fail RuntimeError, message unless Utility.safe_path? v
+          fail RuntimeError, message unless safe_path? v
           next
         end unless v.nil?
 
         # process @config[:components][:paths]
         if k == :paths
           v.each do |path|
-            fail RuntimeError, message unless Utility.safe_path? path[0]
-            fail RuntimeError, message unless Utility.safe_path? path[1]
+            fail RuntimeError, message unless safe_path? path[0]
+            fail RuntimeError, message unless safe_path? path[1]
           end
         end
       end unless @config[:components].nil?
@@ -385,7 +399,7 @@ module Palimpsest
         # process @config[:assets][:sources] then go to the next option
         if k == :sources
           v.each_with_index do |source, i|
-            fail RuntimeError, message unless Utility.safe_path? source
+            fail RuntimeError, message unless safe_path? source
           end
           next
         end
@@ -400,7 +414,7 @@ module Palimpsest
 
           # process each asset path
           asset_value.each_with_index do |path, i|
-            fail RuntimeError, message unless Utility.safe_path? path
+            fail RuntimeError, message unless safe_path? path
           end if asset_key == :paths
         end
       end unless @config[:assets].nil?

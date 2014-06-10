@@ -17,8 +17,14 @@ module Palimpsest
   #
   class Assets
 
+    include Utils
+
     # Default {#options}.
     DEFAULT_OPTIONS = {
+      # Backend to use for file search operations.
+      # :grep to use grep.
+      search_backend: :grep,
+
       # Default path to output all saved assets (relative to directory).
       output: nil,
 
@@ -174,26 +180,23 @@ module Palimpsest
     # @param type [String, nil] only look for asset tags with this type (or any type if `nil`)
     # @param options [Hash] merged with {DEFAULT_OPTIONS}
     # (see #find_tags)
+    # @todo Add support for stdlib backend.
     def self.find_tags path, type=nil, options={}
-      fail ArgumentError, 'must specify path' if path.nil?
+      backend = options[:search_backend]
+      fail "Only grep supported." unless backend == :grep
 
       options = DEFAULT_OPTIONS.merge options
       pre = Regexp.escape options[:src_pre]
       post= Regexp.escape options[:src_post]
 
-      cmd = ['grep']
-      cmd.concat %w(-l -I -r -E)
-      cmd <<
+      regex = \
         if type.nil?
           pre + '(.*?)' + post
         else
           pre + '\s+' + type.to_s + '\s+(.*?)' + post
         end
-      cmd << path
 
-      files = []
-      Open3.capture2(*cmd).first.each_line { |l| files << l.chomp unless l.empty? }
-      files
+      search_files regex, path, backend: options[:search_backend]
     end
   end
 end

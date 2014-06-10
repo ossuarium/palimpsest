@@ -164,7 +164,9 @@ describe Palimpsest::Environment do
       it "copies the source files to the directory preserving mtime" do
         environment.site = site_1
         site_1.source = '/path/to/source'
-        expect(Kernel).to receive(:system).with('rsync', '-rt', %q{--exclude='.git/'}, '/path/to/source/', environment.directory)
+        expect(environment).to receive(:copy_directory).with(
+          '/path/to/source', environment.directory, exclude: environment.options[:copy_exclude]
+        )
         environment.populate from: :source
       end
 
@@ -172,7 +174,9 @@ describe Palimpsest::Environment do
 
         it "copies from the working directory" do
           environment.site = site_1
-          expect(Kernel).to receive(:system).with('rsync', '-rt', %q{--exclude='.git/'}, './', environment.directory)
+          expect(environment).to receive(:copy_directory).with(
+            '.', environment.directory, exclude: environment.options[:copy_exclude]
+          )
           environment.populate from: :source
         end
       end
@@ -471,7 +475,8 @@ describe Palimpsest::Environment do
       end
 
       it "uses options as options" do
-        expect(Palimpsest::Assets).to receive(:find_tags).twice.with(anything, anything, { src_pre: '(%' } )
+        options = { src_pre: '(%', search_backend: environment.options[:search_backend] }
+        expect(Palimpsest::Assets).to receive(:find_tags).twice.with(anything, anything, options)
         environment.sources_with_assets
       end
 
@@ -503,8 +508,8 @@ describe Palimpsest::Environment do
         allow(environment).to receive(:sources_with_assets).and_return sources
         allow(File).to receive(:read).with(sources[0]).and_return('data_1')
         allow(File).to receive(:read).with(sources[1]).and_return('data_2')
-        expect(Palimpsest::Utility).to receive(:write).with 'data_1', sources[0], preserve: true
-        expect(Palimpsest::Utility).to receive(:write).with 'data_2', sources[1], preserve: true
+        expect(environment).to receive(:write_to_file).with 'data_1', sources[0], preserve: true
+        expect(environment).to receive(:write_to_file).with 'data_2', sources[1], preserve: true
         environment.compile_assets
       end
 
