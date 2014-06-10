@@ -96,7 +96,7 @@ module Palimpsest
       cmd = %w(rsync -rt)
       exclude.each { |e| cmd << "--exclude='#{e}'" }
       cmd << "#{source}/"
-      cmd << directory
+      cmd << destination
       system *cmd
     end
 
