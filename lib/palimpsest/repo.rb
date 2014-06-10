@@ -7,6 +7,8 @@ module Palimpsest
   # Supports simple cache.
   class Repo
 
+    include Utils
+
     # @!attribute source
     #   @return [String] local or remote path to git repository
     #
@@ -62,14 +64,22 @@ module Palimpsest
 
     # Create a git mirrored clone.
     def mirror_repo source, destination
+      fail RuntimeError, 'Git not installed' unless command? 'git'
+      system 'git', 'clone', '--mirror', source, destination
     end
 
     # Update a git repository.
     def update_repo path
+      fail RuntimeError, 'Git not installed' unless command? 'git'
+      Dir.chdir path do
+        system 'git', 'remote', 'update'
+      end
     end
 
     # Extract repository files at a particular reference to directory.
     def extract_repo destination, reference
+      fail RuntimeError, 'Git not installed' unless command? 'git'
+      system "git archive #{reference} | tar -x -C #{destination}"
     end
   end
 
