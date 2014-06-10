@@ -11,6 +11,9 @@ module Palimpsest
     #
     # @!attribute source
     #   @return [String] path to source code for this site
+    #
+    # @!attribute path
+    #   @return [String] path to destination for this site
     attr_accessor :name, :repo, :source, :path
 
     def initialize name: '', repo: nil, source: nil
