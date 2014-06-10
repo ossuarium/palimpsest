@@ -176,8 +176,7 @@ module Palimpsest
     # @return [Environment] the current environment instance
     def copy destination: site.path
       fail RuntimeError, "Must specify a destination" if destination.nil?
-      FileUtils.mkdir_p destination
-      FileUtils.cp_r Dir["#{directory}/*"], destination, preserve: true
+      copy_directory directory, destination, exclude: options[:copy_exclude]
       self
     end
 

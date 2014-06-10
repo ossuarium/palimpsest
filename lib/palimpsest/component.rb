@@ -27,7 +27,7 @@ module Palimpsest
       fail RuntimeError if source_path.nil?
       fail RuntimeError if install_path.nil?
       FileUtils.mkdir_p install_path
-      FileUtils.mv Dir["#{source_path}/*"], install_path
+      FileUtils.mv "#{source_path}/.", install_path
     end
   end
 end

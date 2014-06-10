@@ -90,9 +90,9 @@ describe Palimpsest::Environment do
 
     it "copies the environment to the destination" do
       dir = environment.directory
-      allow(Dir).to receive(:[]).with("#{dir}/*").and_return( %W(#{dir}/path/1 #{dir}/path/2) )
-      expect(FileUtils).to receive(:mkdir_p).with('/dest/path')
-      expect(FileUtils).to receive(:cp_r).with( %W(#{dir}/path/1 #{dir}/path/2), '/dest/path', preserve: true)
+      expect(environment).to receive(:copy_directory).with(
+        dir, '/dest/path', exclude: environment.options[:copy_exclude]
+      )
       environment.copy destination: '/dest/path'
     end
 
@@ -310,13 +310,9 @@ describe Palimpsest::Environment do
 
     describe "#install_components" do
 
-      it "installs the components" do
+      it "installs the components and returns itself" do
         expect(environment.components[0]).to receive(:install)
         expect(environment.components[1]).to receive(:install)
-        environment.install_components
-      end
-
-      it "returns itself" do
         expect(environment.install_components).to be environment
       end
 
