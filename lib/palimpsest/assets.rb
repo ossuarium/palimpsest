@@ -148,7 +148,7 @@ module Palimpsest
         else
           asset = write $1
 
-          # @todo raise warning or error if asset not found
+          # @todo Raise warning or error if asset not found.
           p "asset not found: #{$1}" and next if asset.nil?
 
           options[:cdn].empty? ? asset : options[:cdn] + asset

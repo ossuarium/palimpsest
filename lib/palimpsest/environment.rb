@@ -347,7 +347,7 @@ module Palimpsest
     private
 
     # Checks the config file for invalid settings.
-    # @todo refactor this
+    # @todo Refactor this.
     # - Checks that paths are not absolute or use `../` or `~/`.
     def validate_config
       message = 'bad path in config'
