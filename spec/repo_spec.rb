@@ -55,19 +55,20 @@ describe Palimpsest::Repo do
       repo.mirror
     end
 
-    it "returns mirror location" do
+    it "returns self" do
       repo.source = 'src/path'
       repo.local_clone = '/tmp/dest'
-      expect(repo.mirror).to eq '/tmp/dest'
+      expect(repo.mirror).to eq repo
     end
 
     context "when clone directory exists" do
 
-      it "returns the directory" do
+      it "does not recreate the mirror" do
         repo.source = 'src/path'
         repo.local_clone = '/tmp/dest'
         allow(Dir).to receive(:exists?).with('/tmp/dest').and_return(true)
-        expect(repo.mirror).to eq '/tmp/dest'
+        expect(repo.mirror).to_not receive(:mirror_repo)
+        expect(repo.mirror).to be repo
       end
     end
 
@@ -92,9 +93,13 @@ describe Palimpsest::Repo do
       repo.update
     end
 
-    it "update the repo" do
+    it "updates the repo" do
       expect(repo).to receive(:update_repo).with(repo.local_clone)
       repo.update
+    end
+
+    it "returns self " do
+      expect(repo.update).to be repo
     end
   end
 

@@ -34,18 +34,20 @@ module Palimpsest
 
     # Create a bare mirrored clone.
     # @param destination [String] where to place the repository
-    # @return [String] path to new mirror
+    # @return [Repo] the repo object
     def mirror
       fail RuntimeError, 'Must specify source.' unless source
       mirror_repo source, local_clone unless Dir.exists? local_clone
-      local_clone
+      self
     end
 
     # Update a cached clone.
     # @param path [String] location of local mirror
+    # @return [Repo] the repo object
     def update
       mirror
       update_repo local_clone
+      self
     end
 
     # Extracts the repository files at a particular reference to directory.
