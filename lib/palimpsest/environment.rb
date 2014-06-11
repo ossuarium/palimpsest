@@ -248,6 +248,7 @@ module Palimpsest
     # Runs all compile tasks.
     # @return [Environment] the current environment instance
     def compile
+      populate
       install_externals
       install_components
       compile_assets

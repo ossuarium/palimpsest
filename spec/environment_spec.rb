@@ -262,6 +262,7 @@ describe Palimpsest::Environment do
   describe "compile" do
 
     it "runs all compile tasks and returns self" do
+      expect(environment).to receive(:populate)
       expect(environment).to receive(:install_externals)
       expect(environment).to receive(:install_components)
       expect(environment).to receive(:compile_assets)
