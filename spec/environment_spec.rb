@@ -63,7 +63,6 @@ describe Palimpsest::Environment do
 
     before :each do
       site_1.repository = 'repo/src'
-      environment.site = site_1
     end
 
     it "is a repo object" do
@@ -71,6 +70,7 @@ describe Palimpsest::Environment do
     end
 
     it "sets the repository source" do
+      environment.site = site_1
       expect(environment.repo.source).to eq 'repo/src'
     end
 
