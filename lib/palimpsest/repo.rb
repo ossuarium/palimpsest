@@ -14,17 +14,15 @@ module Palimpsest
     #
     # @!attribute cache
     #   @return [String] local root directory to look for cached repositories
-    #
-    # @!attribute auth
-    #   @return [Hash] any information required for authentication
-    attr_accessor :source, :cache, :auth, :local_clone
+    attr_accessor :source, :cache, :local_clone
 
-    def initialize source: nil, cache: "#{Dir.tmpdir}/palimpsest", auth: {}
+    def initialize source: nil, cache: "#{Dir.tmpdir}/palimpsest"
       self.source = source
       self.cache = cache
-      self.auth = auth
     end
 
+    # Path to place the local clone of the repository.
+    # If not set, a unique path will be used under the {#cache}.
     def local_clone
       return @local_clone if @local_clone
       return nil if cache.nil?
