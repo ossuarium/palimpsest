@@ -170,7 +170,8 @@ module Palimpsest
     def repo
       @repo = nil if site.repository != @repo.source unless @repo.nil?
       @repo = nil if options[:repo_cache_root] != @repo.cache unless @repo.nil?
-      @repo ||= Repo.new(cache: options[:repo_cache_root]).tap do |r|
+      @repo ||= Repo.new.tap do |r|
+        r.cache = options[:repo_cache_root]
         r.source = site.repository unless site.nil?
       end
     end
@@ -256,10 +257,10 @@ module Palimpsest
       base = File.join directory, config[:components][:base] unless config[:components][:base].nil?
 
       config[:components][:paths].each do |paths|
-        @components << Component.new(
-          source_path: File.join(base, paths[0]),
-          install_path: File.join(directory, paths[1])
-        )
+        @components << Component.new.tap do |c|
+          c.source_path = File.join(base, paths[0])
+          c.install_path = File.join(directory, paths[1])
+        end
       end
 
       @components
