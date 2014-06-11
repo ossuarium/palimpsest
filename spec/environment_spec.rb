@@ -271,7 +271,7 @@ describe Palimpsest::Environment do
         :externals:
           :server: "https://github.com/razor-x"
           :repositories:
-            - [ my_app, apps/my_app, master ]
+            - [ my_app, apps/my_app ]
             - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
         :excludes:
           - .gitignore
@@ -360,13 +360,13 @@ describe Palimpsest::Environment do
       end
 
       it "sets the externals repo path" do
-        expect(environment.externals[0].repo_path).to eq 'https://github.com/razor-x/my_app'
-        expect(environment.externals[1].repo_path).to eq 'https://bitbucket.org/razorx/sub_app'
+        expect(environment.externals[0].repository_path).to eq 'https://github.com/razor-x/my_app'
+        expect(environment.externals[1].repository_path).to eq 'https://bitbucket.org/razorx/sub_app'
       end
 
-      it "sets the externals branch" do
-        expect(environment.externals[0].branch).to eq 'master'
-        expect(environment.externals[1].branch).to eq 'my_feature'
+      it "sets the externals reference" do
+        expect(environment.externals[0].reference).to eq 'master'
+        expect(environment.externals[1].reference).to eq 'my_feature'
       end
 
       it "sets the install path" do
@@ -391,7 +391,7 @@ describe Palimpsest::Environment do
         let(:external_2) { double Palimpsest::External }
 
         before :each do
-          allow(environment).to receive(:externals).and_return( [ external_1, external_2 ] )
+          allow(environment).to receive(:externals).and_return([external_1, external_2])
           allow(external_1).to receive(:install)
           allow(external_2).to receive(:install)
         end

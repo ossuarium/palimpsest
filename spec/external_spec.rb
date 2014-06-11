@@ -2,86 +2,73 @@ require 'spec_helper'
 
 describe Palimpsest::External do
 
-  subject(:external) { Palimpsest::External.new name: 'my_app', source: 'path/to/source', branch: 'my_feature' }
+  subject(:external) { Palimpsest::External.new }
 
-  let(:gritty) { double Grit::Git }
-  let(:repo) { double Grit::Repo }
+  describe "#repository_path" do
 
-  before :each do
-    allow(Grit::Git).to receive(:new).and_return(gritty)
-    allow(Grit::Repo).to receive(:new).and_return(repo)
-    allow(gritty).to receive(:clone)
-    allow(repo).to receive(:archive_tar)
-  end
+    context "when local repository" do
 
-  describe "#repo_path" do
+      before :each do
+        external.name = 'my_app'
+        external.source = 'path/to/source'
+      end
 
-    it "gives the full path to the source repo" do
-      expect(external.repo_path).to eq 'path/to/source/my_app'
+      it "gives the full path" do
+        expect(Dir).to receive(:exists?).with('path/to/source/my_app').and_return(true)
+        expect(external.repository_path).to eq 'path/to/source/my_app'
+      end
+    end
+
+    context "when remote repository" do
+
+      before :each do
+        external.name = 'my_app'
+        external.source = 'https://github.com/razor-x'
+      end
+
+      it "gives the full url" do
+        expect(Dir).to receive(:exists?).with('https://github.com/razor-x/my_app').and_return(false)
+        expect(external.repository_path).to eq 'https://github.com/razor-x/my_app'
+      end
     end
   end
 
-  describe "#environment" do
+  describe "#repo" do
 
-    it "returns a new environment" do
-      expect(external.environment).to be_a Palimpsest::Environment
+    before :each do
+      external.name = 'my_app'
     end
 
-    it "sets the reference for the environment" do
-      expect(external.environment.reference).to eq 'my_feature'
+    it "is a repo object" do
+      expect(external.repo).to be_a Palimpsest::Repo
     end
 
-    it "sets the repo for the environment" do
-      expect(external.environment.site.repository).to equal repo
-    end
-  end
-
-  describe "#tmp_environment" do
-
-    it "fails if no repo path" do
-      external.name = ''
-      external.source = nil
-      expect { external.tmp_environment }.to raise_error RuntimeError
+    it "sets the repository source" do
+      external.source = 'repo/src'
+      expect(external.repo.source).to eq 'repo/src/my_app'
     end
 
-    it "returns a new environment" do
-      expect(external.tmp_environment).to be_a Palimpsest::Environment
-    end
-
-    it "sets the reference for the environment" do
-      expect(gritty).to receive(:clone).with( { branch: 'my_feature' }, external.repo_path, anything )
-      external.tmp_environment
-    end
-  end
-
-  describe "#cleanup" do
-
-    it "cleans environment" do
-      expect(external.environment).to receive(:cleanup)
-      external.cleanup
-    end
-    it "clears @environment" do
-      expect(external.instance_variable_get :@environment).to be_nil
-      external.cleanup
-    end
-
-    it "cleans tmp_environment" do
-      expect(external.tmp_environment).to receive(:cleanup)
-      external.cleanup
-    end
-
-    it "clears @tmp_environment" do
-      expect(external.instance_variable_get :@tmp_environment).to be_nil
-      external.cleanup
+     it "sets the cache" do
+      external.cache = '/tmp/cache'
+      expect(external.repo.cache).to eq '/tmp/cache'
     end
   end
 
   describe "#install" do
 
-    it "populates and installs the external to the install path and returns itself" do
+    context "when no install path specified" do
+
+      it "fails" do
+        expect { external.install }.to raise_error RuntimeError
+      end
+    end
+
+    it "installs the files to the install path and returns itself" do
       external.install_path = 'path/to/install'
-      expect(external.environment).to receive(:populate).and_return(external.environment)
-      expect(external.environment).to receive(:copy).with(destination: 'path/to/install')
+      external.reference = 'v1.0.0'
+      expect(external.repo).to receive(:extract).with(
+        'path/to/install', reference: 'v1.0.0'
+      )
       expect(external.install).to be external
     end
   end
