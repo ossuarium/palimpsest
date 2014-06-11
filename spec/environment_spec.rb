@@ -107,24 +107,6 @@ describe Palimpsest::Environment do
     end
   end
 
-  describe "#copy" do
-
-    it "copies the environment to the destination" do
-      dir = environment.directory
-      expect(environment).to receive(:copy_directory).with(
-        dir, '/dest/path', exclude: environment.options[:copy_exclude], mirror: false
-      )
-      environment.copy destination: '/dest/path', mirror: false
-    end
-
-    context "when destination is nil" do
-
-      it "fails" do
-        expect { environment.copy destination: nil }.to raise_error RuntimeError, /destination/
-      end
-    end
-  end
-
   describe "#cleanup" do
 
     subject(:environment) { Palimpsest::Environment.new site: site_1 }
@@ -263,22 +245,13 @@ describe Palimpsest::Environment do
     end
   end
 
-  describe "compile" do
-
-    it "runs all compile tasks and returns self" do
-      expect(environment).to receive(:populate)
-      expect(environment).to receive(:install_externals)
-      expect(environment).to receive(:install_components)
-      expect(environment).to receive(:compile_assets)
-      expect(environment).to receive(:remove_excludes)
-      expect(environment.compile).to be environment
-    end
-  end
-
   describe "methods that modify the working directory" do
 
     let(:config) do
       YAML.load <<-EOF
+        :persistent:
+          - config.php
+          - data/
         :components:
           :base: _components
           :paths:
@@ -324,6 +297,60 @@ describe Palimpsest::Environment do
       environment.directory
       allow(environment).to receive(:populated).and_return(true)
       allow(environment).to receive(:config).and_return(config)
+    end
+
+    describe "compile" do
+
+      it "runs all compile tasks and returns self" do
+        expect(environment).to receive(:populate)
+        expect(environment).to receive(:install_externals)
+        expect(environment).to receive(:install_components)
+        expect(environment).to receive(:compile_assets)
+        expect(environment).to receive(:remove_excludes)
+        expect(environment.compile).to be environment
+      end
+    end
+
+    describe "#copy" do
+
+      it "copies the environment to the destination" do
+        dir = environment.directory
+        exclude = environment.options[:copy_exclude] + %w(config.php data/)
+        expect(environment).to receive(:copy_directory).with(
+          dir, '/dest/path', exclude: exclude, mirror: false
+        )
+        environment.copy destination: '/dest/path', mirror: false
+      end
+
+      context "when no persistent files given" do
+
+        it "copies the environment to the destination" do
+          dir = environment.directory
+          allow(environment).to receive(:config).and_return({})
+          exclude = environment.options[:copy_exclude]
+          expect(environment).to receive(:copy_directory).with(
+            dir, '/dest/path', exclude: exclude, mirror: false
+          )
+          environment.copy destination: '/dest/path', mirror: false
+        end
+      end
+
+
+      it "copies the environment to the destination" do
+        dir = environment.directory
+        exclude = environment.options[:copy_exclude] + %w(config.php data/)
+        expect(environment).to receive(:copy_directory).with(
+          dir, '/dest/path', exclude: exclude, mirror: false
+        )
+        environment.copy destination: '/dest/path', mirror: false
+      end
+
+      context "when destination is nil" do
+
+        it "fails" do
+          expect { environment.copy destination: nil }.to raise_error RuntimeError, /destination/
+        end
+      end
     end
 
     describe "#components" do

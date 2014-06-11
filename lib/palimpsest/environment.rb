@@ -17,6 +17,11 @@ module Palimpsest
   # ````yml
   # # example of palimpsest.yml
   #
+  # # persistent files and directories
+  # persistent:
+  #   - config.php
+  #   - data/
+  #
   # # component settings
   # components:
   #   # all component paths are relative to the base
@@ -201,7 +206,9 @@ module Palimpsest
     # @return [Environment] the current environment instance
     def copy destination: site.path, mirror: false
       fail RuntimeError, "Must specify a destination" if destination.nil?
-      copy_directory directory, destination, exclude: options[:copy_exclude], mirror: mirror
+      exclude = options[:copy_exclude]
+      exclude.concat config[:persistent] unless config[:persistent].nil?
+      copy_directory directory, destination, exclude: exclude, mirror: mirror
       self
     end
 
