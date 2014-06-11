@@ -116,7 +116,7 @@ module Palimpsest
       copy_exclude: %w(.git .svn),
 
       # Directory to store cached repository clones.
-      repo_cache_root: "#{Dir.tmpdir}/palimpsest",
+      repo_cache_root: File.join(Dir.tmpdir, 'palimpsest'),
 
       # All environment's temporary directories will be rooted under here.
       tmp_dir: Dir.tmpdir,

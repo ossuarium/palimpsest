@@ -16,7 +16,7 @@ module Palimpsest
     #   @return [String] local root directory to look for cached repositories
     attr_accessor :source, :cache, :local_clone
 
-    def initialize source: nil, cache: "#{Dir.tmpdir}/palimpsest"
+    def initialize source: nil, cache: File.join(Dir.tmpdir, 'palimpsest')
       self.source = source
       self.cache = cache
     end
