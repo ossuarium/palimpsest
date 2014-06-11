@@ -66,6 +66,7 @@ describe Palimpsest::External do
     it "installs the files to the install path and returns itself" do
       external.install_path = 'path/to/install'
       external.reference = 'v1.0.0'
+      expect(FileUtils).to receive(:mkdir_p).with('path/to/install')
       expect(external.repo).to receive(:extract).with(
         'path/to/install', reference: 'v1.0.0'
       )

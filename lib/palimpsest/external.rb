@@ -56,6 +56,7 @@ module Palimpsest
     # @return [External] this external object
     def install
       fail RuntimeError, 'Must specify an install path.' unless install_path
+      FileUtils.mkdir_p install_path
       repo.extract install_path, reference: reference
       self
     end
