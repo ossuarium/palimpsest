@@ -55,7 +55,7 @@ module Palimpsest
     # @param reference [String] the git reference to use
     def extract destination, reference: 'master'
       update
-      extract_repo destination, reference
+      extract_repo local_clone, destination, reference
     end
 
     private
@@ -75,9 +75,11 @@ module Palimpsest
     end
 
     # Extract repository files at a particular reference to directory.
-    def extract_repo destination, reference
+    def extract_repo path, destination, reference
       fail RuntimeError, 'Git not installed' unless command? 'git'
-      system "git archive #{reference} | tar -x -C #{destination}"
+      Dir.chdir path do
+        system "git archive #{reference} | tar -x -C #{destination}"
+      end
     end
   end
 

@@ -117,7 +117,8 @@ describe Palimpsest::Repo do
     end
 
     it "extracts the repo" do
-      expect(repo).to receive(:extract_repo).with('dest/path', 'my_feature')
+      allow(repo).to receive(:local_clone).and_return('src/path')
+      expect(repo).to receive(:extract_repo).with('src/path', 'dest/path', 'my_feature')
       repo.extract 'dest/path', reference: 'my_feature'
     end
   end
