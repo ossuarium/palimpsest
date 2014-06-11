@@ -1,3 +1,4 @@
+require 'active_support/core_ext/hash'
 require 'tmpdir'
 
 module Palimpsest
@@ -17,64 +18,64 @@ module Palimpsest
   # # example of palimpsest.yml
   #
   # # component settings
-  # :components:
+  # components:
   #   # all component paths are relative to the base
-  #   :base: _components
+  #   base: _components
   #
   #   # list of components
-  #   :paths:
+  #   paths:
   #    #- [ components_path, install_path ]
   #     - [ my_app/templates, apps/my_app/templates ]
   #     - [ my_app/extra, apps/my_app ]
   #
   # # externals settings
-  # :externals:
+  # externals:
   #   # server or local path that repositories are under
-  #   :server: "https://github.com/razor-x"
+  #   server: "https://github.com/razor-x"
   #
   #   # list of external repositories
-  #   :repositories:
+  #   repositories:
   #       # uses repository at https://github.com/razor-x/my_app
   #       # and installs to apps/my_app
-  #     - :name: my_app
-  #       :path: apps/my_app
+  #     - name: my_app
+  #       path: apps/my_app
   #
   #       # uses repository at https://bitbucket.org/razorx/sub_app
   #       # and installs to apps/my_app from git reference v1.0.0
-  #     - :name: sub_app
-  #       :path: apps/my_app/sub_app
-  #       :reference: v1.0.0
-  #       :server: apps/my_app
+  #     - name: sub_app
+  #       path: apps/my_app/sub_app
+  #       reference: v1.0.0
+  #       server: apps/my_app
   #
   # # list of excludes
   # # matching paths are removed with {#remove_excludes}.
-  # :excludes:
+  # excludes:
   #   - _assets
   #   - apps/*/.gitignore
   #
   # # asset settings
-  # :assets:
+  # assets:
   #   # all options are passed to Assets#options
   #   # options will use defaults set in Palimpsest::Asset::DEFAULT_OPTIONS if unset here
   #   # unless otherwise mentioned, options can be set or overridden per asset type
-  #   :options:
+  #   options:
   #     # opening and closing brackets for asset source tags
   #     # global option only: cannot be overridden per asset type
-  #     :src_pre: "[%"
-  #     :src_post: "%]"
+  #     src_pre: "[%"
+  #     src_post: "%]"
   #
   #     # relative directory to save compiled assets
-  #     :output: compiled
+  #     output: compiled
   #
   #     # assume assets will be served under here
-  #     :cdn: https://cdn.example.com/
+  #     cdn: https://cdn.example.com/
   #
   #     # compiled asset names include a uniqe hash by default
   #     # this can be toggled off
-  #     :hash: false
+  #     hash: false
   #
   #   # directories to scan for files with asset tags
-  #   :sources:
+  #   sources:
   #     # putting assets/stylesheets first would allow asset tags,
   #     # e.g. for images, to be used in your stylesheets
   #     - assets/stylesheets
@@ -82,29 +83,29 @@ module Palimpsest
   #     - app/src
   #
   #   # all other keys are asset types
-  #   :javascripts:
-  #     :options:
-  #       :js_compressor: :uglifier
+  #   javascripts:
+  #     options:
+  #       js_compressor: :uglifier
   #     # these paths are loaded into the sprockets environment
-  #     :paths:
+  #     paths:
   #       - assets/javascripts
   #       - other/javascripts
   #
   #   # this is another asset type which will have it's own namespace
-  #   :stylesheets:
-  #     :options:
-  #       :css_compressor: :sass
+  #   stylesheets:
+  #     options:
+  #       css_compressor: :sass
   #
-  #     :paths:
+  #     paths:
   #       - assets/stylesheets
   #   # images can be part of the asset pipeline
-  #   :images:
-  #     :options:
+  #   images:
+  #     options:
   #       # requires the sprockets-image_compressor gem
-  #       :image_compression: true
+  #       image_compression: true
   #       # options can be overridden per type
-  #       :output: images
-  #     :paths:
+  #       output: images
+  #     paths:
   #       - assets/images
   # ````
   class Environment
@@ -249,6 +250,7 @@ module Palimpsest
         populate unless populated
         file = File.join(directory, options[:config_file])
         @config = YAML.load_file(file) if File.exists? file
+        @config = ActiveSupport::HashWithIndifferentAccess.new @config
         validate_config if @config
       end
 

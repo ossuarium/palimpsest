@@ -234,27 +234,31 @@ describe Palimpsest::Environment do
 
     context "settings given" do
 
+      let(:hash) { ActiveSupport::HashWithIndifferentAccess.new(conf_1: :val_1, conf_2: :val_2, conf_3: :val_3) }
+
       before :each do
         allow(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest.yml")
-        .and_return( { conf_1: :val_1, conf_2: :val_2 } )
+        .and_return(conf_1: :val_1, conf_2: :val_2)
       end
 
       it "merges new settings on first call" do
-        expect( environment.config({ conf_3: :val_3 }) ).to eq({ conf_1: :val_1, conf_2: :val_2, conf_3: :val_3 })
+        expect(environment.config conf_3: :val_3).to eq hash
       end
 
       it "merges new settings on subsequent call" do
         environment.config
-        expect( environment.config({ conf_3: :val_3 }) ).to eq({ conf_1: :val_1, conf_2: :val_2, conf_3: :val_3 })
+        expect(environment.config conf_3: :val_3).to eq hash
       end
 
       it "remembers new settings" do
-        environment.config({ conf_3: :val_3 })
-        expect(environment.config).to eq({ conf_1: :val_1, conf_2: :val_2, conf_3: :val_3 })
+        hash = ActiveSupport::HashWithIndifferentAccess.new(conf_1: :val_1, conf_2: :val_2, conf_3: :val_3)
+        environment.config(conf_3: :val_3)
+        expect(environment.config).to eq hash
       end
 
       it "overwrites current settings" do
-        expect( environment.config({ conf_2: :new_val_2 }) ).to eq({ conf_1: :val_1, conf_2: :new_val_2 })
+        hash = ActiveSupport::HashWithIndifferentAccess.new(conf_1: :val_1, conf_2: :new_val_2)
+        expect(environment.config conf_2: :new_val_2).to eq hash
       end
     end
   end
