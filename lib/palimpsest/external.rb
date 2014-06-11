@@ -15,7 +15,7 @@ module Palimpsest
     #   @return [String] base source url or path to external git repo (without name)
     #
     # @!attribute branch
-    #   @return [String] branch to use for treeish
+    #   @return [String] branch to use for reference
     #
     # @!attribute install_path
     #   @return [String] where the files will be installed to
@@ -38,7 +38,7 @@ module Palimpsest
       return @environment if @environment
 
       site = Site.new name: "external_#{name.gsub '/', '_'}", repository: Grit::Repo.new(tmp_environment.directory)
-      @environment = Environment.new site: site, treeish: branch
+      @environment = Environment.new site: site, reference: branch
     end
 
     # Copy the files to the {#install_path}.

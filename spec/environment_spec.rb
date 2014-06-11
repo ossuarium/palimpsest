@@ -46,16 +46,16 @@ describe Palimpsest::Environment do
     end
   end
 
-  describe "#treeish" do
+  describe "#reference" do
 
     it "must be a string" do
-      expect { environment.treeish = 1 }.to raise_error TypeError
+      expect { environment.reference = 1 }.to raise_error TypeError
     end
 
     it "cannot be redefinfed while populated" do
-      environment.treeish = 'treeish_1'
+      environment.reference = 'reference_1'
       allow(environment).to receive(:populated).and_return(true)
-      expect { environment.treeish = 'treeish_2' }.to raise_error RuntimeError, /populated/
+      expect { environment.reference = 'reference_2' }.to raise_error RuntimeError, /populated/
     end
   end
 
@@ -144,13 +144,13 @@ describe Palimpsest::Environment do
   describe "#populate" do
 
     it "fails when missing site" do
-      environment.treeish = 'master'
+      environment.reference = 'master'
       expect { environment.populate }.to raise_error RuntimeError, /populate without/
     end
 
     context "from repo" do
 
-      subject(:environment) { Palimpsest::Environment.new site: site_1, treeish: 'master' }
+      subject(:environment) { Palimpsest::Environment.new site: site_1, reference: 'master' }
 
       before :each do
         site_1.repository = 'repo/src'
@@ -160,15 +160,15 @@ describe Palimpsest::Environment do
       it "extracts the repo to the directory and sets populated true" do
         environment.repo
         expect(environment.repo).to receive(:extract).with(
-          environment.directory, reference: environment.treeish
+          environment.directory, reference: environment.reference
         )
         environment.populate from: :repo
         expect(environment.populated).to eq true
       end
 
-      it "fails when missing treeish" do
+      it "fails when missing reference" do
         environment.site = site_1
-        environment.treeish = ''
+        environment.reference = ''
         expect { environment.populate from: :repo }.to raise_error RuntimeError, /populate without/
       end
 
@@ -209,7 +209,7 @@ describe Palimpsest::Environment do
 
   describe "#config" do
 
-    subject(:environment) { Palimpsest::Environment.new site: site_1, treeish: 'master' }
+    subject(:environment) { Palimpsest::Environment.new site: site_1, reference: 'master' }
 
     before :each do
       allow(File).to receive(:exists?).and_return(true)

@@ -27,8 +27,8 @@ describe Palimpsest::External do
       expect(external.environment).to be_a Palimpsest::Environment
     end
 
-    it "sets the treeish for the environment" do
-      expect(external.environment.treeish).to eq 'my_feature'
+    it "sets the reference for the environment" do
+      expect(external.environment.reference).to eq 'my_feature'
     end
 
     it "sets the repo for the environment" do
@@ -48,7 +48,7 @@ describe Palimpsest::External do
       expect(external.tmp_environment).to be_a Palimpsest::Environment
     end
 
-    it "sets the treeish for the environment" do
+    it "sets the reference for the environment" do
       expect(gritty).to receive(:clone).with( { branch: 'my_feature' }, external.repo_path, anything )
       external.tmp_environment
     end

@@ -131,18 +131,18 @@ module Palimpsest
     # @!attribute site
     #   @return site to build the environment with
     #
-    # @!attribute treeish
+    # @!attribute reference
     #   @return [String] the reference used to pick the commit to build the environment with
     #
     # @!attribute [r] populated
     #   @return [Boolean] true if the site's repo has been extracted
-    attr_reader :site, :treeish, :populated
+    attr_reader :site, :reference, :populated
 
-    def initialize site: nil, treeish: 'master', options: {}
+    def initialize site: nil, reference: 'master', options: {}
       @populated = false
       self.options options
       self.site = site if site
-      self.treeish = treeish
+      self.reference = reference
     end
 
     # Uses {DEFAULT_OPTIONS} as initial value.
@@ -159,11 +159,11 @@ module Palimpsest
       @site = site
     end
 
-    # @see Environment#treeish
-    def treeish= treeish
-      fail RuntimeError, "Cannot redefine 'treeish' once populated" if populated
-      fail TypeError unless treeish.is_a? String
-      @treeish = treeish
+    # @see Environment#reference
+    def reference= reference
+      fail RuntimeError, "Cannot redefine 'reference' once populated" if populated
+      fail TypeError unless reference.is_a? String
+      @reference = reference
     end
 
     # The corresponding {Repo} for this environment.
@@ -219,8 +219,8 @@ module Palimpsest
           populate from: :source
         end
       when :repo
-        fail RuntimeError, "Cannot populate without 'treeish'" if treeish.empty?
-        repo.extract directory, reference: treeish
+        fail RuntimeError, "Cannot populate without 'reference'" if reference.empty?
+        repo.extract directory, reference: reference
         @populated = true
       when :source
         source = site.source.nil? ? '.' : site.source

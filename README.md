@@ -111,8 +111,8 @@ environment.site = site
 To populate the environment from a git repo,
 
 ````ruby
-site.repo = Grit::Repo.new '/path/to/project/repo'
-environment.treeish = 'my_feature' # if you want something other then 'master'
+site.repo = '/path/to/project/repo'
+environment.reference = 'my_feature' # if you want something other then 'master'
 environment.populate
 ````
 or to populate from a directory,
