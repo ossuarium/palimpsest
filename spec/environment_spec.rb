@@ -283,8 +283,12 @@ describe Palimpsest::Environment do
         :externals:
           :server: "https://github.com/razor-x"
           :repositories:
-            - [ my_app, apps/my_app ]
-            - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
+            - :name: my_app
+              :path: apps/my_app
+            - :name: sub_app
+              :path: apps/my_app/sub_app
+              :reference: my_feature
+              :server: "https://bitbucket.org/razorx"
         :excludes:
           - .gitignore
           - apps/*/assets

@@ -34,9 +34,17 @@ module Palimpsest
   #
   #   # list of external repositories
   #   :repositories:
-  #    #- [ name, install_path, reference (optional), server (optional) ]
-  #     - [ my_app, apps/my_app ]
-  #     - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
+  #       # uses repository at https://github.com/razor-x/my_app
+  #       # and installs to apps/my_app
+  #     - :name: my_app
+  #       :path: apps/my_app
+  #
+  #       # uses repository at https://bitbucket.org/razorx/sub_app
+  #       # and installs to apps/my_app from git reference v1.0.0
+  #     - :name: sub_app
+  #       :path: apps/my_app/sub_app
+  #       :reference: v1.0.0
+  #       :server: apps/my_app
   #
   # # list of excludes
   # # matching paths are removed with {#remove_excludes}.
@@ -296,10 +304,10 @@ module Palimpsest
 
       config[:externals][:repositories].each do |repo|
         @externals << External.new.tap do |e|
-          e.name = repo[0]
-          e.source = repo[3].nil? ? config[:externals][:server] : repo[3]
-          e.reference = repo[2] unless repo[2].nil?
-          e.install_path = File.join directory, repo[1]
+          e.name = repo[:name]
+          e.source = repo[:server].nil? ? config[:externals][:server] : repo[:server]
+          e.reference = repo[:reference] unless repo[:reference].nil?
+          e.install_path = File.join directory, repo[:path]
         end
       end
 
