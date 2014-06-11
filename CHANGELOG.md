@@ -1,5 +1,14 @@
 # Palimpsest ChangeLog
 
+## HEAD
+
+- Added persistent files.
+- Use `palimpsest.yml` not `palimpsest_config.yml`
+- Keys in `palimpsest.yml` can be given as strings or symbols.
+- New `Repo` class handles caching and extracting repos.
+- New `Utils` module handles copy operations.
+- Refactored to use `Repo` and `Utils`.
+
 ## 0.2.0
 
 - Added Environment#remove_excludes.
