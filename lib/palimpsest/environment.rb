@@ -1,3 +1,5 @@
+require 'tmpdir'
+
 module Palimpsest
 
   # An environment is populated with the contents of
