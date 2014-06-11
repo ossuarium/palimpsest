@@ -27,11 +27,11 @@ module Palimpsest
   #
   # # externals settings
   # :externals:
-  #   # server or local path that repos are under
+  #   # server or local path that repositories are under
   #   :server: "https://github.com/razor-x"
   #
-  #   # list of external repos
-  #   :repos:
+  #   # list of external repositories
+  #   :repositories:
   #    #- [ name, install_path, branch, server (optional) ]
   #     - [ my_app, apps/my_app, master ]
   #     - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
@@ -135,7 +135,7 @@ module Palimpsest
     #   @return [String] the reference used to pick the commit to build the environment with
     #
     # @!attribute [r] populated
-    #   @return [Boolean] true if the site's repo has been extracted
+    #   @return [Boolean] true if the site's repository has been extracted
     attr_reader :site, :reference, :populated
 
     def initialize site: nil, reference: 'master', options: {}
@@ -214,11 +214,11 @@ module Palimpsest
       case from
       when :auto
         if site.respond_to?(:repository) ? site.repository : nil
-          populate from: :repo
+          populate from: :repository
         else
           populate from: :source
         end
-      when :repo
+      when :repository
         fail RuntimeError, "Cannot populate without 'reference'" if reference.empty?
         repo.extract directory, reference: reference
         @populated = true
@@ -276,11 +276,11 @@ module Palimpsest
     def externals
       return @externals if @externals
       return [] if config[:externals].nil?
-      return [] if config[:externals][:repos].nil?
+      return [] if config[:externals][:repositories].nil?
 
       @externals = []
 
-      config[:externals][:repos].each do |repo|
+      config[:externals][:repositories].each do |repo|
         source = repo[3].nil? ? config[:externals][:server] : repo[3]
         @externals << External.new(
           name: repo[0], source: source, branch: repo[2],

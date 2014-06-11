@@ -148,7 +148,7 @@ describe Palimpsest::Environment do
       expect { environment.populate }.to raise_error RuntimeError, /populate without/
     end
 
-    context "from repo" do
+    context "from repository" do
 
       subject(:environment) { Palimpsest::Environment.new site: site_1, reference: 'master' }
 
@@ -157,29 +157,28 @@ describe Palimpsest::Environment do
         allow(environment.repo).to receive(:extract)
       end
 
-      it "extracts the repo to the directory and sets populated true" do
-        environment.repo
+      it "extracts the repository to the directory and sets populated true" do
         expect(environment.repo).to receive(:extract).with(
           environment.directory, reference: environment.reference
         )
-        environment.populate from: :repo
+        environment.populate from: :repository
         expect(environment.populated).to eq true
       end
 
       it "fails when missing reference" do
         environment.site = site_1
         environment.reference = ''
-        expect { environment.populate from: :repo }.to raise_error RuntimeError, /populate without/
+        expect { environment.populate from: :repository }.to raise_error RuntimeError, /populate without/
       end
 
       it "returns itself" do
-        expect(environment.populate from: :repo).to be environment
+        expect(environment.populate from: :repository).to be environment
       end
 
       it "will cleanup if populated" do
         environment.populate
         expect(environment).to receive :cleanup
-        environment.populate from: :repo
+        environment.populate from: :repository
       end
     end
 
@@ -271,7 +270,7 @@ describe Palimpsest::Environment do
             - [ my_app/extra, apps/my_app ]
         :externals:
           :server: "https://github.com/razor-x"
-          :repos:
+          :repositories:
             - [ my_app, apps/my_app, master ]
             - [ sub_app, apps/my_app/sub_app, my_feature, "https://bitbucket.org/razorx" ]
         :excludes:

@@ -108,10 +108,10 @@ site.name = 'my_app'
 environment.site = site
 ````
 
-To populate the environment from a git repo,
+To populate the environment from a git repository,
 
 ````ruby
-site.repo = '/path/to/project/repo'
+site.repository = '/path/to/project/repo'
 environment.reference = 'my_feature' # if you want something other then 'master'
 environment.populate
 ````
