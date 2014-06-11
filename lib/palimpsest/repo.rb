@@ -7,6 +7,9 @@ module Palimpsest
   # Supports simple cache.
   class Repo
 
+    # Local default persistent directory for cached repositories.
+    CACHE = File.join(Dir.home, '.palimpsest', 'repos')
+
     include Utils
 
     # @!attribute source
@@ -16,7 +19,7 @@ module Palimpsest
     #   @return [String] local root directory to look for cached repositories
     attr_accessor :source, :cache, :local_clone
 
-    def initialize source: nil, cache: File.join(Dir.tmpdir, 'palimpsest')
+    def initialize source: nil, cache: CACHE
       self.source = source
       self.cache = cache
     end
