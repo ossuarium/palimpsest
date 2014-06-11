@@ -409,9 +409,7 @@ describe Palimpsest::Environment do
 
         it "installs the externals and returns itself" do
           expect(external_1).to receive(:install).and_return(external_1)
-          expect(external_1).to receive(:cleanup)
           expect(external_2).to receive(:install).and_return(external_2)
-          expect(external_2).to receive(:cleanup)
           expect(environment.install_externals).to be environment
         end
       end
