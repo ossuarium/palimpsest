@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Palimpsest::Assets do
 
+  let(:utils) { Palimpsest::Utils }
   let(:config) do
     YAML.load <<-EOF
       :options:
@@ -330,17 +331,17 @@ describe Palimpsest::Assets do
       let(:regex) { '\[%(.*?)%\]' }
 
       it "greps in the path" do
-        expect(Palimpsest::Assets).to receive(:search_files).with(regex, '/the/path', backend: :grep)
+        expect(utils).to receive(:search_files).with(regex, '/the/path', backend: :grep)
         Palimpsest::Assets.find_tags '/the/path', nil, search_backend: :grep
       end
 
       it "greps for only the asset tag for the given type" do
-        expect(Palimpsest::Assets).to receive(:search_files).with('\[%\s+javascript\s+(.*?)%\]', '/the/path', backend: :grep)
+        expect(utils).to receive(:search_files).with('\[%\s+javascript\s+(.*?)%\]', '/the/path', backend: :grep)
         Palimpsest::Assets.find_tags '/the/path', :javascript, search_backend: :grep
       end
 
       it "merges options" do
-        expect(Palimpsest::Assets).to receive(:search_files).with('\(%\s+javascript\s+(.*?)%\]', '/the/path', backend: :grep)
+        expect(utils).to receive(:search_files).with('\(%\s+javascript\s+(.*?)%\]', '/the/path', backend: :grep)
         Palimpsest::Assets.find_tags '/the/path', :javascript, src_pre: '(%', search_backend: :grep
       end
     end

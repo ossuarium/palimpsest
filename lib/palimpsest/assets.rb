@@ -17,8 +17,6 @@ module Palimpsest
   #
   class Assets
 
-    include Utils
-
     # Default {#options}.
     DEFAULT_OPTIONS = {
       # Backend to use for file search operations.
@@ -196,7 +194,7 @@ module Palimpsest
           pre + '\s+' + type.to_s + '\s+(.*?)' + post
         end
 
-      search_files regex, path, backend: options[:search_backend]
+      Utils.search_files regex, path, backend: options[:search_backend]
     end
   end
 end

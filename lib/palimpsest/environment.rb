@@ -115,8 +115,6 @@ module Palimpsest
   # ````
   class Environment
 
-    include Utils
-
     # Default {#options}.
     DEFAULT_OPTIONS = {
       # Backend to use for file search operations.
@@ -208,7 +206,7 @@ module Palimpsest
       fail RuntimeError, "Must specify a destination" if destination.nil?
       exclude = options[:copy_exclude]
       exclude.concat config[:persistent] unless config[:persistent].nil?
-      copy_directory directory, destination, exclude: exclude, mirror: mirror
+      Utils.copy_directory directory, destination, exclude: exclude, mirror: mirror
       self
     end
 
@@ -243,7 +241,7 @@ module Palimpsest
         @populated = true
       when :source
         source = site.source.nil? ? '.' : site.source
-        copy_directory source, directory, exclude: options[:copy_exclude]
+        Utils.copy_directory source, directory, exclude: options[:copy_exclude]
         @populated = true
       end
 
@@ -384,7 +382,7 @@ module Palimpsest
       sources_with_assets.each do |file|
         source = File.read file
         assets.each { |a| a.update_source! source }
-        write_to_file source, file, preserve: true
+        Utils.write_to_file source, file, preserve: true
       end
       self
     end
@@ -401,34 +399,34 @@ module Palimpsest
       def validate_asset_options opts
         opts.each do |k,v|
           fail RuntimeError, 'bad option in config' if k == :sprockets_options
-          fail RuntimeError, message if k == :output && ! safe_path?(v)
+          fail RuntimeError, message if k == :output && ! Utils.safe_path?(v)
         end
       end
 
       @config[:excludes].each do |v|
-        fail RuntimeError, message unless safe_path? v
+        fail RuntimeError, message unless Utils.safe_path? v
       end unless @config[:excludes].nil?
 
       @config[:external].each do |k, v|
         next if k == :server
 
         v.each do |repo|
-          fail RuntimeError, message unless safe_path? repo[1]
+          fail RuntimeError, message unless Utils.safe_path? repo[1]
         end unless v.nil?
       end unless @config[:external].nil?
 
       @config[:components].each do |k,v|
         # process @config[:components][:base] then go to the next option
         if k == :base
-          fail RuntimeError, message unless safe_path? v
+          fail RuntimeError, message unless Utils.safe_path? v
           next
         end unless v.nil?
 
         # process @config[:components][:paths]
         if k == :paths
           v.each do |path|
-            fail RuntimeError, message unless safe_path? path[0]
-            fail RuntimeError, message unless safe_path? path[1]
+            fail RuntimeError, message unless Utils.safe_path? path[0]
+            fail RuntimeError, message unless Utils.safe_path? path[1]
           end
         end
       end unless @config[:components].nil?
@@ -443,7 +441,7 @@ module Palimpsest
         # process @config[:assets][:sources] then go to the next option
         if k == :sources
           v.each_with_index do |source, i|
-            fail RuntimeError, message unless safe_path? source
+            fail RuntimeError, message unless Utils.safe_path? source
           end
           next
         end
@@ -458,7 +456,7 @@ module Palimpsest
 
           # process each asset path
           asset_value.each_with_index do |path, i|
-            fail RuntimeError, message unless safe_path? path
+            fail RuntimeError, message unless Utils.safe_path? path
           end if asset_key == :paths
         end
       end unless @config[:assets].nil?

@@ -10,8 +10,6 @@ module Palimpsest
     # Local default persistent directory for cached repositories.
     CACHE = File.join(Dir.home, '.palimpsest', 'repos')
 
-    include Utils
-
     # @!attribute source
     #   @return [String] local or remote path to git repository
     #
@@ -65,13 +63,13 @@ module Palimpsest
 
     # Create a git mirrored clone.
     def mirror_repo source, destination
-      fail RuntimeError, 'Git not installed' unless command? 'git'
+      fail RuntimeError, 'Git not installed' unless Utils.command? 'git'
       system 'git', 'clone', '--mirror', source, destination
     end
 
     # Update a git repository.
     def update_repo path
-      fail RuntimeError, 'Git not installed' unless command? 'git'
+      fail RuntimeError, 'Git not installed' unless Utils.command? 'git'
       Dir.chdir path do
         system 'git', 'remote', 'update'
       end
@@ -79,7 +77,7 @@ module Palimpsest
 
     # Extract repository files at a particular reference to directory.
     def extract_repo path, destination, reference
-      fail RuntimeError, 'Git not installed' unless command? 'git'
+      fail RuntimeError, 'Git not installed' unless Utils.command? 'git'
       Dir.chdir path do
         system "git archive #{reference} | tar -x -C #{destination}"
       end
