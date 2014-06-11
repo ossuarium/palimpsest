@@ -59,6 +59,27 @@ describe Palimpsest::Environment do
     end
   end
 
+  describe "#repo" do
+
+    before :each do
+      site_1.repository = 'repo/src'
+      environment.site = site_1
+    end
+
+    it "is a repo object" do
+      expect(environment.repo).to be_a Palimpsest::Repo
+    end
+
+    it "sets the repository source" do
+      expect(environment.repo.source).to eq 'repo/src'
+    end
+
+     it "sets the cache" do
+      environment.options repo_cache_root: '/tmp/cache'
+      expect(environment.repo.cache).to eq '/tmp/cache'
+    end
+  end
+
   describe "#directory" do
 
     before :each do
@@ -127,17 +148,20 @@ describe Palimpsest::Environment do
       expect { environment.populate }.to raise_error RuntimeError, /populate without/
     end
 
-    context "populate from repo" do
+    context "from repo" do
 
       subject(:environment) { Palimpsest::Environment.new site: site_1, treeish: 'master' }
 
       before :each do
-        site_1.repo = double Grit::Repo
-        allow(Palimpsest::Utility).to receive :extract_repo
+        site_1.repository = 'repo/src'
+        allow(environment.repo).to receive(:extract)
       end
 
       it "extracts the repo to the directory and sets populated true" do
-        expect(Palimpsest::Utility).to receive(:extract_repo).with(site_1.repo, 'master', environment.directory)
+        environment.repo
+        expect(environment.repo).to receive(:extract).with(
+          environment.directory, reference: environment.treeish
+        )
         environment.populate from: :repo
         expect(environment.populated).to eq true
       end
@@ -159,7 +183,7 @@ describe Palimpsest::Environment do
       end
     end
 
-    context "populate from source" do
+    context "from source" do
 
       it "copies the source files to the directory preserving mtime" do
         environment.site = site_1

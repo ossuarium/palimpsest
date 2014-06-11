@@ -115,6 +115,9 @@ module Palimpsest
       # be copied to the working environment.
       copy_exclude: %w(.git .svn),
 
+      # Directory to store cached repository clones.
+      repo_cache_root: "#{Dir.tmpdir}/palimpsest",
+
       # All environment's temporary directories will be rooted under here.
       tmp_dir: Dir.tmpdir,
 
@@ -163,6 +166,15 @@ module Palimpsest
       @treeish = treeish
     end
 
+    # The corresponding {Repo} for this environment.
+    def repo
+      @repo = nil if site.repository != @repo.source unless @repo.nil?
+      @repo = nil if options[:repo_cache_root] != @repo.cache unless @repo.nil?
+      @repo ||= Repo.new(cache: options[:repo_cache_root]).tap do |r|
+        r.source = site.repository unless site.nil?
+      end
+    end
+
     # @return [String] the environment's working directory
     def directory
       @directory ||= Dir.mktmpdir(
@@ -201,14 +213,14 @@ module Palimpsest
 
       case from
       when :auto
-        if site.respond_to?(:repo) ? site.repo : nil
+        if site.respond_to?(:repository) ? site.repository : nil
           populate from: :repo
         else
           populate from: :source
         end
       when :repo
         fail RuntimeError, "Cannot populate without 'treeish'" if treeish.empty?
-        Utility.extract_repo site.repo, treeish, directory
+        repo.extract directory, reference: treeish
         @populated = true
       when :source
         source = site.source.nil? ? '.' : site.source

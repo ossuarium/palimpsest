@@ -32,7 +32,7 @@ describe Palimpsest::External do
     end
 
     it "sets the repo for the environment" do
-      expect(external.environment.site.repo).to equal repo
+      expect(external.environment.site.repository).to equal repo
     end
   end
 

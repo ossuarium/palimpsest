@@ -6,19 +6,19 @@ module Palimpsest
     # @!attribute name
     #   @return [String] name for this site
     #
-    # @!attribute repo
-    #   @return [Grit::Repo] grit repo for this site
+    # @!attribute repository
+    #   @return [Grit::Repo] local or remote path to git repository for this site
     #
     # @!attribute source
     #   @return [String] path to source code for this site
     #
     # @!attribute path
     #   @return [String] path to destination for this site
-    attr_accessor :name, :repo, :source, :path
+    attr_accessor :name, :repository, :source, :path
 
-    def initialize name: '', repo: nil, source: nil
+    def initialize name: '', repository: nil, source: nil
       self.name = name
-      self.repo = repo
+      self.repository = repository
       self.source = source
       self.path = path
     end

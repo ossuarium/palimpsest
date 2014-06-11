@@ -37,7 +37,7 @@ module Palimpsest
     def environment
       return @environment if @environment
 
-      site = Site.new name: "external_#{name.gsub '/', '_'}", repo: Grit::Repo.new(tmp_environment.directory)
+      site = Site.new name: "external_#{name.gsub '/', '_'}", repository: Grit::Repo.new(tmp_environment.directory)
       @environment = Environment.new site: site, treeish: branch
     end
 

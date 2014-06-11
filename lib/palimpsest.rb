@@ -1,7 +1,6 @@
 require 'grit'
 
 require 'palimpsest/version'
-require 'palimpsest/utility'
 require 'palimpsest/utils'
 require 'palimpsest/repo'
 require 'palimpsest/site'
