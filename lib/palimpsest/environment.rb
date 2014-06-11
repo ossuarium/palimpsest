@@ -346,11 +346,13 @@ module Palimpsest
         next if [:sources].include? type.to_sym
         next if opt[:paths].nil?
 
-        assets = Assets.new directory: directory, paths: opt[:paths]
-        assets.options config[:assets][:options] unless config[:assets][:options].nil?
-        assets.options opt[:options] unless opt[:options].nil?
-        assets.type = type
-        @assets << assets
+        @assets << Assets.new.tap do |a|
+          a.type = type
+          a.directory = directory
+          a.paths = opt[:paths]
+          a.options config[:assets][:options].symbolize_keys unless config[:assets][:options].nil?
+          a.options opt[:options].symbolize_keys unless opt[:options].nil?
+        end
       end unless config[:assets].nil?
 
       @assets
