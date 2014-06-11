@@ -343,7 +343,7 @@ module Palimpsest
       @assets = []
 
       config[:assets].each do |type, opt|
-        next if [:sources].include? type
+        next if [:sources].include? type.to_sym
         next if opt[:paths].nil?
 
         assets = Assets.new directory: directory, paths: opt[:paths]
