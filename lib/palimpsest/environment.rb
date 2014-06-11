@@ -245,6 +245,16 @@ module Palimpsest
       @config.nil? ? settings : @config.merge!(settings)
     end
 
+    # Runs all compile tasks.
+    # @return [Environment] the current environment instance
+    def compile
+      install_externals
+      install_components
+      compile_assets
+      remove_excludes
+      self
+    end
+
     # @return [Array<Component>] components with paths loaded from config
     def components
       return @components if @components

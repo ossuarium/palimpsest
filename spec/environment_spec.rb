@@ -259,6 +259,17 @@ describe Palimpsest::Environment do
     end
   end
 
+  describe "compile" do
+
+    it "runs all compile tasks and returns self" do
+      expect(environment).to receive(:install_externals)
+      expect(environment).to receive(:install_components)
+      expect(environment).to receive(:compile_assets)
+      expect(environment).to receive(:remove_excludes)
+      expect(environment.compile).to be environment
+    end
+  end
+
   describe "methods that modify the working directory" do
 
     let(:config) do
