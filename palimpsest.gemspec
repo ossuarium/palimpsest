@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.0.0'
   spec.add_development_dependency 'simplecov', '~> 0.8.2'
   spec.add_development_dependency 'coveralls', '~> 0.7.0'
-  spec.add_development_dependency 'fuubar', '~> 1.3.3'
+  spec.add_development_dependency 'fuubar', '~> 2.0.0.rc1'
   spec.add_development_dependency 'guard-rspec', '~> 4.2.9'
   spec.add_development_dependency 'guard-yard', '~> 2.1.0'
 end
