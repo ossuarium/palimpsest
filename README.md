@@ -15,6 +15,7 @@ and easy integration with [Kit](https://github.com/razor-x/kit).
 [![Build Status](http://img.shields.io/travis/razor-x/palimpsest.svg)](https://travis-ci.org/razor-x/palimpsest)
 [![Coverage Status](http://img.shields.io/coveralls/razor-x/palimpsest.svg)](https://coveralls.io/r/razor-x/palimpsest)
 [![Code Climate](http://img.shields.io/codeclimate/github/razor-x/palimpsest.svg)](https://codeclimate.com/github/razor-x/palimpsest)
+[![Inline Docs](http://inch-ci.org/github/razor-x/palimpsest.svg)](http://inch-ci.org/github/razor-x/palimpsest)
 
 ## Installation
 
