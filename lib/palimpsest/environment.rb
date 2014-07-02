@@ -251,6 +251,8 @@ module Palimpsest
     # @param settings [Hash] merged with current config
     # @return [Hash] configuration loaded from {#options}`[:config_file]` under {#directory}
     def config settings = {}
+      settings = ActiveSupport::HashWithIndifferentAccess.new settings
+
       if @config.nil?
         populate unless populated
         file = File.join(directory, options[:config_file])
@@ -259,7 +261,7 @@ module Palimpsest
         validate_config if @config
       end
 
-      @config.nil? ? settings : @config.merge!(settings)
+      @config.nil? ? settings : @config.deep_merge!(settings)
     end
 
     # Runs all compile tasks.
