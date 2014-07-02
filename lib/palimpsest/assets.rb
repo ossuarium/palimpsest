@@ -1,5 +1,6 @@
 require 'active_support/inflector'
 require 'open3'
+require 'pathname'
 require 'sprockets'
 
 module Palimpsest
@@ -25,6 +26,12 @@ module Palimpsest
 
       # Default path to output all saved assets (relative to directory).
       output: nil,
+
+      # Default path to serve all assets from.
+      # Does not affect where assets are saved.
+      # This is prepended to all generated asset references.
+      # If `output` is also specified, this will replace it in all asset references only.
+      serve_root: nil,
 
       # Assume assets will be served under this url,
       # e.g., `https://cdn.example.com/`.
@@ -149,7 +156,7 @@ module Palimpsest
           # @todo Raise warning or error if asset not found.
           p "asset not found: #{$1}" and next if asset.nil?
 
-          options[:cdn] + asset
+          "#{options[:cdn]}#{format_path asset}"
         end
       end
       return true
@@ -195,6 +202,21 @@ module Palimpsest
         end
 
       Utils.search_files regex, path, backend: options[:search_backend]
+    end
+
+    private
+
+    # @todo Refactor this and add tests.
+    def format_path path
+      return path unless options[:serve_root]
+
+      pn = Pathname.new path
+      if options[:output]
+        output = Pathname.new options[:output]
+        pn = Pathname.new pn.to_s.gsub("#{output}#{File::SEPARATOR}", '')
+      end
+
+      Pathname.new(options[:serve_root]) + pn
     end
   end
 end
