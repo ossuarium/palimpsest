@@ -225,7 +225,7 @@ module Palimpsest
     # Extracts the site's files from repository to the working directory.
     # @return [Environment] the current environment instance
     def populate from: :auto
-      cleanup if populated
+      return if populated
       fail RuntimeError, "Cannot populate without 'site'" if site.nil?
 
       case from

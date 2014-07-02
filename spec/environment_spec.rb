@@ -157,12 +157,6 @@ describe Palimpsest::Environment do
       it "returns itself" do
         expect(environment.populate from: :repository).to be environment
       end
-
-      it "will cleanup if populated" do
-        environment.populate
-        expect(environment).to receive :cleanup
-        environment.populate from: :repository
-      end
     end
 
     context "from source" do
