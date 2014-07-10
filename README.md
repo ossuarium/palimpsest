@@ -9,12 +9,12 @@ Palimpsest runs on top of any project and acts as a post processor for your code
 Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
 and easy integration with [Kit](https://github.com/razor-x/kit).
 
-[![Gem Version](http://img.shields.io/gem/v/palimpsest.svg)](https://rubygems.org/gems/palimpsest)
-[![MIT License](http://img.shields.io/badge/license-MIT-red.svg)](./LICENSE.txt)
-[![Dependency Status](http://img.shields.io/gemnasium/razor-x/palimpsest.svg)](https://gemnasium.com/razor-x/palimpsest)
-[![Build Status](http://img.shields.io/travis/razor-x/palimpsest.svg)](https://travis-ci.org/razor-x/palimpsest)
-[![Coverage Status](http://img.shields.io/coveralls/razor-x/palimpsest.svg)](https://coveralls.io/r/razor-x/palimpsest)
-[![Code Climate](http://img.shields.io/codeclimate/github/razor-x/palimpsest.svg)](https://codeclimate.com/github/razor-x/palimpsest)
+[![Gem Version](http://img.shields.io/gem/v/palimpsest.svg?style=flat)](https://rubygems.org/gems/palimpsest)
+[![MIT License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](./LICENSE.txt)
+[![Dependency Status](http://img.shields.io/gemnasium/razor-x/palimpsest.svg?style=flat)](https://gemnasium.com/razor-x/palimpsest)
+[![Build Status](http://img.shields.io/travis/razor-x/palimpsest.svg?style=flat)](https://travis-ci.org/razor-x/palimpsest)
+[![Coverage Status](http://img.shields.io/coveralls/razor-x/palimpsest.svg?style=flat)](https://coveralls.io/r/razor-x/palimpsest)
+[![Code Climate](http://img.shields.io/codeclimate/github/razor-x/palimpsest.svg?style=flat)](https://codeclimate.com/github/razor-x/palimpsest)
 
 ## Installation
 
