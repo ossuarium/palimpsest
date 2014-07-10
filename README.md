@@ -4,10 +4,6 @@ by Evan Boyd Sosenko.
 
 _No web framework, no problem: Palimpsest gives any custom or legacy project a modern workflow and toolset._
 
-Built flexible, simple, and customizable.
-Palimpsest runs on top of any project and acts as a post processor for your code.
-Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
-and easy integration with [Kit](https://github.com/razor-x/kit).
 
 [![Gem Version](http://img.shields.io/gem/v/palimpsest.svg?style=flat)](https://rubygems.org/gems/palimpsest)
 [![MIT License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](./LICENSE.txt)
@@ -16,36 +12,14 @@ and easy integration with [Kit](https://github.com/razor-x/kit).
 [![Coverage Status](http://img.shields.io/coveralls/razor-x/palimpsest.svg?style=flat)](https://coveralls.io/r/razor-x/palimpsest)
 [![Code Climate](http://img.shields.io/codeclimate/github/razor-x/palimpsest.svg?style=flat)](https://codeclimate.com/github/razor-x/palimpsest)
 
-## Installation
+## Description
 
-Add this line to your application's Gemfile:
+Built flexible, simple, and customizable.
+Palimpsest runs on top of any project and acts as a post processor for your code.
+Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
+and easy integration with [Kit](https://github.com/razor-x/kit).
 
-````ruby
-gem 'palimpsest'
-````
-
-And then execute:
-
-````bash
-$ bundle
-````
-
-Or install it yourself as:
-
-````bash
-$ gem install palimpsest
-````
-
-## Documentation
-
-The primary documentation for Palimpsest is this README and the YARD source documentation.
-
-YARD documentation for all gem versions is hosted on the
-[Palimpsest gem page](https://rubygems.org/gems/palimpsest).
-Documentation for the latest commits is hosted on
-[the RubyDoc.info project page](http://rubydoc.info/github/razor-x/palimpsest/frames).
-
-## Usage
+### Usage
 
 **Palimpsest should not be considered stable until version 1.0.0 is released.**
 
@@ -59,7 +33,8 @@ The first step is always
 ````ruby
 require 'palimpsest'
 ````
-### Additional requirements
+
+#### Additional requirements
 
 Some optional Palimpsest features depend on gems not required by Palimpsest itself.
 Include these in your project's Gemfile if you plan to use them.
@@ -127,7 +102,7 @@ Either way you will get a copy of your site in a new temporary working directory
 environment.directory #=> '/tmp/palimpsest_my_app_120140605-26021-d7vlnv'
 ````
 
-### Working with the environment
+#### Working with the environment
 
 If you project contains a file `palimpsest.yml`,
 then its configuration is available with `environment.config`.
@@ -149,7 +124,7 @@ environment.compile_assets
 Check the [`Palimpsest::Environment` documentation](http://rubydoc.info/github/razor-x/palimpsest/Palimpsest/Environment)
 for all available magic, and freely extend the class to add new magic applicable to your project.
 
-### Finishing with the environment
+#### Finishing with the environment
 
 You can copy the current state of the environment to another directory with `Palimpsest::Environment#copy`.
 By default, this will use `site.path` for the destination, or you can specify with
@@ -164,7 +139,38 @@ To delete the working directory, use
 environment.cleanup
 ````
 
-## Source Repository
+## Installation
+
+Add this line to your application's Gemfile:
+
+````ruby
+gem 'palimpsest'
+````
+
+And then execute:
+
+````bash
+$ bundle
+````
+
+Or install it yourself as:
+
+````bash
+$ gem install palimpsest
+````
+
+## Documentation
+
+The primary documentation for Palimpsest is this README and the YARD source documentation.
+
+YARD documentation for all gem versions is hosted on the
+[Palimpsest gem page](https://rubygems.org/gems/palimpsest).
+Documentation for the latest commits is hosted on
+[the RubyDoc.info project page](http://rubydoc.info/github/razor-x/palimpsest/frames).
+
+## Development and Testing
+
+### Source Code
 
 The [Palimpsest source](https://github.com/razor-x/palimpsest)
 is hosted on GitHub.
@@ -174,6 +180,37 @@ To clone the project run
 $ git clone https://github.com/razor-x/palimpsest.git
 ````
 
+### Rake
+
+Run `rake -T` to see all Rake tasks.
+
+````
+rake all                   # Run all tasks
+rake build                 # Build palimpsest-0.0.0.gem into the pkg directory
+rake bump:current          # Show current gem version
+rake bump:major            # Bump major part of gem version
+rake bump:minor            # Bump minor part of gem version
+rake bump:patch            # Bump patch part of gem version
+rake bump:pre              # Bump pre part of gem version
+rake bump:set              # Sets the version number using the VERSION environment variable
+rake install               # Build and install palimpsest-0.0.0.gem into system gems
+rake release               # Create tag v0.0.0 and build and push palimpsest-0.0.0.gem to Rubygems
+rake rubocop               # Run RuboCop
+rake rubocop:auto_correct  # Auto-correct RuboCop offenses
+rake spec                  # Run RSpec code examples
+rake yard                  # Generate YARD Documentation
+````
+
+### Guard
+
+Guard tasks have been separated into the following groups:
+
+- `doc`
+- `lint`
+- `unit`
+
+By default, Guard will generate documentation, lint, and run unit tests.
+
 ## Contributing
 
 Please submit and comment on bug reports and feature requests.
@@ -182,9 +219,10 @@ To submit a patch:
 
 1. Fork it (https://github.com/razor-x/palimpsest/fork).
 2. Create your feature branch (`git checkout -b my-new-feature`).
-3. Commit your changes (`git commit -am 'Add some feature'`).
-4. Push to the branch (`git push origin my-new-feature`).
-5. Create a new Pull Request.
+3. Make changes. Write and run tests.
+4. Commit your changes (`git commit -am 'Add some feature'`).
+5. Push to the branch (`git push origin my-new-feature`).
+6. Create a new Pull Request.
 
 ## License
 

@@ -1,4 +1,4 @@
-# Palimpsest ChangeLog
+# ChangeLog
 
 ## HEAD
 
