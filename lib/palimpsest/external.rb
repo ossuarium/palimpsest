@@ -20,7 +20,8 @@ module Palimpsest
     #   @return [String] local root directory to look for cached repositories
     attr_accessor :name, :source, :reference, :install_path, :cache
 
-    def initialize(name: '', source: nil, reference: 'master', install_path: nil, cache: Palimpsest::Repo::CACHE)
+    def initialize(name: '', source: nil, reference: 'master',
+                   install_path: nil, cache: Palimpsest::Repo::CACHE)
       self.name = name
       self.source = source
       self.reference = reference

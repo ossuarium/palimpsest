@@ -28,13 +28,17 @@ describe Palimpsest::Environment do
 
     it "merges with default options" do
       environment.options[:tmp_dir] = '/tmp/path'
-      expect(environment.options).to eq Palimpsest::Environment::DEFAULT_OPTIONS.merge(tmp_dir: '/tmp/path')
+      expect(environment.options).to eq(
+        Palimpsest::Environment::DEFAULT_OPTIONS.merge(tmp_dir: '/tmp/path')
+      )
     end
 
     it "can be called twice and merge options" do
       environment.options[:tmp_dir] = '/tmp/path'
       environment.options[:dir_prefix] = '/tmp/path'
-      expect(environment.options).to eq Palimpsest::Environment::DEFAULT_OPTIONS.merge(tmp_dir: '/tmp/path', dir_prefix: '/tmp/path')
+      expect(environment.options).to eq(
+        Palimpsest::Environment::DEFAULT_OPTIONS.merge(tmp_dir: '/tmp/path', dir_prefix: '/tmp/path')
+      )
     end
   end
 
@@ -539,8 +543,10 @@ describe Palimpsest::Environment do
       end
 
       it "returns assets with tags" do
-        allow(Palimpsest::Assets).to receive(:find_tags).with(dir + '/public', anything, anything).and_return(dir + '/public/header.html')
-        allow(Palimpsest::Assets).to receive(:find_tags).with(dir + '/app/src', anything, anything).and_return(dir + '/app/src/head.tpl')
+        allow(Palimpsest::Assets).to receive(:find_tags)
+        .with(dir + '/public', anything, anything).and_return(dir + '/public/header.html')
+        allow(Palimpsest::Assets).to receive(:find_tags)
+        .with(dir + '/app/src', anything, anything).and_return(dir + '/app/src/head.tpl')
         expect(environment.sources_with_assets).to eq ["#{dir}/public/header.html", "#{dir}/app/src/head.tpl"]
       end
 

@@ -31,7 +31,9 @@ module Palimpsest
       available_backends = backends(COPY_BACKENDS)
       backend = available_backends.first if backend == :auto
       fail 'Requested copy backend not available.' unless available_backends.include? backend
-      send "copy_directory_with_#{backend}".to_sym, source, destination, exclude: exclude, mirror: mirror
+      send "copy_directory_with_#{backend}".to_sym,
+           source, destination,
+           exclude: exclude, mirror: mirror
     end
 
     # Search all non-binary files against regular expression.

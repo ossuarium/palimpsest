@@ -332,7 +332,9 @@ module Palimpsest
     # @return [Environment] the current environment instance
     def remove_excludes
       return self if config[:excludes].nil?
-      config[:excludes].map { |e| Dir["#{directory}/#{e}"] }.flatten.each { |e| FileUtils.remove_entry_secure e }
+      config[:excludes].map { |e| Dir["#{directory}/#{e}"] }.flatten.each do |e|
+        FileUtils.remove_entry_secure e
+      end
       self
     end
 
