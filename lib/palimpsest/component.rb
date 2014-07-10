@@ -22,8 +22,8 @@ module Palimpsest
 
     # Installs files in {#source_path} to {#install_path}
     def install
-      fail RuntimeError if source_path.nil?
-      fail RuntimeError if install_path.nil?
+      fail if source_path.nil?
+      fail if install_path.nil?
       FileUtils.mkdir_p install_path
       FileUtils.mv source_path, install_path
     end

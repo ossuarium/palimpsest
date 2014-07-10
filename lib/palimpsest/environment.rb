@@ -167,13 +167,13 @@ module Palimpsest
 
     # @see Environment#site
     def site=(site)
-      fail RuntimeError, "Cannot redefine 'site' once populated" if populated
+      fail "Cannot redefine 'site' once populated" if populated
       @site = site
     end
 
     # @see Environment#reference
     def reference=(reference)
-      fail RuntimeError, "Cannot redefine 'reference' once populated" if populated
+      fail "Cannot redefine 'reference' once populated" if populated
       fail TypeError unless reference.is_a? String
       @reference = reference
     end
@@ -201,7 +201,7 @@ module Palimpsest
     # @param mirror [Boolean] remove any non-excluded paths from destination
     # @return [Environment] the current environment instance
     def copy(destination: site.path, mirror: false)
-      fail RuntimeError, 'Must specify a destination' if destination.nil?
+      fail 'Must specify a destination' if destination.nil?
       exclude = options[:copy_exclude]
       exclude.concat config[:persistent] unless config[:persistent].nil?
       Utils.copy_directory directory, destination, exclude: exclude, mirror: mirror
@@ -224,7 +224,7 @@ module Palimpsest
     # @return [Environment] the current environment instance
     def populate(from: :auto)
       return if populated
-      fail RuntimeError, "Cannot populate without 'site'" if site.nil?
+      fail "Cannot populate without 'site'" if site.nil?
 
       case from
       when :auto
@@ -234,7 +234,7 @@ module Palimpsest
           populate from: :source
         end
       when :repository
-        fail RuntimeError, "Cannot populate without 'reference'" if reference.empty?
+        fail "Cannot populate without 'reference'" if reference.empty?
         repo.extract directory, reference: reference
         @populated = true
       when :source
@@ -400,35 +400,35 @@ module Palimpsest
       # Checks the option in the asset key.
       def validate_asset_options(opts)
         opts.each do |k, v|
-          fail RuntimeError, 'bad option in config' if k == :sprockets_options
-          fail RuntimeError, message if k == :output && !Utils.safe_path?(v)
+          fail 'bad option in config' if k == :sprockets_options
+          fail message if k == :output && !Utils.safe_path?(v)
         end
       end
 
       @config[:excludes].each do |v|
-        fail RuntimeError, message unless Utils.safe_path? v
+        fail message unless Utils.safe_path? v
       end unless @config[:excludes].nil?
 
       @config[:external].each do |k, v|
         next if k == :server
 
         v.each do |repo|
-          fail RuntimeError, message unless Utils.safe_path? repo[1]
+          fail message unless Utils.safe_path? repo[1]
         end unless v.nil?
       end unless @config[:external].nil?
 
       @config[:components].each do |k, v|
         # process @config[:components][:base] then go to the next option
         if k == :base
-          fail RuntimeError, message unless Utils.safe_path? v
+          fail message unless Utils.safe_path? v
           next
         end unless v.nil?
 
         # process @config[:components][:paths]
         if k == :paths
           v.each do |path|
-            fail RuntimeError, message unless Utils.safe_path? path[0]
-            fail RuntimeError, message unless Utils.safe_path? path[1]
+            fail message unless Utils.safe_path? path[0]
+            fail message unless Utils.safe_path? path[1]
           end
         end
       end unless @config[:components].nil?
@@ -443,7 +443,7 @@ module Palimpsest
         # process @config[:assets][:sources] then go to the next option
         if k == :sources
           v.each_with_index do |source, _|
-            fail RuntimeError, message unless Utils.safe_path? source
+            fail message unless Utils.safe_path? source
           end
           next
         end
@@ -458,7 +458,7 @@ module Palimpsest
 
           # process each asset path
           asset_value.each_with_index do |path, _|
-            fail RuntimeError, message unless Utils.safe_path? path
+            fail message unless Utils.safe_path? path
           end if asset_key == :paths
         end
       end unless @config[:assets].nil?

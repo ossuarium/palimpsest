@@ -30,7 +30,7 @@ module Palimpsest
     def self.copy_directory(source, destination, exclude: [], mirror: false, backend: :auto)
       available_backends = backends(COPY_BACKENDS)
       backend = available_backends.first if backend == :auto
-      fail RuntimeError, 'Requested copy backend not available.' unless available_backends.include? backend
+      fail 'Requested copy backend not available.' unless available_backends.include? backend
       send "copy_directory_with_#{backend}".to_sym, source, destination, exclude: exclude, mirror: mirror
     end
 
@@ -44,7 +44,7 @@ module Palimpsest
     def self.search_files(regex, path, backend: :auto)
       available_backends = backends(FILE_SEARCH_BACKENDS)
       backend = available_backends.first if backend == :auto
-      fail RuntimeError, 'Requested search backend not available.' unless available_backends.include? backend
+      fail 'Requested search backend not available.' unless available_backends.include? backend
       send "search_files_with_#{backend}".to_sym, regex, path
     end
 
@@ -88,7 +88,7 @@ module Palimpsest
 
     # @todo Add support for stdlib backend.
     def self.copy_directory_with_stdlib(_source, _destination, _exclude: [], _mirror: false)
-      fail RuntimeError, 'Directory copy via stdlib not yet implemented.'
+      fail 'Directory copy via stdlib not yet implemented.'
     end
 
     def self.copy_directory_with_rsync(source, destination, exclude: [], mirror: false)
@@ -102,11 +102,11 @@ module Palimpsest
 
     # @todo Add support for stdlib backend.
     def self.search_files_with_stdlib(_source, _destination, _exclude: [])
-      fail RuntimeError, 'File search via stdlib not yet implemented.'
+      fail 'File search via stdlib not yet implemented.'
     end
 
     def self.search_files_with_grep(regex, path)
-      fail RuntimeError, 'Must specify regex as string.' unless regex.is_a? String
+      fail 'Must specify regex as string.' unless regex.is_a? String
 
       cmd = ['grep']
       cmd.concat %w(-l -I -r -E)
