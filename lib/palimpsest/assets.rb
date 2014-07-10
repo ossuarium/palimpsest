@@ -157,7 +157,7 @@ module Palimpsest
           asset = write Regexp.last_match[1]
 
           # @todo Raise warning or error if asset not found.
-          p "asset not found: #{Regexp.last_match[1]}" and next if asset.nil?
+          p "asset not found: #{Regexp.last_match[1]}" && next if asset.nil?
 
           "#{options[:cdn]}#{format_path asset}"
         end
