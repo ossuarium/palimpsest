@@ -112,6 +112,10 @@ module Palimpsest
   #     paths:
   #       - assets/images
   # ````
+  #
+  # Disable some cops until they can be refactored in the rubocop branch.
+  # rubocop:disable Style/ClassLength, Style/MethodLength
+  # rubocop:disable Style/BlockNesting, Style/Next, Style/CyclomaticComplexity
   class Environment
     # Default {#options}.
     DEFAULT_OPTIONS = {
