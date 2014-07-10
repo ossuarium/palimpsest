@@ -146,13 +146,13 @@ module Palimpsest
       # e.g. /\[%\s+javascript\s+((\S+)\s?(\S+))\s+%\]/
       regex = /#{Regexp.escape options[:src_pre]}\s+#{type.to_s.singularize}\s+((\S+)\s?(\S+))\s+#{Regexp.escape options[:src_post]}/
       source.gsub! regex do
-        if $2 == options[:inline]
-          assets[$3].to_s
+        if Regexp.last_match[2] == options[:inline]
+          assets[Regexp.last_match[3]].to_s
         else
-          asset = write $1
+          asset = write Regexp.last_match[1]
 
           # @todo Raise warning or error if asset not found.
-          p "asset not found: #{$1}" and next if asset.nil?
+          p "asset not found: #{Regexp.last_match[1]}" and next if asset.nil?
 
           "#{options[:cdn]}#{format_path asset}"
         end
