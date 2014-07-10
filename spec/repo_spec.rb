@@ -79,7 +79,7 @@ describe Palimpsest::Repo do
         expect { repo.mirror }.to raise_error RuntimeError
       end
     end
-   end
+  end
 
   describe "#update" do
 
