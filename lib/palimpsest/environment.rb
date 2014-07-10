@@ -137,7 +137,7 @@ module Palimpsest
       dir_prefix: 'palimpsest_',
 
       # Name of config file to load, relative to environment's working directory.
-      config_file: 'palimpsest.yml',
+      config_file: 'palimpsest.yml'
     }
 
     # @!attribute site

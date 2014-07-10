@@ -27,7 +27,7 @@ module Palimpsest
       return nil if cache.nil?
       return nil if source.nil?
       hash = Digest::SHA1.hexdigest(source)[0..10]
-      path = Zaru.sanitize! source.gsub(%r{[/\\:]}, '_')
+      path = Zaru.sanitize! source.gsub(/[\/\\:]/, '_')
       File.join cache, "repo_#{path}_#{hash}"
     end
 

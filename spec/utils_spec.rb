@@ -84,16 +84,16 @@ describe Palimpsest::Utils do
 
     it "runs the correct search method" do
       expect(utils).to receive(:search_files_with_stdlib).with(/regex/, 'path')
-      utils.search_files /regex/, 'path', backend: :stdlib
+      utils.search_files(/regex/, 'path', backend: :stdlib)
     end
 
     it "automatically selects first available backend" do
       expect(utils).to receive(:search_files_with_good_backend)
-      utils.search_files /regex/, 'path'
+      utils.search_files(/regex/, 'path')
     end
 
     it "fails when backend not available" do
-      expect { utils.search_files /regex/, 'path', backend: :not_a_backend }.to raise_error RuntimeError, /backend/
+      expect { utils.search_files(/regex/, 'path', backend: :not_a_backend) }.to raise_error RuntimeError, /backend/
     end
   end
 end

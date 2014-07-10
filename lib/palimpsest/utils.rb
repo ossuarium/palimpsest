@@ -54,7 +54,7 @@ module Palimpsest
     # @return [Boolean]
     def self.safe_path?(path)
       case
-      when path[/(\.\.\/|~\/)/] then return false
+      when path[%r{(\.\./|~/)}] then return false
       when path[/^\//] then return false
       else return true
       end
@@ -97,7 +97,7 @@ module Palimpsest
       exclude.each { |e| cmd << %Q{--exclude=#{e}} }
       cmd << "#{source}/"
       cmd << destination
-      system *cmd
+      system(*cmd)
     end
 
     # @todo Add support for stdlib backend.
