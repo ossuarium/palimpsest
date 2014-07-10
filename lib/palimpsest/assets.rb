@@ -144,7 +144,12 @@ module Palimpsest
     # @note this modifies the `source` `String` in place
     def update_source!(source)
       # e.g. /\[%\s+javascript\s+((\S+)\s?(\S+))\s+%\]/
-      regex = /#{Regexp.escape options[:src_pre]}\s+#{type.to_s.singularize}\s+((\S+)\s?(\S+))\s+#{Regexp.escape options[:src_post]}/
+      regex = /
+        #{Regexp.escape options[:src_pre]}
+        \s+#{type.to_s.singularize}
+        \s+((\S+)\s?(\S+))\s+
+        #{Regexp.escape options[:src_post]}
+      /x
       source.gsub! regex do
         if Regexp.last_match[2] == options[:inline]
           assets[Regexp.last_match[3]].to_s
