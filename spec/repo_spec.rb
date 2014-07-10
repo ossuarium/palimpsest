@@ -66,7 +66,7 @@ describe Palimpsest::Repo do
       it "does not recreate the mirror" do
         repo.source = 'src/path'
         repo.local_clone = '/tmp/dest'
-        allow(Dir).to receive(:exists?).with('/tmp/dest').and_return(true)
+        allow(Dir).to receive(:exist?).with('/tmp/dest').and_return(true)
         expect(repo.mirror).to_not receive(:mirror_repo)
         expect(repo.mirror).to be repo
       end

@@ -14,7 +14,7 @@ describe Palimpsest::External do
       end
 
       it "gives the full path" do
-        expect(Dir).to receive(:exists?).with('path/to/source/my_app').and_return(true)
+        expect(Dir).to receive(:exist?).with('path/to/source/my_app').and_return(true)
         expect(external.repository_path).to eq 'path/to/source/my_app'
       end
     end
@@ -27,7 +27,7 @@ describe Palimpsest::External do
       end
 
       it "gives the full url" do
-        expect(Dir).to receive(:exists?).with('https://github.com/razor-x/my_app').and_return(false)
+        expect(Dir).to receive(:exist?).with('https://github.com/razor-x/my_app').and_return(false)
         expect(external.repository_path).to eq 'https://github.com/razor-x/my_app'
       end
     end
@@ -48,7 +48,7 @@ describe Palimpsest::External do
       expect(external.repo.source).to eq 'repo/src/my_app'
     end
 
-     it "sets the cache" do
+    it "sets the cache" do
       external.cache = '/tmp/cache'
       expect(external.repo.cache).to eq '/tmp/cache'
     end

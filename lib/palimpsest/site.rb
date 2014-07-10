@@ -1,8 +1,6 @@
 module Palimpsest
-
   # Model site object used by {Environment#site}.
   class Site
-
     # @!attribute name
     #   @return [String] name for this site
     #
@@ -16,7 +14,7 @@ module Palimpsest
     #   @return [String] path to destination for this site
     attr_accessor :name, :repository, :source, :path
 
-    def initialize name: '', repository: nil, source: nil
+    def initialize(name: '', repository: nil, source: nil)
       self.name = name
       self.repository = repository
       self.source = source

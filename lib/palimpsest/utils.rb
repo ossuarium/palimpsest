@@ -2,10 +2,8 @@ require 'mkmf'
 require 'open3'
 
 module Palimpsest
-
   # Utility module.
   module Utils
-
     # Available backends for {#copy_directory}.
     COPY_BACKENDS = %i(rsync)
 
@@ -15,7 +13,7 @@ module Palimpsest
     # Write contents to file.
     # @param contents [String]
     # @param file [String]
-    def self.write_to_file contents, file, preserve: false
+    def self.write_to_file(contents, file, preserve: false)
       original_time = File.mtime file if preserve
       File.open(file, 'w') { |f| f.write contents }
       File.utime original_time, original_time, file if preserve
@@ -29,7 +27,7 @@ module Palimpsest
     # @param exclude [Symbol] files and directories to exclude from copy
     # @param mirror [Boolean] remove any non-excluded paths from destination
     # @param backend [Symbol] copy backed to use
-    def self.copy_directory source, destination, exclude: [], mirror: false, backend: :auto
+    def self.copy_directory(source, destination, exclude: [], mirror: false, backend: :auto)
       available_backends = backends(COPY_BACKENDS)
       backend = available_backends.first if backend == :auto
       fail RuntimeError, 'Requested copy backend not available.' unless available_backends.include? backend
@@ -43,7 +41,7 @@ module Palimpsest
     # @param path [String] where to search
     # @param backend [Symbol] search backed to use
     # @return [Array] matched files
-    def self.search_files regex, path, backend: :auto
+    def self.search_files(regex, path, backend: :auto)
       available_backends = backends(FILE_SEARCH_BACKENDS)
       backend = available_backends.first if backend == :auto
       fail RuntimeError, 'Requested search backend not available.' unless available_backends.include? backend
@@ -54,7 +52,7 @@ module Palimpsest
     # Forbids absolute paths.
     # @param path [String]
     # @return [Boolean]
-    def self.safe_path? path
+    def self.safe_path?(path)
       case
       when path[/(\.\.\/|~\/)/] then return false
       when path[/^\//] then return false
@@ -67,7 +65,7 @@ module Palimpsest
     # Checks if command exists.
     # @param command [String] command name to check
     # @return [String, nil] full path to command or nil if not found
-    def self.command? command
+    def self.command?(command)
       MakeMakefile::Logging.instance_variable_set :@logfile, File::NULL
       MakeMakefile::Logging.quiet = true
       MakeMakefile.find_executable command.to_s
@@ -76,7 +74,7 @@ module Palimpsest
     # Determines available backends from list of commands
     # by checking if each command exists.
     # The backend `:stdlib` is always available if given.
-    def self.backends commands
+    def self.backends(commands)
       backends = []
       commands.each do |backend|
         backends << backend if command?(backend) || backend == :stdlib
@@ -89,11 +87,11 @@ module Palimpsest
     #
 
     # @todo Add support for stdlib backend.
-    def self.copy_directory_with_stdlib source, destination, exclude: [], mirror: false
-      fail RuntimeError, "Directory copy via stdlib not yet implemented."
+    def self.copy_directory_with_stdlib(_source, _destination, _exclude: [], _mirror: false)
+      fail RuntimeError, 'Directory copy via stdlib not yet implemented.'
     end
 
-    def self.copy_directory_with_rsync source, destination, exclude: [], mirror: false
+    def self.copy_directory_with_rsync(source, destination, exclude: [], mirror: false)
       cmd = %w(rsync -rt)
       cmd << '--del' if mirror
       exclude.each { |e| cmd << %Q{--exclude=#{e}} }
@@ -103,12 +101,12 @@ module Palimpsest
     end
 
     # @todo Add support for stdlib backend.
-    def self.search_files_with_stdlib source, destination, exclude: []
-      fail RuntimeError, "File search via stdlib not yet implemented."
+    def self.search_files_with_stdlib(_source, _destination, _exclude: [])
+      fail RuntimeError, 'File search via stdlib not yet implemented.'
     end
 
-    def self.search_files_with_grep regex, path
-      fail RuntimeError, "Must specify regex as string." unless regex.is_a? String
+    def self.search_files_with_grep(regex, path)
+      fail RuntimeError, 'Must specify regex as string.' unless regex.is_a? String
 
       cmd = ['grep']
       cmd.concat %w(-l -I -r -E)
@@ -120,5 +118,4 @@ module Palimpsest
       files
     end
   end
-
 end

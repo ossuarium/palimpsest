@@ -2,11 +2,9 @@ require 'digest/sha1'
 require 'zaru'
 
 module Palimpsest
-
   # Class for working with mirrored git repositories.
   # Supports simple cache.
   class Repo
-
     # Local default persistent directory for cached repositories.
     CACHE = File.join(Dir.home, '.palimpsest', 'repos')
 
@@ -17,7 +15,7 @@ module Palimpsest
     #   @return [String] local root directory to look for cached repositories
     attr_accessor :source, :cache, :local_clone
 
-    def initialize source: nil, cache: CACHE
+    def initialize(source: nil, cache: CACHE)
       self.source = source
       self.cache = cache
     end
@@ -29,7 +27,7 @@ module Palimpsest
       return nil if cache.nil?
       return nil if source.nil?
       hash = Digest::SHA1.hexdigest(source)[0..10]
-      path = Zaru.sanitize! source.gsub(%r([/\\:]), '_')
+      path = Zaru.sanitize! source.gsub(%r{[/\\:]}, '_')
       File.join cache, "repo_#{path}_#{hash}"
     end
 
@@ -38,7 +36,7 @@ module Palimpsest
     # @return [Repo] the repo object
     def mirror
       fail RuntimeError, 'Must specify source.' unless source
-      mirror_repo source, local_clone unless Dir.exists? local_clone
+      mirror_repo source, local_clone unless Dir.exist? local_clone
       self
     end
 
@@ -54,7 +52,7 @@ module Palimpsest
     # Extracts the repository files at a particular reference to directory.
     # @param destination [String] directory to place files
     # @param reference [String] the git reference to use
-    def extract destination, reference: 'master'
+    def extract(destination, reference: 'master')
       update
       extract_repo local_clone, destination, reference
     end
@@ -62,13 +60,13 @@ module Palimpsest
     private
 
     # Create a git mirrored clone.
-    def mirror_repo source, destination
+    def mirror_repo(source, destination)
       fail RuntimeError, 'Git not installed' unless Utils.command? 'git'
       system 'git', 'clone', '--mirror', source, destination
     end
 
     # Update a git repository.
-    def update_repo path
+    def update_repo(path)
       fail RuntimeError, 'Git not installed' unless Utils.command? 'git'
       Dir.chdir path do
         system 'git', 'remote', 'update'
@@ -76,13 +74,11 @@ module Palimpsest
     end
 
     # Extract repository files at a particular reference to directory.
-    def extract_repo path, destination, reference
+    def extract_repo(path, destination, reference)
       fail RuntimeError, 'Git not installed' unless Utils.command? 'git'
       Dir.chdir path do
         system "git archive #{reference} | tar -x -C #{destination}"
       end
     end
   end
-
 end
-

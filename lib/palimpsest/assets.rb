@@ -4,7 +4,6 @@ require 'pathname'
 require 'sprockets'
 
 module Palimpsest
-
   # Flexible asset pipeline using Sprockets.
   # Paths are loaded into a `Sprockets::Environment` (relative to {#directory} if given).
   # Asset tags are used in source code and replaced
@@ -17,7 +16,6 @@ module Palimpsest
   #     [% javascript inline tracking %] -> <compiled source of tracking.js asset>
   #
   class Assets
-
     # Default {#options}.
     DEFAULT_OPTIONS = {
       # Backend to use for file search operations.
@@ -67,7 +65,7 @@ module Palimpsest
     #   @return [Symbol] type of asset
     attr_accessor :directory, :paths, :type
 
-    def initialize directory: nil, options: {}, paths: {}
+    def initialize(directory: nil, options: {}, paths: {})
       self.options options
       self.directory = directory
       self.paths = paths
@@ -76,7 +74,7 @@ module Palimpsest
     # Uses {DEFAULT_OPTIONS} as initial value.
     # @param options [Hash] merged with current options
     # @return [Hash] current options
-    def options options={}
+    def options(options = {})
       @options ||= DEFAULT_OPTIONS
       @options = @options.merge options
     end
@@ -126,7 +124,7 @@ module Palimpsest
     # @param gzip [Boolean] if the asset should be gzipped
     # @param hash [Boolean] if the asset name should include the hash
     # @return [String, nil] the relative path to the written asset or `nil` if no such asset
-    def write target, gzip: options[:gzip], hash: options[:hash]
+    def write(target, gzip: options[:gzip], hash: options[:hash])
       asset = assets[target]
 
       return if asset.nil?
@@ -144,7 +142,7 @@ module Palimpsest
 
     # (see #update_source)
     # @note this modifies the `source` `String` in place
-    def update_source! source
+    def update_source!(source)
       # e.g. /\[%\s+javascript\s+((\S+)\s?(\S+))\s+%\]/
       regex = /#{Regexp.escape options[:src_pre]}\s+#{type.to_s.singularize}\s+((\S+)\s?(\S+))\s+#{Regexp.escape options[:src_post]}/
       source.gsub! regex do
@@ -159,14 +157,14 @@ module Palimpsest
           "#{options[:cdn]}#{format_path asset}"
         end
       end
-      return true
+      true
     end
 
     # Replaces all asset tags in source string with asset path or asset source.
     # Writes any referenced assets to disk.
     # @param source [String] code to find and replace asset tags
     # @return [String] copy of `source` with asset tags replaced
-    def update_source source
+    def update_source(source)
       s = source
       update_source! s
       s
@@ -176,7 +174,7 @@ module Palimpsest
     # Uses current asset {#type} (if set) and {#options}.
     # @param path [String] where to look for source files
     # @return [Array] files with asset tags
-    def find_tags path: directory
+    def find_tags(path: directory)
       self.class.find_tags path, type, options
     end
 
@@ -186,13 +184,13 @@ module Palimpsest
     # @param options [Hash] merged with {DEFAULT_OPTIONS}
     # (see #find_tags)
     # @todo Add support for stdlib backend.
-    def self.find_tags path, type=nil, options={}
+    def self.find_tags(path, type = nil, options = {})
       backend = options[:search_backend]
-      fail "Only grep supported." unless backend == :grep
+      fail 'Only grep supported.' unless backend == :grep
 
       options = DEFAULT_OPTIONS.merge options
       pre = Regexp.escape options[:src_pre]
-      post= Regexp.escape options[:src_post]
+      post = Regexp.escape options[:src_post]
 
       regex = \
         if type.nil?
@@ -207,7 +205,7 @@ module Palimpsest
     private
 
     # @todo Refactor this and add tests.
-    def format_path path
+    def format_path(path)
       return path unless options[:serve_root]
 
       pn = Pathname.new path

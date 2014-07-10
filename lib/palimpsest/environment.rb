@@ -2,7 +2,6 @@ require 'active_support/core_ext/hash'
 require 'tmpdir'
 
 module Palimpsest
-
   # An environment is populated with the contents of
   # a site's repository at a specified commit.
   # Alternatively, a single directory can be used to populate the environment.
@@ -114,7 +113,6 @@ module Palimpsest
   #       - assets/images
   # ````
   class Environment
-
     # Default {#options}.
     DEFAULT_OPTIONS = {
       # Backend to use for file search operations.
@@ -152,7 +150,7 @@ module Palimpsest
     #   @return [Boolean] true if the site's repository has been extracted
     attr_reader :site, :reference, :populated
 
-    def initialize site: nil, reference: 'master', options: {}
+    def initialize(site: nil, reference: 'master', options: {})
       @populated = false
       self.options options
       self.site = site if site
@@ -162,19 +160,19 @@ module Palimpsest
     # Uses {DEFAULT_OPTIONS} as initial value.
     # @param options [Hash] merged with current options
     # @return [Hash] current options
-    def options options={}
+    def options(options = {})
       @options ||= DEFAULT_OPTIONS
       @options = @options.merge options
     end
 
     # @see Environment#site
-    def site= site
+    def site=(site)
       fail RuntimeError, "Cannot redefine 'site' once populated" if populated
       @site = site
     end
 
     # @see Environment#reference
-    def reference= reference
+    def reference=(reference)
       fail RuntimeError, "Cannot redefine 'reference' once populated" if populated
       fail TypeError unless reference.is_a? String
       @reference = reference
@@ -202,8 +200,8 @@ module Palimpsest
     # @param destination [String] path to copy environment's files to
     # @param mirror [Boolean] remove any non-excluded paths from destination
     # @return [Environment] the current environment instance
-    def copy destination: site.path, mirror: false
-      fail RuntimeError, "Must specify a destination" if destination.nil?
+    def copy(destination: site.path, mirror: false)
+      fail RuntimeError, 'Must specify a destination' if destination.nil?
       exclude = options[:copy_exclude]
       exclude.concat config[:persistent] unless config[:persistent].nil?
       Utils.copy_directory directory, destination, exclude: exclude, mirror: mirror
@@ -224,7 +222,7 @@ module Palimpsest
 
     # Extracts the site's files from repository to the working directory.
     # @return [Environment] the current environment instance
-    def populate from: :auto
+    def populate(from: :auto)
       return if populated
       fail RuntimeError, "Cannot populate without 'site'" if site.nil?
 
@@ -250,13 +248,13 @@ module Palimpsest
 
     # @param settings [Hash] merged with current config
     # @return [Hash] configuration loaded from {#options}`[:config_file]` under {#directory}
-    def config settings = {}
+    def config(settings = {})
       settings = ActiveSupport::HashWithIndifferentAccess.new settings
 
       if @config.nil?
         populate unless populated
         file = File.join(directory, options[:config_file])
-        @config = YAML.load_file(file) if File.exists? file
+        @config = YAML.load_file(file) if File.exist? file
         @config = ActiveSupport::HashWithIndifferentAccess.new @config
         validate_config if @config
       end
@@ -334,7 +332,7 @@ module Palimpsest
     # @return [Environment] the current environment instance
     def remove_excludes
       return self if config[:excludes].nil?
-      config[:excludes].map{ |e| Dir["#{directory}/#{e}"] }.flatten.each { |e| FileUtils.remove_entry_secure e }
+      config[:excludes].map { |e| Dir["#{directory}/#{e}"] }.flatten.each { |e| FileUtils.remove_entry_secure e }
       self
     end
 
@@ -400,10 +398,10 @@ module Palimpsest
       message = 'bad path in config'
 
       # Checks the option in the asset key.
-      def validate_asset_options opts
-        opts.each do |k,v|
+      def validate_asset_options(opts)
+        opts.each do |k, v|
           fail RuntimeError, 'bad option in config' if k == :sprockets_options
-          fail RuntimeError, message if k == :output && ! Utils.safe_path?(v)
+          fail RuntimeError, message if k == :output && !Utils.safe_path?(v)
         end
       end
 
@@ -419,7 +417,7 @@ module Palimpsest
         end unless v.nil?
       end unless @config[:external].nil?
 
-      @config[:components].each do |k,v|
+      @config[:components].each do |k, v|
         # process @config[:components][:base] then go to the next option
         if k == :base
           fail RuntimeError, message unless Utils.safe_path? v
@@ -444,7 +442,7 @@ module Palimpsest
 
         # process @config[:assets][:sources] then go to the next option
         if k == :sources
-          v.each_with_index do |source, i|
+          v.each_with_index do |source, _|
             fail RuntimeError, message unless Utils.safe_path? source
           end
           next
@@ -459,7 +457,7 @@ module Palimpsest
           end unless asset_value.nil?
 
           # process each asset path
-          asset_value.each_with_index do |path, i|
+          asset_value.each_with_index do |path, _|
             fail RuntimeError, message unless Utils.safe_path? path
           end if asset_key == :paths
         end

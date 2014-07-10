@@ -1,11 +1,9 @@
 module Palimpsest
-
   # Use this class to manage external repositories you want to include in your project.
   #
   # Given a name, source, and reference, you can install
   # the contents of the repository at the reference to the install path.
   class External
-
     # @!attribute name
     #   @return [String] repository name
     #
@@ -22,7 +20,7 @@ module Palimpsest
     #   @return [String] local root directory to look for cached repositories
     attr_accessor :name, :source, :reference, :install_path, :cache
 
-    def initialize name: '', source: nil, reference: 'master', install_path: nil, cache: Palimpsest::Repo::CACHE
+    def initialize(name: '', source: nil, reference: 'master', install_path: nil, cache: Palimpsest::Repo::CACHE)
       self.name = name
       self.source = source
       self.reference = reference
@@ -35,7 +33,7 @@ module Palimpsest
       return nil if source.nil? || name.empty?
 
       path = File.join source, name
-      if Dir.exists? path
+      if Dir.exist? path
         path
       else
         "#{source}/#{name}"

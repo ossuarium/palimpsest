@@ -75,7 +75,7 @@ describe Palimpsest::Environment do
       expect(environment.repo.source).to eq 'repo/src'
     end
 
-     it "sets the cache" do
+    it "sets the cache" do
       environment.options repo_cache_root: '/tmp/cache'
       expect(environment.repo.cache).to eq '/tmp/cache'
     end
@@ -188,7 +188,7 @@ describe Palimpsest::Environment do
     subject(:environment) { Palimpsest::Environment.new site: site_1, reference: 'master' }
 
     before :each do
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       allow(YAML).to receive(:load_file).and_return({})
     end
 
@@ -330,7 +330,6 @@ describe Palimpsest::Environment do
         end
       end
 
-
       it "copies the environment to the destination" do
         dir = environment.directory
         exclude = environment.options[:copy_exclude] + %w(config.php data/)
@@ -461,7 +460,7 @@ describe Palimpsest::Environment do
         .and_return(["#{environment.directory}/.gitignore"])
 
         allow(Dir).to receive(:[]).with("#{environment.directory}/apps/*/assets")
-        .and_return( %W(#{environment.directory}/apps/app_1/assets #{environment.directory}/apps/app_2/assets) )
+        .and_return(%W(#{environment.directory}/apps/app_1/assets #{environment.directory}/apps/app_2/assets))
 
         expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/.gitignore")
         expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/apps/app_1/assets")
@@ -542,7 +541,7 @@ describe Palimpsest::Environment do
       it "returns assets with tags" do
         allow(Palimpsest::Assets).to receive(:find_tags).with(dir + '/public', anything, anything).and_return(dir + '/public/header.html')
         allow(Palimpsest::Assets).to receive(:find_tags).with(dir + '/app/src', anything, anything).and_return(dir + '/app/src/head.tpl')
-        expect(environment.sources_with_assets).to eq [ "#{dir}/public/header.html", "#{dir}/app/src/head.tpl" ]
+        expect(environment.sources_with_assets).to eq ["#{dir}/public/header.html", "#{dir}/app/src/head.tpl"]
       end
 
       context "when no assets given" do
@@ -556,7 +555,7 @@ describe Palimpsest::Environment do
 
     describe "#compile_assets" do
 
-      let(:sources) { [ "#{environment.directory}/public/header.html", "#{environment.directory}/app/src/head.tpl" ] }
+      let(:sources) { ["#{environment.directory}/public/header.html", "#{environment.directory}/app/src/head.tpl"] }
 
       it "returns itself" do
         allow(environment).to receive(:sources_with_assets).and_return([])
