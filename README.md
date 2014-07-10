@@ -16,8 +16,7 @@ _No web framework, no problem: Palimpsest gives any custom or legacy project a m
 
 Built flexible, simple, and customizable.
 Palimpsest runs on top of any project and acts as a post processor for your code.
-Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline
-and easy integration with [Kit](https://github.com/razor-x/kit).
+Features a [Sprockets](https://github.com/sstephenson/sprockets) asset pipeline.
 
 ### Usage
 
