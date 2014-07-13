@@ -134,6 +134,9 @@ module Palimpsest
       # Directory to store cached repository clones.
       repo_cache_root: Palimpsest::Repo::CACHE,
 
+      # Skip updating each external repository.
+      skip_external_repo_update: false,
+
       # All environment's temporary directories will be rooted under here.
       tmp_dir: Dir.tmpdir,
 
@@ -319,6 +322,7 @@ module Palimpsest
           e.source = repo[:server].nil? ? config[:externals][:server] : repo[:server]
           e.reference = repo[:reference] unless repo[:reference].nil?
           e.install_path = File.join directory, repo[:path]
+          e.repo.skip_update = options[:skip_external_repo_update]
         end
       end
 
