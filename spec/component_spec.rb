@@ -20,7 +20,7 @@ describe Palimpsest::Component do
       component.source_path = 'src/path'
       component.install_path = 'install/path'
       expect(FileUtils).to receive(:mkdir_p).with('install/path')
-      expect(FileUtils).to receive(:mv).with('src/path', 'install/path')
+      expect(Palimpsest::Utils).to receive(:copy_directory).with('src/path', 'install/path')
       component.install
     end
   end
