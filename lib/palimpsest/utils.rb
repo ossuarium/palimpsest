@@ -4,10 +4,10 @@ require 'open3'
 module Palimpsest
   # Utility module.
   module Utils
-    # Available backends for {#copy_directory}.
+    # Available backends for {.copy_directory}.
     COPY_BACKENDS = %i(rsync)
 
-    # Available backends for {#search_files}.
+    # Available backends for {.search_files}.
     FILE_SEARCH_BACKENDS = %i(grep)
 
     # Write contents to file.

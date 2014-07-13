@@ -45,7 +45,7 @@ module Palimpsest
     end
 
     # Update a cached clone.
-    # Will skip the update step if {skip_update} is true.
+    # Will skip the update step if {#skip_update} is true.
     # @param path [String] location of local mirror
     # @return [Repo] the repo object
     def update
