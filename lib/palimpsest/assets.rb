@@ -16,7 +16,7 @@ module Palimpsest
   #     [% javascript inline tracking %] -> <compiled source of tracking.js asset>
   #
   # Disable some cops until they can be refactored in the rubocop branch.
-  # rubocop:disable Style/ClassLength, Style/MethodLength
+  # rubocop:disable Style/ClassLength, Style/MethodLength, Style/CyclomaticComplexity
   class Assets
     # Default {#options}.
     DEFAULT_OPTIONS = {
@@ -47,6 +47,8 @@ module Palimpsest
       gzip: false,
 
       # Include hash in asset name.
+      # Can be set to `:also_unhashed` to include a hash,
+      # but additionally write an unhased file.
       hash: true,
 
       # Opening and closing brackets for asset source tags.
@@ -136,6 +138,8 @@ module Palimpsest
 
       path = name
       path = File.join(directory, path) unless directory.nil?
+
+      write(target, gzip: gzip, hash: false) if hash == :also_unhashed
 
       asset.write_to "#{path}.gz", compress: true if gzip
       asset.write_to path
