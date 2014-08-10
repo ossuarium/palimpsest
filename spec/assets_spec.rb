@@ -145,15 +145,15 @@ describe Palimpsest::Assets do
   describe "#write" do
 
     let(:asset) { double Sprockets::Asset }
-    let(:name) { 'lib/app.js' }
 
     before :each do
       assets.options hash: false
       allow(assets.assets).to receive(:[]).with('lib/app').and_return(asset)
-      allow(asset).to receive(:logical_path).and_return(name)
+      allow(asset).to receive(:logical_path).and_return('lib/app.js')
     end
 
     context "asset not found" do
+
       it "returns nil" do
         allow(assets.assets).to receive(:[]).with('not_here').and_return(nil)
         expect(assets.write 'not_here').to be nil
@@ -164,8 +164,8 @@ describe Palimpsest::Assets do
 
       it "writes to relative path and returns the relative path" do
         assets.options output: 'compiled'
-        expect(asset).to receive(:write_to).with("compiled/#{name}")
-        expect(assets.write 'lib/app').to eq "compiled/#{name}"
+        expect(asset).to receive(:write_to).with("compiled/lib/app.js")
+        expect(assets.write 'lib/app').to eq "compiled/lib/app.js"
       end
     end
 
@@ -174,38 +174,38 @@ describe Palimpsest::Assets do
       it "writes to relative path under directory and returns the relative path" do
         assets.options output: 'compiled'
         assets.directory = '/tmp/dir'
-        expect(asset).to receive(:write_to).with("/tmp/dir/compiled/#{name}")
-        expect(assets.write 'lib/app').to eq "compiled/#{name}"
+        expect(asset).to receive(:write_to).with("/tmp/dir/compiled/lib/app.js")
+        expect(assets.write 'lib/app').to eq "compiled/lib/app.js"
       end
     end
 
-    context "no output is set with directory set and returns the relative path" do
+    context "no output is set with directory set" do
 
       it "writes to relative path under directory and returns the relative path" do
         assets.directory = '/tmp/dir'
-        expect(asset).to receive(:write_to).with("/tmp/dir/#{name}")
-        expect(assets.write 'lib/app').to eq name
+        expect(asset).to receive(:write_to).with("/tmp/dir/lib/app.js")
+        expect(assets.write 'lib/app').to eq 'lib/app.js'
       end
     end
 
     context "no output is set with no directory set" do
 
       it "writes to relative path and returns the relative path" do
-        expect(asset).to receive(:write_to).with(name)
-        expect(assets.write 'lib/app').to eq name
+        expect(asset).to receive(:write_to).with('lib/app.js')
+        expect(assets.write 'lib/app').to eq 'lib/app.js'
       end
     end
 
     context "when gzip true" do
 
-      it "still returns the non-gzipped asset name" do
+      it "still returns the non-gzipped asset 'lib/app.js'" do
         allow(asset).to receive(:write_to)
-        expect(assets.write 'lib/app', gzip: true).to eq name
+        expect(assets.write 'lib/app', gzip: true).to eq 'lib/app.js'
       end
 
       it "it gzips the assets as well" do
-        expect(asset).to receive(:write_to).at_most(:once).with("#{name}.gz", compress: true)
-        expect(asset).to receive(:write_to).at_most(:once).with(name)
+        expect(asset).to receive(:write_to).at_most(:once).with("lib/app.js.gz", compress: true)
+        expect(asset).to receive(:write_to).at_most(:once).with('lib/app.js')
         assets.write 'lib/app', gzip: true
       end
     end
@@ -213,8 +213,8 @@ describe Palimpsest::Assets do
     context "when hash true" do
 
       it "hashes the file name" do
-        allow(asset).to receive(:digest_path).and_return('app-cb5a921a4e7663347223c41cd2fa9e11.js')
-        expect(asset).to receive(:write_to).with('app-cb5a921a4e7663347223c41cd2fa9e11.js')
+        allow(asset).to receive(:digest_path).and_return('lib/app-cb5a921a4e7663347223c41cd2fa9e11.js')
+        expect(asset).to receive(:write_to).with('lib/app-cb5a921a4e7663347223c41cd2fa9e11.js')
         assets.write 'lib/app', hash: true
       end
     end
