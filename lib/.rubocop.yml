@@ -2,3 +2,9 @@ inherit_from: ../.rubocop.yml
 
 Metrics/LineLength:
   Max: 100
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
