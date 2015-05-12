@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe Palimpsest::Repo do
-
   subject(:repo) { Palimpsest::Repo.new }
 
   describe "#local_clone" do
-
     it "uses a unique path" do
       repo.cache = '/tmp'
       repo.source = 'src/path'
@@ -25,7 +23,6 @@ describe Palimpsest::Repo do
     end
 
     context "when source not given" do
-
       it "returns nil" do
         repo.source = nil
         repo.cache = '/tmp'
@@ -34,7 +31,6 @@ describe Palimpsest::Repo do
     end
 
     context "when cache not given" do
-
       it "returns nil" do
         repo.source = 'src/path'
         repo.cache = nil
@@ -44,7 +40,6 @@ describe Palimpsest::Repo do
   end
 
   describe "#mirror" do
-
     before :each do
       allow(repo).to receive(:mirror_repo)
     end
@@ -62,7 +57,6 @@ describe Palimpsest::Repo do
     end
 
     context "when clone directory exists" do
-
       it "does not recreate the mirror" do
         repo.source = 'src/path'
         repo.local_clone = '/tmp/dest'
@@ -73,7 +67,6 @@ describe Palimpsest::Repo do
     end
 
     context "when source not given" do
-
       it "fails" do
         repo.source = nil
         expect { repo.mirror }.to raise_error RuntimeError
@@ -82,7 +75,6 @@ describe Palimpsest::Repo do
   end
 
   describe "#update" do
-
     before :each do
       allow(repo).to receive(:mirror)
       allow(repo).to receive(:update_repo)
@@ -104,7 +96,6 @@ describe Palimpsest::Repo do
   end
 
   describe "#extract" do
-
     before :each do
       allow(repo).to receive(:mirror)
       allow(repo).to receive(:update)

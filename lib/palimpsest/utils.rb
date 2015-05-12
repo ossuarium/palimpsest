@@ -96,7 +96,7 @@ module Palimpsest
     def self.copy_directory_with_rsync(source, destination, exclude: [], mirror: false)
       cmd = %w(rsync -rt)
       cmd << '--del' if mirror
-      exclude.each { |e| cmd << %Q{--exclude=#{e}} }
+      exclude.each { |e| cmd << %(--exclude=#{e}) }
       cmd << "#{source}/"
       cmd << destination
       system(*cmd)

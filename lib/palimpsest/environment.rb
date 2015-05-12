@@ -305,7 +305,7 @@ module Palimpsest
     # Install all components.
     # @return [Environment] the current environment instance
     def install_components
-      components.each { |c| c.install }
+      components.each(&:install)
       self
     end
 
@@ -333,7 +333,7 @@ module Palimpsest
     # Install all externals.
     # @return [Environment] the current environment instance
     def install_externals
-      externals.each { |e| e.install }
+      externals.each(&:install)
       self
     end
 

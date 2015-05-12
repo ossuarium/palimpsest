@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe Palimpsest::Component do
-
   subject(:component) { Palimpsest::Component.new }
 
   describe "#install" do
-
     it "fails if no source path" do
       component.install_path = 'install/path'
       expect { component.install }.to raise_error RuntimeError
