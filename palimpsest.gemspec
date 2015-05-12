@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activesupport', '~> 4.2.1'
   spec.add_dependency 'zaru', '~> 0.1.0'
-  spec.add_dependency 'sprockets', '~> 2.12.1'
+  spec.add_dependency 'sprockets', '~> 3.1.0'
 
   spec.add_development_dependency 'bundler', '~> 1.6'
   spec.add_development_dependency 'bump', '~> 0.5'
