@@ -16,7 +16,7 @@ module Palimpsest
   #     [% javascript inline tracking %] -> <compiled source of tracking.js asset>
   #
   # Disable some cops until they can be refactored in the rubocop branch.
-  # rubocop:disable Style/ClassLength, Style/MethodLength, Style/CyclomaticComplexity
+  # rubocop:disable Metrics/ClassLength, Metrics/MethodLength, Metrics/CyclomaticComplexity
   class Assets
     # Default {#options}.
     DEFAULT_OPTIONS = {
