@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Palimpsest::Assets do
-
   let(:utils) { Palimpsest::Utils }
   let(:config) do
     YAML.load <<-EOF
@@ -17,7 +16,6 @@ describe Palimpsest::Assets do
   subject(:assets) { Palimpsest::Assets.new }
 
   describe ".new" do
-
     it "sets default options" do
       expect(assets.options).to eq Palimpsest::Assets::DEFAULT_OPTIONS
     end
@@ -29,7 +27,6 @@ describe Palimpsest::Assets do
   end
 
   describe "#options" do
-
     it "merges with default options" do
       assets.options[:src_pre] = '{{'
       expect(assets.options).to eq Palimpsest::Assets::DEFAULT_OPTIONS.merge(src_pre: '{{')
@@ -43,14 +40,12 @@ describe Palimpsest::Assets do
   end
 
   describe "#sprockets" do
-
     it "returns a new sprockets environment" do
       expect(assets.sprockets).to be_a Sprockets::Environment
     end
   end
 
   describe "#load_options" do
-
     subject(:assets) { Palimpsest::Assets.new options: config[:options] }
 
     it "returns itself" do
@@ -73,7 +68,6 @@ describe Palimpsest::Assets do
     end
 
     context "no options" do
-
       it "does not fail when options not set" do
         expect { assets.load_options }.to_not raise_error
       end
@@ -81,7 +75,6 @@ describe Palimpsest::Assets do
   end
 
   describe "#load_paths" do
-
     subject(:assets) { Palimpsest::Assets.new paths: config[:paths] }
 
     it "returns itself" do
@@ -89,7 +82,6 @@ describe Palimpsest::Assets do
     end
 
     context "when directory set" do
-
       it "loads the paths for the given set into the sprockets environment" do
         assets.directory = '/tmp/root_dir'
         expect(assets.sprockets).to receive(:append_path).with('/tmp/root_dir/assets/javascripts')
@@ -99,7 +91,6 @@ describe Palimpsest::Assets do
     end
 
     context "when no directory set" do
-
       it "loads the paths for the given set into the sprockets environment" do
         expect(assets.sprockets).to receive(:append_path).with('assets/javascripts')
         expect(assets.sprockets).to receive(:append_path).with('other/javascripts')
@@ -108,7 +99,6 @@ describe Palimpsest::Assets do
     end
 
     context "when no paths set" do
-
       it "does not fail" do
         assets.paths = {}
         expect { assets.load_paths }.to_not raise_error
@@ -117,7 +107,6 @@ describe Palimpsest::Assets do
   end
 
   describe "#assets" do
-
     subject(:assets) { Palimpsest::Assets.new paths: config[:paths] }
 
     it "loads options" do
@@ -143,14 +132,12 @@ describe Palimpsest::Assets do
   end
 
   describe "#write" do
-
     let(:asset) { double Sprockets::Asset }
-    let(:name) { 'lib/app.js' }
 
     before :each do
       assets.options hash: false
       allow(assets.assets).to receive(:[]).with('lib/app').and_return(asset)
-      allow(asset).to receive(:logical_path).and_return(name)
+      allow(asset).to receive(:logical_path).and_return('lib/app.js')
     end
 
     context "asset not found" do
@@ -161,67 +148,60 @@ describe Palimpsest::Assets do
     end
 
     context "output is set with no directory set" do
-
       it "writes to relative path and returns the relative path" do
         assets.options output: 'compiled'
-        expect(asset).to receive(:write_to).with("compiled/#{name}")
-        expect(assets.write 'lib/app').to eq "compiled/#{name}"
+        expect(asset).to receive(:write_to).with("compiled/lib/app.js")
+        expect(assets.write 'lib/app').to eq "compiled/lib/app.js"
       end
     end
 
     context "output is set with directory set" do
-
       it "writes to relative path under directory and returns the relative path" do
         assets.options output: 'compiled'
         assets.directory = '/tmp/dir'
-        expect(asset).to receive(:write_to).with("/tmp/dir/compiled/#{name}")
-        expect(assets.write 'lib/app').to eq "compiled/#{name}"
+        expect(asset).to receive(:write_to).with("/tmp/dir/compiled/lib/app.js")
+        expect(assets.write 'lib/app').to eq "compiled/lib/app.js"
       end
     end
 
-    context "no output is set with directory set and returns the relative path" do
-
+    context "no output is set with directory set" do
       it "writes to relative path under directory and returns the relative path" do
         assets.directory = '/tmp/dir'
-        expect(asset).to receive(:write_to).with("/tmp/dir/#{name}")
-        expect(assets.write 'lib/app').to eq name
+        expect(asset).to receive(:write_to).with("/tmp/dir/lib/app.js")
+        expect(assets.write 'lib/app').to eq 'lib/app.js'
       end
     end
 
     context "no output is set with no directory set" do
-
       it "writes to relative path and returns the relative path" do
-        expect(asset).to receive(:write_to).with(name)
-        expect(assets.write 'lib/app').to eq name
+        expect(asset).to receive(:write_to).with('lib/app.js')
+        expect(assets.write 'lib/app').to eq 'lib/app.js'
       end
     end
 
     context "when gzip true" do
-
-      it "still returns the non-gzipped asset name" do
+      it "still returns the non-gzipped asset 'lib/app.js'" do
         allow(asset).to receive(:write_to)
-        expect(assets.write 'lib/app', gzip: true).to eq name
+        expect(assets.write 'lib/app', gzip: true).to eq 'lib/app.js'
       end
 
       it "it gzips the assets as well" do
-        expect(asset).to receive(:write_to).at_most(:once).with("#{name}.gz", compress: true)
-        expect(asset).to receive(:write_to).at_most(:once).with(name)
+        expect(asset).to receive(:write_to).at_most(:once).with("lib/app.js.gz", compress: true)
+        expect(asset).to receive(:write_to).at_most(:once).with('lib/app.js')
         assets.write 'lib/app', gzip: true
       end
     end
 
     context "when hash true" do
-
       it "hashes the file name" do
-        allow(asset).to receive(:digest_path).and_return('app-cb5a921a4e7663347223c41cd2fa9e11.js')
-        expect(asset).to receive(:write_to).with('app-cb5a921a4e7663347223c41cd2fa9e11.js')
+        allow(asset).to receive(:digest_path).and_return('lib/app-cb5a921a4e7663347223c41cd2fa9e11.js')
+        expect(asset).to receive(:write_to).with('lib/app-cb5a921a4e7663347223c41cd2fa9e11.js')
         assets.write 'lib/app', hash: true
       end
     end
   end
 
   describe "#find_tags" do
-
     it "uses the type as the type" do
       assets.type = :javascript
       expect(Palimpsest::Assets).to receive(:find_tags).with(anything, :javascript, anything)
@@ -247,7 +227,6 @@ describe Palimpsest::Assets do
   end
 
   describe "#update_source and #update_source!" do
-
     let(:asset) { double Sprockets::Asset }
 
     let(:source) do
@@ -291,18 +270,16 @@ describe Palimpsest::Assets do
       allow(assets).to receive(:write).with('app').and_return('app-1234.js')
       allow(assets).to receive(:write).with('vendor/modernizr').and_return('vendor/modernizr-5678.js')
       allow(assets.assets).to receive(:[]).with('vendor/tracking').and_return(asset)
-      allow(asset).to receive(:to_s).and_return(%q{alert('track');})
+      allow(asset).to receive(:to_s).and_return("alert('track');")
     end
 
     describe "#update_source!" do
-
       it "replaces asset tags in sources" do
         assets.update_source! source
         expect(source).to eq result
       end
 
       context "cdn option set" do
-
         it "uses cdn when it replaces asset tags in sources" do
           assets.options cdn: 'https://cdn.example.com/'
           assets.update_source! source
@@ -312,7 +289,6 @@ describe Palimpsest::Assets do
     end
 
     describe "#update_source" do
-
       it "replaces asset tags in sources" do
         expect(assets.update_source source).to eq result
       end
@@ -325,9 +301,7 @@ describe Palimpsest::Assets do
   end
 
   describe ".find_tags" do
-
     context "when grep is the backend" do
-
       let(:regex) { '\[%(.*?)%\]' }
 
       it "greps in the path" do

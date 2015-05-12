@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Palimpsest::Environment do
-
   let(:site_1) { Palimpsest::Site.new name: 'site_1' }
   let(:site_2) { Palimpsest::Site.new name: 'site_2' }
   let(:utils) { Palimpsest::Utils }
@@ -13,7 +12,6 @@ describe Palimpsest::Environment do
   end
 
   describe ".new" do
-
     it "sets default options" do
       expect(environment.options).to eq Palimpsest::Environment::DEFAULT_OPTIONS
     end
@@ -25,7 +23,6 @@ describe Palimpsest::Environment do
   end
 
   describe "#options" do
-
     it "merges with default options" do
       environment.options[:tmp_dir] = '/tmp/path'
       expect(environment.options).to eq(
@@ -43,7 +40,6 @@ describe Palimpsest::Environment do
   end
 
   describe "#site" do
-
     it "cannot be redefinfed while populated" do
       environment.site = site_1
       allow(environment).to receive(:populated).and_return(true)
@@ -52,7 +48,6 @@ describe Palimpsest::Environment do
   end
 
   describe "#reference" do
-
     it "must be a string" do
       expect { environment.reference = 1 }.to raise_error TypeError
     end
@@ -65,7 +60,6 @@ describe Palimpsest::Environment do
   end
 
   describe "#repo" do
-
     before :each do
       site_1.repository = 'repo/src'
     end
@@ -86,13 +80,11 @@ describe Palimpsest::Environment do
   end
 
   describe "#directory" do
-
     before :each do
       allow(Dir).to receive(:mktmpdir).and_return('/tmp/rand_dir')
     end
 
     context "when directory is unset" do
-
       it "makes and returns a temporary directory" do
         environment.site = site_1
         rest = environment.options[:tmp_dir]
@@ -103,7 +95,6 @@ describe Palimpsest::Environment do
     end
 
     context "when directory is set" do
-
       it "returns the current directory" do
         expect(Dir).to receive(:mktmpdir).once
         environment.directory
@@ -113,7 +104,6 @@ describe Palimpsest::Environment do
   end
 
   describe "#cleanup" do
-
     subject(:environment) { Palimpsest::Environment.new site: site_1 }
 
     it "removes the directory and resets @directory" do
@@ -129,14 +119,12 @@ describe Palimpsest::Environment do
   end
 
   describe "#populate" do
-
     it "fails when missing site" do
       environment.reference = 'master'
       expect { environment.populate }.to raise_error RuntimeError, /populate without/
     end
 
     context "from repository" do
-
       subject(:environment) { Palimpsest::Environment.new site: site_1, reference: 'master' }
 
       before :each do
@@ -164,7 +152,6 @@ describe Palimpsest::Environment do
     end
 
     context "from source" do
-
       it "copies the source files to the directory preserving mtime" do
         environment.site = site_1
         site_1.source = '/path/to/source'
@@ -175,7 +162,6 @@ describe Palimpsest::Environment do
       end
 
       context "site source not given" do
-
         it "copies from the working directory" do
           environment.site = site_1
           expect(utils).to receive(:copy_directory).with(
@@ -188,7 +174,6 @@ describe Palimpsest::Environment do
   end
 
   describe "#config" do
-
     subject(:environment) { Palimpsest::Environment.new site: site_1, reference: 'master' }
 
     before :each do
@@ -214,12 +199,11 @@ describe Palimpsest::Environment do
     end
 
     context "settings given" do
-
       let(:hash) { ActiveSupport::HashWithIndifferentAccess.new(conf_1: :val_1, conf_2: :val_2, conf_3: :val_3) }
 
       before :each do
         allow(YAML).to receive(:load_file).with("#{environment.directory}/palimpsest.yml")
-        .and_return(conf_1: :val_1, conf_2: :val_2)
+          .and_return(conf_1: :val_1, conf_2: :val_2)
       end
 
       it "merges new settings on first call" do
@@ -245,7 +229,6 @@ describe Palimpsest::Environment do
   end
 
   describe "methods that modify the working directory" do
-
     let(:config) do
       YAML.load <<-EOF
         :persistent:
@@ -299,7 +282,6 @@ describe Palimpsest::Environment do
     end
 
     describe "compile" do
-
       it "runs all compile tasks and returns self" do
         expect(environment).to receive(:populate)
         expect(environment).to receive(:install_externals)
@@ -311,7 +293,6 @@ describe Palimpsest::Environment do
     end
 
     describe "#copy" do
-
       it "copies the environment to the destination" do
         dir = environment.directory
         exclude = environment.options[:copy_exclude] + %w(config.php data/)
@@ -322,7 +303,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no persistent files given" do
-
         it "copies the environment to the destination" do
           dir = environment.directory
           allow(environment).to receive(:config).and_return({})
@@ -344,7 +324,6 @@ describe Palimpsest::Environment do
       end
 
       context "when destination is nil" do
-
         it "fails" do
           expect { environment.copy destination: nil }.to raise_error RuntimeError, /destination/
         end
@@ -352,7 +331,6 @@ describe Palimpsest::Environment do
     end
 
     describe "#components" do
-
       it "returns an array" do
         expect(environment.components).to be_a Array
       end
@@ -368,7 +346,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no components given" do
-
         it "contains no components" do
           allow(environment).to receive(:config).and_return({})
           expect(environment.components).to eq []
@@ -377,7 +354,6 @@ describe Palimpsest::Environment do
     end
 
     describe "#install_components" do
-
       it "installs the components and returns itself" do
         expect(environment.components[0]).to receive(:install)
         expect(environment.components[1]).to receive(:install)
@@ -385,7 +361,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no components given" do
-
         it "does nothing and returns itself" do
           allow(environment).to receive(:config).and_return({})
           expect(environment.install_components).to be environment
@@ -394,7 +369,6 @@ describe Palimpsest::Environment do
     end
 
     describe "#externals" do
-
       it "returns an array" do
         expect(environment.externals).to be_a Array
       end
@@ -420,7 +394,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no externals given" do
-
         it "contains no externals" do
           allow(environment).to receive(:config).and_return({})
           expect(environment.externals).to eq []
@@ -429,9 +402,7 @@ describe Palimpsest::Environment do
     end
 
     describe "#install_externals" do
-
       context "when externals given" do
-
         let(:external_1) { double Palimpsest::External }
         let(:external_2) { double Palimpsest::External }
 
@@ -449,7 +420,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no externals given" do
-
         it "does nothing and returns itself" do
           allow(environment).to receive(:config).and_return({})
           expect(environment.install_externals).to be environment
@@ -458,13 +428,12 @@ describe Palimpsest::Environment do
     end
 
     describe "#remove_excludes" do
-
       it "removes excluded files and returns itself" do
         allow(Dir).to receive(:[]).with("#{environment.directory}/.gitignore")
-        .and_return(["#{environment.directory}/.gitignore"])
+          .and_return(["#{environment.directory}/.gitignore"])
 
         allow(Dir).to receive(:[]).with("#{environment.directory}/apps/*/assets")
-        .and_return(%W(#{environment.directory}/apps/app_1/assets #{environment.directory}/apps/app_2/assets))
+          .and_return(%W(#{environment.directory}/apps/app_1/assets #{environment.directory}/apps/app_2/assets))
 
         expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/.gitignore")
         expect(FileUtils).to receive(:remove_entry_secure).with("#{environment.directory}/apps/app_1/assets")
@@ -473,7 +442,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no excludes given" do
-
         it "does nothing and returns itself" do
           allow(environment).to receive(:config).and_return({})
           expect(environment.remove_excludes).to be environment
@@ -482,7 +450,6 @@ describe Palimpsest::Environment do
     end
 
     describe "#assets" do
-
       subject(:assets) { environment.assets }
 
       it "returns an array" do
@@ -519,7 +486,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no assets given" do
-
         it "contains no assets" do
           allow(environment).to receive(:config).and_return({})
           expect(assets).to eq []
@@ -528,7 +494,6 @@ describe Palimpsest::Environment do
     end
 
     describe "#sources_with_assets" do
-
       let(:dir) { environment.directory }
 
       it "looks for all asset types" do
@@ -544,14 +509,13 @@ describe Palimpsest::Environment do
 
       it "returns assets with tags" do
         allow(Palimpsest::Assets).to receive(:find_tags)
-        .with(dir + '/public', anything, anything).and_return(dir + '/public/header.html')
+          .with(dir + '/public', anything, anything).and_return(dir + '/public/header.html')
         allow(Palimpsest::Assets).to receive(:find_tags)
-        .with(dir + '/app/src', anything, anything).and_return(dir + '/app/src/head.tpl')
+          .with(dir + '/app/src', anything, anything).and_return(dir + '/app/src/head.tpl')
         expect(environment.sources_with_assets).to eq ["#{dir}/public/header.html", "#{dir}/app/src/head.tpl"]
       end
 
       context "when no assets given" do
-
         it "contains no sources with assets" do
           allow(environment).to receive(:config).and_return({})
           expect(environment.sources_with_assets).to eq []
@@ -560,7 +524,6 @@ describe Palimpsest::Environment do
     end
 
     describe "#compile_assets" do
-
       let(:sources) { ["#{environment.directory}/public/header.html", "#{environment.directory}/app/src/head.tpl"] }
 
       it "returns itself" do
@@ -578,7 +541,6 @@ describe Palimpsest::Environment do
       end
 
       context "when no assets given" do
-
         it "does nothing and returns itself" do
           allow(environment).to receive(:config).and_return({})
           expect(environment.compile_assets).to be environment

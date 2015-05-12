@@ -4,10 +4,10 @@ require 'open3'
 module Palimpsest
   # Utility module.
   module Utils
-    # Available backends for {#copy_directory}.
+    # Available backends for {.copy_directory}.
     COPY_BACKENDS = %i(rsync)
 
-    # Available backends for {#search_files}.
+    # Available backends for {.search_files}.
     FILE_SEARCH_BACKENDS = %i(grep)
 
     # Write contents to file.
@@ -57,7 +57,7 @@ module Palimpsest
     def self.safe_path?(path)
       case
       when path[%r{(\.\./|~/)}] then return false
-      when path[/^\//] then return false
+      when path[%r{^/}] then return false
       else return true
       end
     end
@@ -96,7 +96,7 @@ module Palimpsest
     def self.copy_directory_with_rsync(source, destination, exclude: [], mirror: false)
       cmd = %w(rsync -rt)
       cmd << '--del' if mirror
-      exclude.each { |e| cmd << %Q{--exclude=#{e}} }
+      exclude.each { |e| cmd << %(--exclude=#{e}) }
       cmd << "#{source}/"
       cmd << destination
       system(*cmd)

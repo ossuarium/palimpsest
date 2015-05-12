@@ -5,12 +5,12 @@ by Evan Boyd Sosenko.
 _No web framework, no problem: Palimpsest gives any custom or legacy project a modern workflow and toolset._
 
 
-[![Gem Version](http://img.shields.io/gem/v/palimpsest.svg?style=flat)](https://rubygems.org/gems/palimpsest)
-[![MIT License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](./LICENSE.txt)
-[![Dependency Status](http://img.shields.io/gemnasium/razor-x/palimpsest.svg?style=flat)](https://gemnasium.com/razor-x/palimpsest)
-[![Build Status](http://img.shields.io/travis/razor-x/palimpsest.svg?style=flat)](https://travis-ci.org/razor-x/palimpsest)
-[![Coverage Status](http://img.shields.io/coveralls/razor-x/palimpsest.svg?style=flat)](https://coveralls.io/r/razor-x/palimpsest)
-[![Code Climate](http://img.shields.io/codeclimate/github/razor-x/palimpsest.svg?style=flat)](https://codeclimate.com/github/razor-x/palimpsest)
+[![Gem Version](https://img.shields.io/gem/v/palimpsest.svg)](https://rubygems.org/gems/palimpsest)
+[![MIT License](https://img.shields.io/github/license/razor-x/palimpsest.svg)](./LICENSE.txt)
+[![Dependency Status](https://img.shields.io/gemnasium/razor-x/palimpsest.svg)](https://gemnasium.com/razor-x/palimpsest)
+[![Build Status](https://img.shields.io/travis/razor-x/palimpsest.svg)](https://travis-ci.org/razor-x/palimpsest)
+[![Coverage Status](https://img.shields.io/codecov/c/github/razor-x/palimpsest.svg)](https://codecov.io/github/razor-x/palimpsest)
+[![Code Climate](https://img.shields.io/codeclimate/github/razor-x/palimpsest.svg)](https://codeclimate.com/github/razor-x/palimpsest)
 
 ## Description
 
@@ -29,9 +29,9 @@ Palimpsest's classes are independently useful outside of `Palimpsest::Environmen
 
 The first step is always
 
-````ruby
+```ruby
 require 'palimpsest'
-````
+```
 
 #### Additional requirements
 
@@ -40,27 +40,27 @@ Include these in your project's Gemfile if you plan to use them.
 
 For example, to use the `image_compression` option, add to your Gemfile
 
-````ruby
+```ruby
 gem 'sprockets-image_compressor'
-````
+```
 
 and to your project
 
-````ruby
+```ruby
 require 'sprockets-image_compressor'
-````
+```
 
 or if you set `js_compressor: uglifier` you must add to your Gemfile
 
-````ruby
+```ruby
 gem 'uglifier'
-````
+```
 
 and to your project
 
-````ruby
+```ruby
 require 'uglifier'
-````
+```
 
 Similarly you must include gems for any sprockets engines you want to use.
 
@@ -68,38 +68,38 @@ Similarly you must include gems for any sprockets engines you want to use.
 
 Create an environment with
 
-````ruby
+```ruby
 environment = Palimpsest::Environment.new
-````
+```
 For most operations you will need to specify a `site` which can be any object which
 responds to the methods `Palimpsest::Environment` assumes exists in some of its own methods.
 A model class `Palimpsest::Site` is included which implements all possible expected methods.
 Finally, the examples below assume default options for each class, but these can be overridden with `#options`.
 
-````ruby
+```ruby
 site = Palimpsest::Site.new
 site.name = 'my_app'
 environment.site = site
-````
+```
 
 To populate the environment from a git repository,
 
-````ruby
+```ruby
 site.repository = '/path/to/project/repo'
 environment.reference = 'my_feature' # if you want something other then 'master'
 environment.populate
-````
+```
 or to populate from a directory,
 
-````ruby
+```ruby
 site.source = '/path/to/project/source'
 environment.populate from :source
-````
+```
 Either way you will get a copy of your site in a new temporary working directory,
 
-````ruby
+```ruby
 environment.directory #=> '/tmp/palimpsest_my_app_120140605-26021-d7vlnv'
-````
+```
 
 #### Working with the environment
 
@@ -117,9 +117,9 @@ For example, to search through you code for tags referencing assets,
 process and save those assets with sprockets,
 and replace the tags with references to the processed assets,
 
-````ruby
+```ruby
 environment.compile_assets
-````
+```
 Check the [`Palimpsest::Environment` documentation](http://rubydoc.info/github/razor-x/palimpsest/Palimpsest/Environment)
 for all available magic, and freely extend the class to add new magic applicable to your project.
 
@@ -128,35 +128,35 @@ for all available magic, and freely extend the class to add new magic applicable
 You can copy the current state of the environment to another directory with `Palimpsest::Environment#copy`.
 By default, this will use `site.path` for the destination, or you can specify with
 
-````ruby
+```ruby
 environment.copy destination: '/path/to/out/dir'
-````
+```
 
 To delete the working directory, use
 
-````ruby
+```ruby
 environment.cleanup
-````
+```
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-````ruby
+```ruby
 gem 'palimpsest'
-````
+```
 
 And then execute:
 
-````bash
+```bash
 $ bundle
-````
+```
 
 Or install it yourself as:
 
-````bash
+```bash
 $ gem install palimpsest
-````
+```
 
 ## Documentation
 
@@ -164,8 +164,8 @@ The primary documentation for Palimpsest is this README and the YARD source docu
 
 YARD documentation for all gem versions is hosted on the
 [Palimpsest gem page](https://rubygems.org/gems/palimpsest).
-Documentation for the latest commits is hosted on
-[the RubyDoc.info project page](http://rubydoc.info/github/razor-x/palimpsest/frames).
+Also checkout
+[Omniref's interactive documentation](https://www.omniref.com/ruby/gems/palimpsest).
 
 ## Development and Testing
 
@@ -175,30 +175,31 @@ The [Palimpsest source](https://github.com/razor-x/palimpsest)
 is hosted on GitHub.
 To clone the project run
 
-````bash
+```bash
 $ git clone https://github.com/razor-x/palimpsest.git
-````
+```
 
 ### Rake
 
 Run `rake -T` to see all Rake tasks.
 
-````
+```
 rake all                   # Run all tasks
-rake build                 # Build palimpsest-0.0.0.gem into the pkg directory
-rake bump:current          # Show current gem version
-rake bump:major            # Bump major part of gem version
-rake bump:minor            # Bump minor part of gem version
-rake bump:patch            # Bump patch part of gem version
-rake bump:pre              # Bump pre part of gem version
+rake build                 # Build palimpsest-0.2.0.gem into the pkg directory
+rake bump:current[tag]     # Show current gem version
+rake bump:major[tag]       # Bump major part of gem version
+rake bump:minor[tag]       # Bump minor part of gem version
+rake bump:patch[tag]       # Bump patch part of gem version
+rake bump:pre[tag]         # Bump pre part of gem version
 rake bump:set              # Sets the version number using the VERSION environment variable
-rake install               # Build and install palimpsest-0.0.0.gem into system gems
-rake release               # Create tag v0.0.0 and build and push palimpsest-0.0.0.gem to Rubygems
+rake install               # Build and install palimpsest-0.2.0.gem into system gems
+rake install:local         # Build and install palimpsest-0.2.0.gem into system gems without network access
+rake release               # Create tag v0.2.0 and build and push palimpsest-0.2.0.gem to Rubygems
 rake rubocop               # Run RuboCop
 rake rubocop:auto_correct  # Auto-correct RuboCop offenses
 rake spec                  # Run RSpec code examples
 rake yard                  # Generate YARD Documentation
-````
+```
 
 ### Guard
 

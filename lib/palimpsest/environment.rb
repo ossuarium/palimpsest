@@ -1,5 +1,6 @@
 require 'active_support/core_ext/hash'
 require 'tmpdir'
+require 'yaml'
 
 module Palimpsest
   # An environment is populated with the contents of
@@ -112,6 +113,10 @@ module Palimpsest
   #     paths:
   #       - assets/images
   # ````
+  #
+  # Disable some cops until they can be refactored in the rubocop branch.
+  # rubocop:disable Metrics/ClassLength, Metrics/MethodLength
+  # rubocop:disable Metrics/BlockNesting, Style/Next, Metrics/CyclomaticComplexity
   class Environment
     # Default {#options}.
     DEFAULT_OPTIONS = {
@@ -129,6 +134,9 @@ module Palimpsest
 
       # Directory to store cached repository clones.
       repo_cache_root: Palimpsest::Repo::CACHE,
+
+      # Skip updating each external repository.
+      skip_external_repo_update: false,
 
       # All environment's temporary directories will be rooted under here.
       tmp_dir: Dir.tmpdir,
@@ -297,7 +305,7 @@ module Palimpsest
     # Install all components.
     # @return [Environment] the current environment instance
     def install_components
-      components.each { |c| c.install }
+      components.each(&:install)
       self
     end
 
@@ -315,6 +323,7 @@ module Palimpsest
           e.source = repo[:server].nil? ? config[:externals][:server] : repo[:server]
           e.reference = repo[:reference] unless repo[:reference].nil?
           e.install_path = File.join directory, repo[:path]
+          e.repo.skip_update = options[:skip_external_repo_update]
         end
       end
 
@@ -324,7 +333,7 @@ module Palimpsest
     # Install all externals.
     # @return [Environment] the current environment instance
     def install_externals
-      externals.each { |e| e.install }
+      externals.each(&:install)
       self
     end
 

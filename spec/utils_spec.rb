@@ -1,20 +1,16 @@
 require 'spec_helper'
 
 describe Palimpsest::Utils do
-
   subject(:utils) { Palimpsest::Utils }
 
   describe ".safe_path?" do
-
     context "valid path" do
-
       it "returns true" do
         expect(utils.safe_path? 'path').to be true
       end
     end
 
     context "invalid path" do
-
       it "returns false if path contains '../'" do
         expect(utils.safe_path? 'path/with/../in/it').to be false
       end
@@ -30,7 +26,6 @@ describe Palimpsest::Utils do
   end
 
   describe ".write_to_file" do
-
     let(:file) { double File }
     let(:mtime) { Time.now }
 
@@ -52,7 +47,6 @@ describe Palimpsest::Utils do
   end
 
   describe ".copy_directory" do
-
     before :each do
       stub_const('Palimpsest::Utils::COPY_BACKENDS', [:not_a_backend, :good_backend, :stdlib])
       allow(utils).to receive(:backends).and_return([:good_backend, :stdlib])
@@ -75,7 +69,6 @@ describe Palimpsest::Utils do
   end
 
   describe ".search_files" do
-
     before :each do
       stub_const('Palimpsest::Utils::FILE_SEARCH_BACKENDS', [:not_a_backend, :good_backend, :stdlib])
       allow(utils).to receive(:backends).and_return([:good_backend, :stdlib])

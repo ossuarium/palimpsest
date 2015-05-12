@@ -25,7 +25,7 @@ module Palimpsest
       fail if source_path.nil?
       fail if install_path.nil?
       FileUtils.mkdir_p install_path
-      FileUtils.mv source_path, install_path
+      Palimpsest::Utils.copy_directory source_path, install_path
     end
   end
 end

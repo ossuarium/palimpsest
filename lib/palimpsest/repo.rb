@@ -13,11 +13,15 @@ module Palimpsest
     #
     # @!attribute cache
     #   @return [String] local root directory to look for cached repositories
-    attr_accessor :source, :cache, :local_clone
+    #
+    # @!attribute skip_update
+    #   @return [Boolean] skip updating the repository if true
+    attr_accessor :source, :cache, :skip_update, :local_clone
 
-    def initialize(source: nil, cache: CACHE)
+    def initialize(source: nil, cache: CACHE, skip_update: false)
       self.source = source
       self.cache = cache
+      self.skip_update = skip_update
     end
 
     # Path to place the local clone of the repository.
@@ -27,7 +31,7 @@ module Palimpsest
       return nil if cache.nil?
       return nil if source.nil?
       hash = Digest::SHA1.hexdigest(source)[0..10]
-      path = Zaru.sanitize! source.gsub(/[\/\\:]/, '_')
+      path = Zaru.sanitize! source.gsub(%r{[/\\:]}, '_')
       File.join cache, "repo_#{path}_#{hash}"
     end
 
@@ -41,11 +45,12 @@ module Palimpsest
     end
 
     # Update a cached clone.
+    # Will skip the update step if {#skip_update} is true.
     # @param path [String] location of local mirror
     # @return [Repo] the repo object
     def update
       mirror
-      update_repo local_clone
+      update_repo local_clone unless skip_update
       self
     end
 

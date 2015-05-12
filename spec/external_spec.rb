@@ -1,13 +1,10 @@
 require 'spec_helper'
 
 describe Palimpsest::External do
-
   subject(:external) { Palimpsest::External.new }
 
   describe "#repository_path" do
-
     context "when local repository" do
-
       before :each do
         external.name = 'my_app'
         external.source = 'path/to/source'
@@ -20,7 +17,6 @@ describe Palimpsest::External do
     end
 
     context "when remote repository" do
-
       before :each do
         external.name = 'my_app'
         external.source = 'https://github.com/razor-x'
@@ -34,7 +30,6 @@ describe Palimpsest::External do
   end
 
   describe "#repo" do
-
     before :each do
       external.name = 'my_app'
     end
@@ -55,9 +50,7 @@ describe Palimpsest::External do
   end
 
   describe "#install" do
-
     context "when no install path specified" do
-
       it "fails" do
         expect { external.install }.to raise_error RuntimeError
       end
