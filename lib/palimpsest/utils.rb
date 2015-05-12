@@ -57,7 +57,7 @@ module Palimpsest
     def self.safe_path?(path)
       case
       when path[%r{(\.\./|~/)}] then return false
-      when path[/^\//] then return false
+      when path[%r{^/}] then return false
       else return true
       end
     end
