@@ -1,5 +1,6 @@
 require 'active_support/core_ext/hash'
 require 'tmpdir'
+require 'yaml'
 
 module Palimpsest
   # An environment is populated with the contents of
