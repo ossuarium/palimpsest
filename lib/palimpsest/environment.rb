@@ -114,9 +114,6 @@ module Palimpsest
   #       - assets/images
   # ````
   #
-  # Disable some cops until they can be refactored in the rubocop branch.
-  # rubocop:disable Metrics/ClassLength, Metrics/MethodLength
-  # rubocop:disable Metrics/BlockNesting, Style/Next, Metrics/CyclomaticComplexity
   class Environment
     # Default {#options}.
     DEFAULT_OPTIONS = {
